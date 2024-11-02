@@ -1,0 +1,583 @@
+{
+    "name": "commerce-platform",
+    "version": "1.0.0",
+    "boundedContexts": {
+        "customerManagement": {
+            "description": "A service to manage customers and their details like addresses, etc.",
+            "core": {
+                "entities": {
+                    "entity": {
+                        "isAbstract": true,
+                        "fields": {
+                            "id": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "customer": {
+                        "extends": {
+                            "type": "#/core/entities/entity"
+                        },
+                        "isAggregate": true,
+                        "fields": {
+                            "firstName": {
+                                "type": "string"
+                            },
+                            "lastName": {
+                                "type": "string"
+                            },
+                            "email": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            },
+                            "phone": {
+                                "type": "string"
+                            },
+                            "userId": {
+                                "type": "string"
+                            },
+                            "addresses": {
+                                "type": "collection",
+                                "items": "#/core/entities/address",
+                                "default": []
+                            }
+                        },
+                        "methods": {
+                            "addAddress": {
+                                "description": "Adds a new address for the customer.",
+                                "parameters": {
+                                    "data": {
+                                        "type": "#/core/entities/address"
+                                    }
+                                },
+                                "execute": [
+                                    {
+                                        "push": {
+                                            "to": "@fields.addresses",
+                                            "value": "@parameters.data"
+                                        }
+                                    }
+                                ]
+                            },
+                            "updateAddress": {
+                                "description": "Updates an existing address by ID.",
+                                "parameters": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "data": {
+                                        "type": "#/core/entities/address"
+                                    }
+                                }
+                            },
+                            "execute": [
+                                {
+                                    "let": {
+                                        "existingAddress": {
+                                            "find": {
+                                                "in": "@fields.addresses",
+                                                "where": {
+                                                    "id": "@parameters.id"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "condition": "!@let.existingAddress",
+                                        "then": {
+                                            "error": "Address not found."
+                                        }
+                                    }
+                                },
+                                {
+                                    "mapFields": {
+                                        "from": "@parameters.data",
+                                        "to": "@let.existingAddress"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "address": {
+                        "extends": {
+                            "type": "#/core/entities/entity"
+                        },
+                        "fields": {
+                            "firstName": {
+                                "type": "string"
+                            },
+                            "lastName": {
+                                "type": "string"
+                            },
+                            "phone": {
+                                "type": "string"
+                            },
+                            "company": {
+                                "type": "string"
+                            },
+                            "addressLine1": {
+                                "type": "string"
+                            },
+                            "addressLine2": {
+                                "type": "string"
+                            },
+                            "city": {
+                                "type": "string"
+                            },
+                            "countryCode": {
+                                "type": "string"
+                            },
+                            "province": {
+                                "type": "string"
+                            },
+                            "postalCode": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "application": {
+                "commands": {
+                    "createCustomer": {
+                        "input": {
+                            "extends": {
+                                "type": "#/core/entities/customer",
+                                "omit": [
+                                    "id",
+                                    "userId",
+                                    "addresses"
+                                ]
+                            },
+                            "fields": {
+                                "repeatPassword": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "validate": {
+                            "and": [
+                                {
+                                    "required": [
+                                        "@input.firstName",
+                                        "@input.lastName",
+                                        "@input.email",
+                                        "@input.password",
+                                        "@input.repeatPassword"
+                                    ]
+                                },
+                                {
+                                    "equals": [
+                                        "@input.password",
+                                        "@input.repeatPassword"
+                                    ]
+                                }
+                            ]
+                        },
+                        "execute": [
+                            {
+                                "let": {
+                                    "hashedPassword": {
+                                        "hash": {
+                                            "value": "@input.password",
+                                            "salt": 10
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "let": {
+                                    "data": {
+                                        "object": [
+                                            {
+                                                "merge": "@input"
+                                            },
+                                            {
+                                                "omit": [
+                                                    "password",
+                                                    "repeatPassword"
+                                                ]
+                                            },
+                                            {
+                                                "merge": {
+                                                    "password": "@let.hashedPassword",
+                                                    "userId": "@identity.claims.sub"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            {
+                                "let": {
+                                    "result": {
+                                        "aggregate": {
+                                            "type": "#/core/entities/customer",
+                                            "execute": [
+                                                {
+                                                    "fromData": "@let.data"
+                                                },
+                                                {
+                                                    "save": true
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "identity": {
+                                    "claims": {
+                                        "add": {
+                                            "customerId": "@let.result.id"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "return": "@let.result"
+                            }
+                        ]
+                    },
+                    "updateCustomer": {
+                        "input": {
+                            "extends": {
+                                "type": "#/core/entities/customer",
+                                "omit": [
+                                    "id",
+                                    "userId",
+                                    "password",
+                                    "addresses"
+                                ]
+                            }
+                        },
+                        "validate": {
+                            "and": [
+                                {
+                                    "required": [
+                                        "@input.firstName",
+                                        "@input.lastName",
+                                        "@input.email"
+                                    ]
+                                }
+                            ]
+                        },
+                        "execute": [
+                            {
+                                "aggregate": {
+                                    "name": "#/core/entities/customer",
+                                    "execute": [
+                                        {
+                                            "findOne": {
+                                                "userId": "@identity.claims.sub"
+                                            }
+                                        },
+                                        {
+                                            "update": {
+                                                "data": "@input"
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "addShippingAddress": {
+                        "input": {
+                            "type": "#/core/entities/address",
+                            "omit": [
+                                "id"
+                            ]
+                        },
+                        "validate": {
+                            "and": [
+                                {
+                                    "required": [
+                                        "@input.addressLine1",
+                                        "@input.addressLine2"
+                                    ]
+                                }
+                            ]
+                        },
+                        "execute": [
+                            {
+                                "let": {
+                                    "newAddress": {
+                                        "aggregate": {
+                                            "type": "#/core/entities/customer",
+                                            "execute": [
+                                                {
+                                                    "findOne": {
+                                                        "id": "@identity.claims.customerId"
+                                                    }
+                                                },
+                                                {
+                                                    "addAddress": {
+                                                        "data": "@input.data"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "return": "@let.newAddress"
+                            }
+                        ]
+                    },
+                    "updateShippingAddress": {
+                        "input": {
+                            "fields": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "#/core/entities/address",
+                                    "omit": [
+                                        "id"
+                                    ]
+                                }
+                            }
+                        },
+                        "validate": {
+                            "and": [
+                                {
+                                    "required": [
+                                        "@input.addressLine1",
+                                        "@input.addressLine2"
+                                    ]
+                                }
+                            ]
+                        },
+                        "execute": [
+                            {
+                                "aggregate": {
+                                    "type": "#/core/entities/address",
+                                    "execute": [
+                                        {
+                                            "aggregate": {
+                                                "type": "#/core/entities/customer",
+                                                "execute": [
+                                                    {
+                                                        "findOne": {
+                                                            "id": "@identity.claims.customerId"
+                                                        }
+                                                    },
+                                                    {
+                                                        "updateAddress": {
+                                                            "id": "@input.id",
+                                                            "data": "@input.data"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "deleteAddress": {
+                        "input": {
+                            "fields": {
+                                "id": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "execute": [
+                            {
+                                "aggregate": {
+                                    "type": "#/core/entities/customer",
+                                    "execute": [
+                                        {
+                                            "deleteOne": {
+                                                "id": "@input.id"
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                "queries": {
+                    "getCustomer": {
+                        "execute": [
+                            {
+                                "aggregate": {
+                                    "type": "#/core/entities/customer",
+                                    "findOne": {
+                                        "filter": {
+                                            "id": "@identity.claims.sub"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                "eventHandlers": {
+                    "customerManagement::application::features::commands::createCustomer": {
+                        "description": "Triggered after a customer is created successfully.",
+                        "execute": [
+                            {
+                                "sendMail": {
+                                    "from": "@env.companyEmail",
+                                    "to": [
+                                        "@event.email"
+                                    ],
+                                    "subject": "Welcome to Our Service!",
+                                    "template": {
+                                        "templateId": "welcome-email-template",
+                                        "fileStore": "s3",
+                                        "data": "@event"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "interface": {
+                "rest": {
+                    "paths": {
+                        "store/customers": {
+                            "post": {
+                                "request": {
+                                    "body": "#/application/commands/createCustomer/input"
+                                },
+                                "response": {
+                                    "success": {
+                                        "201": {
+                                            "body": "#/core/entities/customer"
+                                        }
+                                    }
+                                },
+                                "dispatch": {
+                                    "request": "#/application/commands/createCustomer",
+                                    "input": "@request.body"
+                                },
+                                "security": {
+                                    "protect": true
+                                }
+                            }
+                        },
+                        "/store/customers/me": {
+                            "put": {
+                                "request": {
+                                    "body": "#/application/commands/updateCustomer/input"
+                                },
+                                "response": {
+                                    "success": {
+                                        "204": ""
+                                    }
+                                },
+                                "dispatch": {
+                                    "request": "#/application/commands/updateCustomer",
+                                    "input": "@request.body"
+                                },
+                                "security": {
+                                    "protect": true
+                                }
+                            },
+                            "get": {
+                                "response": {
+                                    "success": {
+                                        "200": {
+                                            "body": "#/core/entities/customer"
+                                        }
+                                    }
+                                },
+                                "dispatch": {
+                                    "request": "#/application/queries/getCustomer"
+                                },
+                                "security": {
+                                    "protect": true
+                                }
+                            }
+                        },
+                        "/store/customers/me/addresses": {
+                            "post": {
+                                "request": {
+                                    "body": "#/application/commands/addShippingAddress/input"
+                                },
+                                "response": {
+                                    "success": {
+                                        "201": {
+                                            "body": "#/core/entities/address"
+                                        }
+                                    }
+                                },
+                                "dispatch": {
+                                    "request": "#/application/commands/addShippingAddress",
+                                    "input": "@request.body"
+                                },
+                                "security": {
+                                    "protect": true
+                                }
+                            }
+                        },
+                        "/store/customers/me/addresses/:id": {
+                            "put": {
+                                "request": {
+                                    "params": {
+                                        "id": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "body": "#/application/commands/updateShippingAddress/input/fields/data"
+                                },
+                                "response": {
+                                    "success": {
+                                        "201": {
+                                            "body": "#/core/entities/address"
+                                        }
+                                    }
+                                },
+                                "dispatch": {
+                                    "request": "#/application/commands/updateShippingAddress",
+                                    "input": {
+                                        "id": "@request.params.id",
+                                        "data": "@request.body"
+                                    }
+                                },
+                                "security": {
+                                    "protect": true
+                                }
+                            },
+                            "delete": {
+                                "request": {
+                                    "params": {
+                                        "id": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "response": {
+                                    "success": {
+                                        "204": ""
+                                    }
+                                },
+                                "dispatch": {
+                                    "request": "#/application/commands/deleteAddress",
+                                    "input": {
+                                        "id": "@request.params.id"
+                                    }
+                                },
+                                "security": {
+                                    "protect": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

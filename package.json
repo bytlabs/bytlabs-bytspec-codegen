@@ -1,0 +1,21 @@
+{
+  "name": "bytlabs-ddd-generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node index.js"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "case-anything": "^3.1.0",
+    "change-case": "^5.4.4",
+    "fs-extra": "^11.2.0",
+    "handlebars": "^4.7.8",
+    "lodash": "^4.17.21"
+  }
+}
