@@ -14,6 +14,13 @@ const variableResolver = ($var) => {
             .map((prop, index) => index > 0 ? pascalCase(prop) : prop)
             .join(".")
     }
+
+    if ($var.startsWith("@let")) {
+        return $var.split(".")
+            .slice(1)
+            .map((prop, index) => index > 0 ? pascalCase(prop) : prop)
+            .join(".")
+    }
 }
 
 export default variableResolver;

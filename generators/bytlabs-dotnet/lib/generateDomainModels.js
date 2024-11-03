@@ -2,10 +2,9 @@ import { pascalCase } from "change-case";
 import path from "path"
 import {
     getClassTemplateData,
-    parseTemplateWithPath,
-    resolveExtendedFields,
-    unwrapObj
+    parseTemplateWithPath
 } from "./shared.js"
+import unwrapObj from "./utils/unwrapObj.js";
 import { TEMPLATE_PATH } from "./constants.js"
 
 

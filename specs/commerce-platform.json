@@ -85,8 +85,12 @@
                                         }
                                     },
                                     {
-                                        "unless": {
-                                            "condition": "@let.existingAddress",
+                                        "if": {
+                                            "condition": {
+                                                "not": {
+                                                    "exists": "@let.existingAddress"
+                                                }
+                                            },
                                             "then": {
                                                 "error": "Address not found."
                                             }
@@ -95,7 +99,15 @@
                                     {
                                         "mapFields": {
                                             "from": "@parameters.data",
-                                            "to": "@let.existingAddress"
+                                            "to": "@let.existingAddress",
+                                            "fields": {
+                                                "extends": {
+                                                    "type": "#/core/entities/address",
+                                                    "omit": [
+                                                        "id"
+                                                    ]
+                                                }
+                                            }
                                         }
                                     }
                                 ]

@@ -5,7 +5,8 @@ import lodash from "lodash"
 import { pascalCase } from "change-case";
 import typeResolver from "./csharp-resolvers/typeResolver.js";
 import methodOpResolver from "./csharp-resolvers/methodOpResolver.js";
-
+import unwrapObj from "./utils/unwrapObj.js";
+import resolveExtendedFields from "./utils/resolveExtendedFields.js"
 
 const parseTemplateWithPath = async (srcDir, destDir, extension, data) => {
     try {
@@ -68,7 +69,7 @@ const getClassTemplateData = (entity, boundedContext) =>
                     name: pascalCase(method.name),
                     type: "void",
                     parameters: unwrapObj(method.parameters).map(param=>({name: param.name, type: typeResolver(param.type)})),
-                    body: method.execute.map(line => methodOpResolver(line))
+                    body: method.execute.map(line => methodOpResolver(line, boundedContext))
                 }))
         }
 
@@ -86,35 +87,12 @@ const getClassTemplateData = (entity, boundedContext) =>
 
 
 
-const resolveExtendedFields = (type, boundedContext, fields = {}) => {
-    if (type.extends) {
-        const breadcrumbs = type.extends.type.split("/").slice(1)
-        let entity = boundedContext;
-        for (let breadcrumb of breadcrumbs) {
-            entity = entity[breadcrumb];
-        }
-        fields = { ...fields, ...resolveExtendedFields(entity, boundedContext, fields) }
 
-    }
 
-    fields = { ...fields, ...type.fields };
 
-    if (type.extends && type.extends.omit) {
-        fields = lodash.omit(fields, type.extends.omit)
-    }
-
-    return fields;
-}
-
-const unwrapObj = (obj) => {
-    const keys = Object.keys(obj)
-    return keys.map(key => ({ name: key, ...obj[key] }))
-}
 
 
 export {
-    parseTemplateWithPath, 
-    resolveExtendedFields, 
-    unwrapObj,
+    parseTemplateWithPath,
     getClassTemplateData
 };
