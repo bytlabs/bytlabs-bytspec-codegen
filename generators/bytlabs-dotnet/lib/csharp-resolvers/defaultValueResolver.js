@@ -1,29 +1,30 @@
 import lodash from "lodash"
 import { pascalCase } from "change-case"
+import typeResolver from "./typeResolver.js"
 
-const typeResolver = (type, itemType) => {
+const defaultValueResolver = (type, itemType) => {
     if(type && type.startsWith("#")) {
         const typeName = lodash.last(type.split("/"))
-        return pascalCase(typeName)
+        return `new ${pascalCase(typeName)}()`
     }
 
     switch (type) {
         case "number":
-            return "double";
+            return "0";
         case "text":
         case "string":
-            return "string"
+            return "string.Empty()"
         case "date":
-            return "DateTime"
+            return "DateTime.Now()"
         case "boolean":
-            return "bool"
+            return "false"
         case "void":
-            return "void"
+            return "null"
         case "collection":
-            return `ICollecton<${typeResolver(itemType)}>`
+            return `new List<${typeResolver(itemType)}>()`
         default:
             return type;
     }
 }
 
-export default typeResolver;
+export default defaultValueResolver;

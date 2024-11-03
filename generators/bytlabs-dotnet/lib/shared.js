@@ -7,6 +7,7 @@ import typeResolver from "./csharp-resolvers/typeResolver.js";
 import methodOpResolver from "./csharp-resolvers/methodOpResolver.js";
 import unwrapObj from "./utils/unwrapObj.js";
 import resolveExtendedFields from "./utils/resolveExtendedFields.js"
+import defaultValueResolver from "./csharp-resolvers/defaultValueResolver.js";
 
 const parseTemplateWithPath = async (srcDir, destDir, extension, data) => {
     try {
@@ -58,7 +59,8 @@ const getClassTemplateData = (entity, boundedContext) =>
         const fields = unwrapObj(extendedFields)
             .map(field => ({
                 type: typeResolver(field.type, field.items),
-                name: pascalCase(field.name)
+                name: pascalCase(field.name),
+                default: defaultValueResolver(field.type, field.items)
             }))
 
         let methods = [];
