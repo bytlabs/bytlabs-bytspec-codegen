@@ -14,7 +14,7 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\BytLabs.MicroserviceTemplate.Application\BytLabs.MicroserviceTemplate.Application.csproj" />
+    <ProjectReference Include="..\BytLabs.{{project.name}}.Application\BytLabs.{{project.name}}.Application.csproj" />
   </ItemGroup>
 
 </Project>
