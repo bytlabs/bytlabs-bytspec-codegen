@@ -1,8 +1,10 @@
-﻿namespace BytLabs.{{project.name}}.Domain.Entities
+﻿using System;
+using System.Collections.Generic;
+
+namespace BytLabs.{{project.name}}.Domain.Entities
 {
     public class {{class.name}}
     {
-
         {{#each class.fields}}
             {{>fieldTemplate this}}
         {{/each}}

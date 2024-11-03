@@ -31,7 +31,7 @@ const parseTemplateWithPath = async (srcDir, destDir, extension, data) => {
                     await fs.ensureDir(currentDestDir);
                     await fs.writeFile(destPath, newContent, "utf-8");
 
-                    console.log(`Processed .csproj file: ${destPath}`);
+                    console.log(`Processed ${extension} file: ${destPath}`);
                 }
             }
         }
@@ -73,6 +73,11 @@ const unwrapObj = (obj) => {
 }
 
 const mapToCsharpType = (type, itemType) => {
+    if(type && type.startsWith("#")) {
+        const typeName = lodash.last(type.split("/"))
+        return pascalCase(typeName)
+    }
+
     switch (type) {
         case "number":
             return "double";
@@ -85,7 +90,7 @@ const mapToCsharpType = (type, itemType) => {
         case "void":
             return "void"
         case "collection":
-            return `ICollecton<${mapToCsharpField(itemType)}>`
+            return `ICollecton<${mapToCsharpType(itemType)}>`
         default:
             return type;
     }
@@ -94,7 +99,7 @@ const mapToCsharpType = (type, itemType) => {
 const mapToCsharpField = (field) => {
     return {
         type: mapToCsharpType(field.type, field.items),
-        name: pascalCase(field.name || "unknown")
+        name: pascalCase(field.name)
     }
 }
 

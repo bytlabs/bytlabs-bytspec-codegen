@@ -24,7 +24,8 @@ const generateDomainModels = async (spec, buildDirectory) => {
                     },
                     class: {
                         name: className,
-                        fields: fields
+                        fields: fields,
+                        methods: []
                     }
                 };
                 const destinationDirectory = path.join(buildDirectory, projectName);
