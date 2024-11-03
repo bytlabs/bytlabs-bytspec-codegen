@@ -4,11 +4,11 @@ Handlebars.registerPartial("methodTemplate", `
 public {{type}} {{name}}({{#each parameters}}{{type}} {{name}}{{#unless @last}}, {{/unless}}{{/each}})
 {
     {{#each body}}
-    {{this}}
+    {{{this}}}
     {{/each}}
 }
 `);
 
-Handlebars.registerPartial("fieldTemplate", `
+Handlebars.registerPartial("propTemplate", `
 public {{{type}}} {{name}} { get; set; }
 `);

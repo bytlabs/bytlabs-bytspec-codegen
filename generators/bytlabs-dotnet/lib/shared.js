@@ -3,6 +3,9 @@ import path from "path";
 import Handlebars from "handlebars";
 import lodash from "lodash"
 import { pascalCase } from "change-case";
+import typeResolver from "./csharp-resolvers/typeResolver.js";
+import methodOpResolver from "./csharp-resolvers/methodOpResolver.js";
+
 
 const parseTemplateWithPath = async (srcDir, destDir, extension, data) => {
     try {
@@ -45,6 +48,42 @@ const parseTemplateWithPath = async (srcDir, destDir, extension, data) => {
     }
 }
 
+const getClassTemplateData = (entity, boundedContext) => 
+    {
+        const projectName = pascalCase(boundedContext.name);
+        const className = pascalCase(entity.name);
+        const extendedFields = resolveExtendedFields(entity, boundedContext);
+
+        const fields = unwrapObj(extendedFields)
+            .map(field => ({
+                type: typeResolver(field.type, field.items),
+                name: pascalCase(field.name)
+            }))
+
+        let methods = [];
+
+        if (entity.methods) {
+            methods = unwrapObj(entity.methods)
+                .map(method => ({
+                    name: pascalCase(method.name),
+                    type: "void",
+                    parameters: unwrapObj(method.parameters).map(param=>({name: param.name, type: typeResolver(param.type)})),
+                    body: method.execute.map(line => methodOpResolver(line))
+                }))
+        }
+
+        return {
+            project: {
+                name: projectName
+            },
+            class: {
+                name: className,
+                fields: fields,
+                methods: methods
+            }
+        };
+}
+
 
 
 const resolveExtendedFields = (type, boundedContext, fields = {}) => {
@@ -72,40 +111,10 @@ const unwrapObj = (obj) => {
     return keys.map(key => ({ name: key, ...obj[key] }))
 }
 
-const mapToCsharpType = (type, itemType) => {
-    if(type && type.startsWith("#")) {
-        const typeName = lodash.last(type.split("/"))
-        return pascalCase(typeName)
-    }
-
-    switch (type) {
-        case "number":
-            return "double";
-        case "text":
-            return "string"
-        case "date":
-            return "DateTime"
-        case "boolean":
-            return "bool"
-        case "void":
-            return "void"
-        case "collection":
-            return `ICollecton<${mapToCsharpType(itemType)}>`
-        default:
-            return type;
-    }
-}
-
-const mapToCsharpField = (field) => {
-    return {
-        type: mapToCsharpType(field.type, field.items),
-        name: pascalCase(field.name)
-    }
-}
 
 export {
     parseTemplateWithPath, 
     resolveExtendedFields, 
     unwrapObj,
-    mapToCsharpField
+    getClassTemplateData
 };

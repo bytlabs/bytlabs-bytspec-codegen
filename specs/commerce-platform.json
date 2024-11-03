@@ -70,36 +70,36 @@
                                     "data": {
                                         "type": "#/core/entities/address"
                                     }
-                                }
-                            },
-                            "execute": [
-                                {
-                                    "let": {
-                                        "existingAddress": {
-                                            "find": {
-                                                "in": "@fields.addresses",
-                                                "where": {
-                                                    "id": "@parameters.id"
+                                },
+                                "execute": [
+                                    {
+                                        "let": {
+                                            "existingAddress": {
+                                                "find": {
+                                                    "in": "@fields.addresses",
+                                                    "where": {
+                                                        "id": "@parameters.id"
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
-                                },
-                                {
-                                    "if": {
-                                        "condition": "!@let.existingAddress",
-                                        "then": {
-                                            "error": "Address not found."
+                                    },
+                                    {
+                                        "unless": {
+                                            "condition": "@let.existingAddress",
+                                            "then": {
+                                                "error": "Address not found."
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "mapFields": {
+                                            "from": "@parameters.data",
+                                            "to": "@let.existingAddress"
                                         }
                                     }
-                                },
-                                {
-                                    "mapFields": {
-                                        "from": "@parameters.data",
-                                        "to": "@let.existingAddress"
-                                    }
-                                }
-                            ]
+                                ]
+                            }
                         }
                     },
                     "address": {
