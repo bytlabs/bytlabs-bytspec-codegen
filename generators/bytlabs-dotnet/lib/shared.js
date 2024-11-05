@@ -1,13 +1,12 @@
 import fs from "fs-extra";
 import path from "path";
 import Handlebars from "handlebars";
-import lodash from "lodash"
 import { pascalCase } from "change-case";
-import typeResolver from "./csharp-resolvers/typeResolver.js";
-import methodOpResolver from "./csharp-resolvers/methodOpResolver.js";
+import typeResolver from "./resolvers/typeResolver.js";
+import methodOpResolver from "./resolvers/methodOpResolver.js";
 import unwrapObj from "./utils/unwrapObj.js";
 import resolveExtendedFields from "./utils/resolveExtendedFields.js"
-import defaultValueResolver from "./csharp-resolvers/defaultValueResolver.js";
+import defaultValueResolver from "./resolvers/defaultValueResolver.js";
 
 const parseTemplateWithPath = async (srcDir, destDir, extension, data) => {
     try {
@@ -86,13 +85,6 @@ const getClassTemplateData = (entity, boundedContext) =>
             }
         };
 }
-
-
-
-
-
-
-
 
 export {
     parseTemplateWithPath,

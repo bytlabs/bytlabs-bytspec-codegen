@@ -3,9 +3,9 @@ import path from "path"
 import {
     getClassTemplateData,
     parseTemplateWithPath
-} from "./shared.js"
-import unwrapObj from "./utils/unwrapObj.js";
-import { TEMPLATE_PATH } from "./constants.js"
+} from "../shared.js"
+import unwrapObj from "../utils/unwrapObj.js";
+import { TEMPLATE_PATH } from "../constants.js"
 
 
 

@@ -13,7 +13,7 @@ const defaultValueResolver = (type, itemType) => {
             return "0";
         case "text":
         case "string":
-            return "string.Empty()"
+            return "string.Empty"
         case "date":
             return "DateTime.Now()"
         case "boolean":

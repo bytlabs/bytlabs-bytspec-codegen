@@ -87,9 +87,7 @@
                                     {
                                         "if": {
                                             "condition": {
-                                                "not": {
-                                                    "exists": "@let.existingAddress"
-                                                }
+                                                "isEmpty": "@let.existingAddress"
                                             },
                                             "then": {
                                                 "error": "Address not found."

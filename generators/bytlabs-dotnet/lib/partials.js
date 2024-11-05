@@ -10,5 +10,5 @@ public {{type}} {{name}}({{#each parameters}}{{type}} {{name}}{{#unless @last}},
 `);
 
 Handlebars.registerPartial("propTemplate", `
-public {{{type}}} {{name}} { get; private set; } = {{{default}}}
+public {{{type}}} {{name}} { get; private set; } = {{{default}}};
 `);
