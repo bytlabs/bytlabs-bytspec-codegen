@@ -1,6 +1,14 @@
 import lodash from "lodash"
 
 const resolveExtendedFields = (type, boundedContext, fields = {}) => {
+    if(lodash.isString(type)) {
+        let typeRef = boundedContext;
+        type.split("/").slice(1).forEach(element => {
+            typeRef = typeRef[element]
+        });
+        return resolveExtendedFields(typeRef, boundedContext)
+    }
+
     if (type.extends) {
         const breadcrumbs = type.extends.type.split("/").slice(1)
         let entity = boundedContext;

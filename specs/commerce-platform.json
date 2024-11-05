@@ -95,15 +95,11 @@
                                         }
                                     },
                                     {
-                                        "mapFields": {
-                                            "from": "@parameters.data",
-                                            "to": "@let.existingAddress",
-                                            "fields": {
-                                                "extends": {
-                                                    "type": "#/core/entities/address",
-                                                    "omit": [
-                                                        "id"
-                                                    ]
+                                        "invoke": {
+                                            "target": "@let.existingAddress",
+                                            "method": {
+                                                "update": {
+                                                    "data": "@parameters.data"
                                                 }
                                             }
                                         }
@@ -146,6 +142,26 @@
                             },
                             "postalCode": {
                                 "type": "string"
+                            }
+                        },
+                        "methods": {
+                            "update": {
+                                "description": "Updates address fields",
+                                "parameters": {
+                                    "data": {
+                                        "type": "#/core/entities/address"
+                                    }
+                                },
+                                "execute": [
+                                    {
+                                        "mapFields": {
+                                            "from": "@parameters.data",
+                                            "omit": [
+                                                "id"
+                                            ]
+                                        }
+                                    }
+                                ]
                             }
                         }
                     }
@@ -225,17 +241,18 @@
                             {
                                 "let": {
                                     "result": {
-                                        "aggregate": {
-                                            "type": "#/core/entities/customer",
-                                            "execute": [
-                                                {
-                                                    "fromData": "@let.data"
-                                                },
-                                                {
-                                                    "save": true
-                                                }
-                                            ]
+                                        "type": {
+                                            "of": "#/core/entities/customer",
+                                            "fromObject": "@let.data"
                                         }
+                                    }
+                                }
+                            },
+                            {
+                                "repository": {
+                                    "type": "#/core/entities/customer",
+                                    "insert": {
+                                        "data": "@let.result"
                                     }
                                 }
                             },
@@ -278,20 +295,34 @@
                         },
                         "execute": [
                             {
-                                "aggregate": {
-                                    "name": "#/core/entities/customer",
-                                    "execute": [
-                                        {
+                                "let": {
+                                    "customer": {
+                                        "repository": {
+                                            "type": "#/core/entities/customer",
                                             "findOne": {
                                                 "userId": "@identity.claims.sub"
                                             }
-                                        },
-                                        {
-                                            "update": {
-                                                "data": "@input"
-                                            }
                                         }
-                                    ]
+                                    }
+                                }
+                            },
+                            {
+                                "invoke": {
+                                    "target": "@let.customer",
+                                    "method": {
+                                        "update": {
+                                            "data": "@input"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "repository": {
+                                    "type": "#/core/entities/customer",
+                                    "update": {
+                                        "userId": "@identity.claims.sub",
+                                        "data": "@let.customer"
+                                    }
                                 }
                             }
                         ]
@@ -316,22 +347,36 @@
                         "execute": [
                             {
                                 "let": {
-                                    "newAddress": {
-                                        "aggregate": {
+                                    "customer": {
+                                        "repository": {
                                             "type": "#/core/entities/customer",
-                                            "execute": [
-                                                {
-                                                    "findOne": {
-                                                        "id": "@identity.claims.customerId"
-                                                    }
-                                                },
-                                                {
-                                                    "addAddress": {
-                                                        "data": "@input.data"
-                                                    }
-                                                }
-                                            ]
+                                            "findOne": {
+                                               "userId": "@identity.claims.sub"
+                                            }
                                         }
+                                    }
+                                }
+                            },
+                            {
+                                "let": {
+                                    "newAddress": {
+                                        "invoke": {
+                                            "target": "@let.customer",
+                                            "method": {
+                                                "addAddress": {
+                                                    "data": "@input.data"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "repository": {
+                                    "type": "#/core/entities/customer",
+                                    "update": {
+                                        "userId": "@identity.claims.sub",
+                                        "data": "@let.customer"
                                     }
                                 }
                             },
@@ -366,28 +411,35 @@
                         },
                         "execute": [
                             {
-                                "aggregate": {
-                                    "type": "#/core/entities/address",
-                                    "execute": [
-                                        {
-                                            "aggregate": {
-                                                "type": "#/core/entities/customer",
-                                                "execute": [
-                                                    {
-                                                        "findOne": {
-                                                            "id": "@identity.claims.customerId"
-                                                        }
-                                                    },
-                                                    {
-                                                        "updateAddress": {
-                                                            "id": "@input.id",
-                                                            "data": "@input.data"
-                                                        }
-                                                    }
-                                                ]
+                                "let": {
+                                    "customer": {
+                                        "repository": {
+                                            "type": "#/core/entities/customer",
+                                            "findOne": {
+                                                "userId": "@identity.claims.sub"
                                             }
                                         }
-                                    ]
+                                    }
+                                }
+                            },
+                            {
+                                "invoke": {
+                                    "target": "@let.customer",
+                                    "method": {
+                                        "updateAddress": {
+                                            "id": "@input.id",
+                                            "data": "@input.data"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "repository": {
+                                    "type": "#/core/entities/customer",
+                                    "update": {
+                                        "userId": "@identity.claims.sub",
+                                        "data": "@let.customer"
+                                    }
                                 }
                             }
                         ]
@@ -402,15 +454,11 @@
                         },
                         "execute": [
                             {
-                                "aggregate": {
+                                "repository": {
                                     "type": "#/core/entities/customer",
-                                    "execute": [
-                                        {
-                                            "deleteOne": {
-                                                "id": "@input.id"
-                                            }
-                                        }
-                                    ]
+                                    "deleteOne": {
+                                        "id": "@input.id"
+                                    }
                                 }
                             }
                         ]
@@ -420,7 +468,7 @@
                     "getCustomer": {
                         "execute": [
                             {
-                                "aggregate": {
+                                "repository": {
                                     "type": "#/core/entities/customer",
                                     "findOne": {
                                         "filter": {

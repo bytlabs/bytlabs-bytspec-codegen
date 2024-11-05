@@ -70,7 +70,7 @@ const getClassTemplateData = (entity, boundedContext) =>
                     name: pascalCase(method.name),
                     type: "void",
                     parameters: unwrapObj(method.parameters).map(param=>({name: param.name, type: typeResolver(param.type)})),
-                    body: method.execute.map(line => methodOpResolver(line, boundedContext))
+                    body: method.execute.map(line => methodOpResolver(line, boundedContext, { executionContext: entity }))
                 }))
         }
 

@@ -21,6 +21,10 @@ const variableResolver = ($var) => {
             .map((prop, index) => index > 0 ? pascalCase(prop) : prop)
             .join(".")
     }
+
+    if ($var.startsWith("@this")) {
+        return "this"
+    }
 }
 
 export default variableResolver;
