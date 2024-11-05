@@ -1,3 +1,4 @@
+import { pascalCase } from "change-case";
 import variableResolver from "./variableResolver.js";
 
 export default function matchSyntaxResolver(mongoFilter) {
@@ -13,7 +14,7 @@ export default function matchSyntaxResolver(mongoFilter) {
 
   function parseField(field) {
     // Convert MongoDB's dot notation (e.g., "address.city") to C# nested property access
-    return field.split('.').join('.');
+    return field.split('.').map((x, index)=> index>0?pascalCase(x):x).join('.');
   }
 
   function parseCondition(key, condition) {
@@ -45,7 +46,7 @@ export default function matchSyntaxResolver(mongoFilter) {
     if (key === "$or" || key === "$and") {
       predicateClauses.push(parseLogicalOperator(key, value));
     } else {
-      predicateClauses.push(parseCondition("x."+key, value));
+      predicateClauses.push(parseCondition("x."+ pascalCase(key), value));
     }
   }
 

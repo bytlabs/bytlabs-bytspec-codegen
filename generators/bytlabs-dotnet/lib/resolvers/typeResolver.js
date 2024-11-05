@@ -20,7 +20,7 @@ const typeResolver = (type, itemType) => {
         case "void":
             return "void"
         case "collection":
-            return `ICollecton<${typeResolver(itemType)}>`
+            return `ICollection<${typeResolver(itemType)}>`
         default:
             return type;
     }

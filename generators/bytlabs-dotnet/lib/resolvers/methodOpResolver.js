@@ -13,12 +13,12 @@ const methodOpResolver = (op, boundedContext) => {
     if (op.push) {
         const to = variableResolver(op.push.to)
         const value = variableResolver(op.push.value)
-        return `${to}.Add(${value})`
+        return `${to}.Add(${value});`
     }
     if (op.find) {
         const $in = variableResolver(op.find.in)
         const value = matchSyntaxResolver(op.find.where)
-        return `${$in}.FirstOrDefault(${value})`
+        return `${$in}.FirstOrDefault(${value});`
     }
     if(op.unless) {
         return unlessResolver(op.unless, boundedContext)
@@ -27,7 +27,7 @@ const methodOpResolver = (op, boundedContext) => {
         return ifResolver(op.if, boundedContext)
     }
     if(op.error) {
-        return `throw new Exception("${op.error}")`
+        return `throw new Exception("${op.error}");`
     }
     if(op.mapFields) {
         return mapFieldResolver(op.mapFields, boundedContext)

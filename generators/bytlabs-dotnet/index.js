@@ -7,8 +7,8 @@ async function generateApp(spec, outputDirectory) {
   console.log("Generating application...");
 
   // Ensure output directory is clean
-  await fs.remove(outputDirectory);
-  await fs.ensureDir(outputDirectory);
+  // await fs.remove(outputDirectory);
+  // await fs.ensureDir(outputDirectory);
 
   //call generators
   await generateSolutionFiles(spec, outputDirectory);
