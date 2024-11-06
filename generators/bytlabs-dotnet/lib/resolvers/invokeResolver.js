@@ -2,7 +2,7 @@ import variableResolver from "./variableResolver.js";
 import { pascalCase } from "change-case";
 
  export default function invokeResolver(invokeObject, boundedContext) {
-    const target = variableResolver(invokeObject.target);
+    const target = variableResolver(invokeObject.onTarget);
     const methodName = invokeObject.method.name
     const result = [];
     result.push(`${target}.${pascalCase(methodName)}(`)

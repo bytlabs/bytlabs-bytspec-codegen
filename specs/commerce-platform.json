@@ -49,7 +49,9 @@
                                             "from": "@parameters.data",
                                             "omit": [
                                                 "id",
-                                                "addresses"
+                                                "addresses",
+                                                "password",
+                                                "userId"
                                             ]
                                         }
                                     }
@@ -106,7 +108,7 @@
                                     },
                                     {
                                         "invoke": {
-                                            "target": "@let.existingAddress",
+                                            "onTarget": "@let.existingAddress",
                                             "method": {
                                                 "name": "update",
                                                 "parameters": {
@@ -484,7 +486,7 @@
                         "store/customers": {
                             "post": {
                                 "request": {
-                                    "body": "#/application/commands/createCustomer/input"
+                                    "body": "#/application/commands/createCustomer/input/data"
                                 },
                                 "response": {
                                     "success": {
@@ -495,7 +497,9 @@
                                 },
                                 "dispatch": {
                                     "request": "#/application/commands/createCustomer",
-                                    "input": "@request.body"
+                                    "input": {
+                                        "data": "@request.body"
+                                    }
                                 },
                                 "security": {
                                     "protect": true
@@ -505,7 +509,7 @@
                         "/store/customers/me": {
                             "put": {
                                 "request": {
-                                    "body": "#/application/commands/updateCustomer/input"
+                                    "body": "#/application/commands/updateCustomer/input/data"
                                 },
                                 "response": {
                                     "success": {
@@ -514,7 +518,9 @@
                                 },
                                 "dispatch": {
                                     "request": "#/application/commands/updateCustomer",
-                                    "input": "@request.body"
+                                    "input": {
+                                        "data": "@request.body"
+                                    }
                                 },
                                 "security": {
                                     "protect": true
@@ -539,7 +545,7 @@
                         "/store/customers/me/addresses": {
                             "post": {
                                 "request": {
-                                    "body": "#/application/commands/addShippingAddress/input"
+                                    "body": "#/application/commands/addShippingAddress/input/data"
                                 },
                                 "response": {
                                     "success": {
@@ -550,7 +556,9 @@
                                 },
                                 "dispatch": {
                                     "request": "#/application/commands/addShippingAddress",
-                                    "input": "@request.body"
+                                    "input": {
+                                        "data": "@request.body"
+                                    }
                                 },
                                 "security": {
                                     "protect": true
@@ -565,7 +573,7 @@
                                             "type": "text"
                                         }
                                     },
-                                    "body": "#/application/commands/updateShippingAddress/input/fields/data"
+                                    "body": "#/application/commands/updateShippingAddress/input/data"
                                 },
                                 "response": {
                                     "success": {
