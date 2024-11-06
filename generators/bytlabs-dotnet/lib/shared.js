@@ -5,7 +5,6 @@ import { pascalCase } from "change-case";
 import typeResolver from "./resolvers/typeResolver.js";
 import methodOpResolver from "./resolvers/methodOpResolver.js";
 import unwrapObj from "./utils/unwrapObj.js";
-import resolveExtendedFields from "./utils/resolveExtendedFields.js"
 import defaultValueResolver from "./resolvers/defaultValueResolver.js";
 
 const parseTemplateWithPath = async (srcDir, destDir, extension, data) => {
@@ -53,9 +52,8 @@ const getClassTemplateData = (entity, boundedContext) =>
     {
         const projectName = pascalCase(boundedContext.name);
         const className = pascalCase(entity.name);
-        const extendedFields = resolveExtendedFields(entity, boundedContext);
 
-        const fields = unwrapObj(extendedFields)
+        const fields = unwrapObj(entity.properties)
             .map(field => ({
                 type: typeResolver(field.type, field.items),
                 name: pascalCase(field.name),
@@ -64,8 +62,8 @@ const getClassTemplateData = (entity, boundedContext) =>
 
         let methods = [];
 
-        if (entity.methods) {
-            methods = unwrapObj(entity.methods)
+        if (entity.actions) {
+            methods = unwrapObj(entity.actions)
                 .map(method => ({
                     name: pascalCase(method.name),
                     type: "void",

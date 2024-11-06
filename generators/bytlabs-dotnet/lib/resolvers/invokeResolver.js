@@ -3,12 +3,12 @@ import { pascalCase } from "change-case";
 
  export default function invokeResolver(invokeObject, boundedContext) {
     const target = variableResolver(invokeObject.target);
-    const methodName = Object.keys(invokeObject.method)[0]
+    const methodName = invokeObject.method.name
     const result = [];
     result.push(`${target}.${pascalCase(methodName)}(`)
-    const paraNames = Object.keys(invokeObject.method[methodName]);
+    const paraNames = Object.keys(invokeObject.method.parameters);
     paraNames.forEach((paraName, index)=>{
-        result.push(variableResolver(invokeObject.method[methodName][paraName]))
+        result.push(variableResolver(invokeObject.method.parameters[paraName]))
         if(index < (paraNames.length - 1)) {
             result.push(`,`)
         }        

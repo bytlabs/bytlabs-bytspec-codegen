@@ -4,52 +4,62 @@
     "boundedContexts": {
         "customerManagement": {
             "description": "A service to manage customers and their details like addresses, etc.",
-            "core": {
+            "domain": {
                 "entities": {
-                    "entity": {
-                        "isAbstract": true,
-                        "fields": {
-                            "id": {
-                                "type": "string"
-                            }
-                        }
-                    },
                     "customer": {
-                        "extends": {
-                            "type": "#/core/entities/entity"
-                        },
-                        "isAggregate": true,
-                        "fields": {
+                        "aggregate": true,
+                        "properties": {
+                            "id": {
+                                "type": "text"
+                            },
                             "firstName": {
-                                "type": "string"
+                                "type": "text"
                             },
                             "lastName": {
-                                "type": "string"
+                                "type": "text"
                             },
                             "email": {
-                                "type": "string"
+                                "type": "text"
                             },
                             "password": {
-                                "type": "string"
+                                "type": "text"
                             },
                             "phone": {
-                                "type": "string"
+                                "type": "text"
                             },
                             "userId": {
-                                "type": "string"
+                                "type": "text"
                             },
                             "addresses": {
                                 "type": "collection",
-                                "items": "#/core/entities/address",
-                                "default": []
+                                "items": "#/domain/entities/address"
                             }
                         },
-                        "methods": {
+                        "actions": {
+                            "update": {
+                                "description": "Update customer fields",
+                                "parameters": {
+                                    "data": {
+                                        "type": "#/domain/entities/customer"
+                                    }
+                                },
+                                "execute": [
+                                    {
+                                        "mapFields": {
+                                            "from": "@parameters.data",
+                                            "omit": [
+                                                "id",
+                                                "addresses"
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
                             "addAddress": {
                                 "description": "Adds a new address for the customer.",
                                 "parameters": {
                                     "data": {
-                                        "type": "#/core/entities/address"
+                                        "type": "#/domain/entities/address"
                                     }
                                 },
                                 "execute": [
@@ -65,10 +75,10 @@
                                 "description": "Updates an existing address by ID.",
                                 "parameters": {
                                     "id": {
-                                        "type": "string"
+                                        "type": "text"
                                     },
                                     "data": {
-                                        "type": "#/core/entities/address"
+                                        "type": "#/domain/entities/address"
                                     }
                                 },
                                 "execute": [
@@ -98,7 +108,8 @@
                                         "invoke": {
                                             "target": "@let.existingAddress",
                                             "method": {
-                                                "update": {
+                                                "name": "update",
+                                                "parameters": {
                                                     "data": "@parameters.data"
                                                 }
                                             }
@@ -109,47 +120,47 @@
                         }
                     },
                     "address": {
-                        "extends": {
-                            "type": "#/core/entities/entity"
-                        },
-                        "fields": {
+                        "properties": {
+                            "id": {
+                                "type": "text"
+                            },
                             "firstName": {
-                                "type": "string"
+                                "type": "text"
                             },
                             "lastName": {
-                                "type": "string"
+                                "type": "text"
                             },
                             "phone": {
-                                "type": "string"
+                                "type": "text"
                             },
                             "company": {
-                                "type": "string"
+                                "type": "text"
                             },
                             "addressLine1": {
-                                "type": "string"
+                                "type": "text"
                             },
                             "addressLine2": {
-                                "type": "string"
+                                "type": "text"
                             },
                             "city": {
-                                "type": "string"
+                                "type": "text"
                             },
                             "countryCode": {
-                                "type": "string"
+                                "type": "text"
                             },
                             "province": {
-                                "type": "string"
+                                "type": "text"
                             },
                             "postalCode": {
-                                "type": "string"
+                                "type": "text"
                             }
                         },
-                        "methods": {
+                        "actions": {
                             "update": {
                                 "description": "Updates address fields",
                                 "parameters": {
                                     "data": {
-                                        "type": "#/core/entities/address"
+                                        "type": "#/domain/entities/address"
                                     }
                                 },
                                 "execute": [
@@ -171,45 +182,42 @@
                 "commands": {
                     "createCustomer": {
                         "input": {
-                            "extends": {
-                                "type": "#/core/entities/customer",
-                                "omit": [
+                            "data": {
+                                "hasPropertiesOf": "#/domain/entities/customer",
+                                "except": [
                                     "id",
                                     "userId",
                                     "addresses"
-                                ]
-                            },
-                            "fields": {
-                                "repeatPassword": {
-                                    "type": "string"
-                                }
-                            }
-                        },
-                        "validate": {
-                            "and": [
-                                {
-                                    "required": [
-                                        "@input.firstName",
-                                        "@input.lastName",
-                                        "@input.email",
-                                        "@input.password",
-                                        "@input.repeatPassword"
-                                    ]
+                                ],
+                                "with": {
+                                    "repeatPassword": {
+                                        "type": "text"
+                                    }
                                 },
-                                {
-                                    "equals": [
-                                        "@input.password",
-                                        "@input.repeatPassword"
-                                    ]
-                                }
-                            ]
+                                "ensure": [
+                                    {
+                                        "notEmpty": [
+                                            "firstName",
+                                            "lastName",
+                                            "password",
+                                            "repeatPassword"
+                                        ]
+                                    },
+                                    {
+                                        "matches": [
+                                            "password",
+                                            "repeatPassword"
+                                        ]
+                                    }
+                                ]
+                            }
                         },
                         "execute": [
                             {
                                 "let": {
                                     "hashedPassword": {
                                         "hash": {
-                                            "value": "@input.password",
+                                            "value": "@input.data.password",
                                             "salt": 10
                                         }
                                     }
@@ -220,7 +228,7 @@
                                     "data": {
                                         "object": [
                                             {
-                                                "merge": "@input"
+                                                "merge": "@input.data"
                                             },
                                             {
                                                 "omit": [
@@ -239,89 +247,72 @@
                                 }
                             },
                             {
-                                "let": {
-                                    "result": {
-                                        "type": {
-                                            "of": "#/core/entities/customer",
-                                            "fromObject": "@let.data"
+                                "return": {
+                                    "aggregate": {
+                                        "type": "#/domain/entities/customer",
+                                        "fromObject": "@let.data",
+                                        "saveOptions": {
+                                            "persistChanges": true,
+                                            "auditTrail": {
+                                                "userId": "@identity.claims.sub",
+                                                "reason": "Register a customer"
+                                            }
                                         }
                                     }
                                 }
-                            },
-                            {
-                                "repository": {
-                                    "type": "#/core/entities/customer",
-                                    "insert": {
-                                        "data": "@let.result"
-                                    }
-                                }
-                            },
-                            {
-                                "identity": {
-                                    "claims": {
-                                        "add": {
-                                            "customerId": "@let.result.id"
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "return": "@let.result"
                             }
                         ]
                     },
                     "updateCustomer": {
                         "input": {
-                            "extends": {
-                                "type": "#/core/entities/customer",
-                                "omit": [
+                            "data": {
+                                "hasPropertiesOf": "#/domain/entities/customer",
+                                "except": [
                                     "id",
                                     "userId",
-                                    "password",
-                                    "addresses"
+                                    "addresses",
+                                    "password"
+                                ],
+                                "ensure": [
+                                    {
+                                        "notEmpty": [
+                                            "firstName",
+                                            "lastName",
+                                            "email"
+                                        ]
+                                    },
+                                    {
+                                        "pattern": {
+                                            "matches": [
+                                                "email"
+                                            ],
+                                            "regex": "[a-zA-Z]+@[a-zA-Z]+\\.(com|in)"
+                                        }
+                                    }
                                 ]
                             }
                         },
-                        "validate": {
-                            "and": [
-                                {
-                                    "required": [
-                                        "@input.firstName",
-                                        "@input.lastName",
-                                        "@input.email"
-                                    ]
-                                }
-                            ]
-                        },
                         "execute": [
                             {
-                                "let": {
-                                    "customer": {
-                                        "repository": {
-                                            "type": "#/core/entities/customer",
-                                            "findOne": {
-                                                "userId": "@identity.claims.sub"
+                                "aggregate": {
+                                    "type": "#/domain/entities/customer",
+                                    "findOne": {
+                                        "userId": "@identity.claims.sub"
+                                    },
+                                    "actions": [
+                                        {
+                                            "name": "update",
+                                            "parameters": {
+                                                "data": "@input.data"
                                             }
                                         }
-                                    }
-                                }
-                            },
-                            {
-                                "invoke": {
-                                    "target": "@let.customer",
-                                    "method": {
-                                        "update": {
-                                            "data": "@input"
+                                    ],
+                                    "saveOptions": {
+                                        "persistChanges": true,
+                                        "auditTrail": {
+                                            "userId": "@identity.claims.sub",
+                                            "reason": "Update customer"
                                         }
-                                    }
-                                }
-                            },
-                            {
-                                "repository": {
-                                    "type": "#/core/entities/customer",
-                                    "update": {
-                                        "userId": "@identity.claims.sub",
-                                        "data": "@let.customer"
                                     }
                                 }
                             }
@@ -329,42 +320,40 @@
                     },
                     "addShippingAddress": {
                         "input": {
-                            "type": "#/core/entities/address",
-                            "omit": [
-                                "id"
-                            ]
-                        },
-                        "validate": {
-                            "and": [
-                                {
-                                    "required": [
-                                        "@input.addressLine1",
-                                        "@input.addressLine2"
-                                    ]
-                                }
-                            ]
+                            "data": {
+                                "hasPropertiesOf": "#/domain/entities/address",
+                                "ensure": [
+                                    {
+                                        "notEmpty": [
+                                            "addressLine1",
+                                            "addressLine2"
+                                        ]
+                                    }
+                                ]
+                            }
                         },
                         "execute": [
                             {
                                 "let": {
                                     "customer": {
-                                        "repository": {
-                                            "type": "#/core/entities/customer",
+                                        "aggregate": {
+                                            "type": "#/domain/entities/customer",
                                             "findOne": {
-                                               "userId": "@identity.claims.sub"
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "let": {
-                                    "newAddress": {
-                                        "invoke": {
-                                            "target": "@let.customer",
-                                            "method": {
-                                                "addAddress": {
-                                                    "data": "@input.data"
+                                                "userId": "@identity.claims.sub"
+                                            },
+                                            "actions": [
+                                                {
+                                                    "name": "addAddress",
+                                                    "parameters": {
+                                                        "data": "@input.data"
+                                                    }
+                                                }
+                                            ],
+                                            "saveOptions": {
+                                                "persistChanges": true,
+                                                "auditTrail": {
+                                                    "userId": "@identity.claims.sub",
+                                                    "reason": "Update address"
                                                 }
                                             }
                                         }
@@ -372,73 +361,53 @@
                                 }
                             },
                             {
-                                "repository": {
-                                    "type": "#/core/entities/customer",
-                                    "update": {
-                                        "userId": "@identity.claims.sub",
-                                        "data": "@let.customer"
+                                "return": {
+                                    "last": {
+                                        "in": "@let.customer.addresses"
                                     }
                                 }
-                            },
-                            {
-                                "return": "@let.newAddress"
                             }
                         ]
                     },
                     "updateShippingAddress": {
                         "input": {
-                            "fields": {
-                                "id": {
-                                    "type": "string"
-                                },
-                                "data": {
-                                    "type": "#/core/entities/address",
-                                    "omit": [
-                                        "id"
-                                    ]
-                                }
+                            "id": {
+                                "type": "text"
+                            },
+                            "data": {
+                                "hasPropertiesOf": "#/domain/entities/address",
+                                "ensure": [
+                                    {
+                                        "notEmpty": [
+                                            "addressLine1",
+                                            "addressLine2"
+                                        ]
+                                    }
+                                ]
                             }
-                        },
-                        "validate": {
-                            "and": [
-                                {
-                                    "required": [
-                                        "@input.addressLine1",
-                                        "@input.addressLine2"
-                                    ]
-                                }
-                            ]
                         },
                         "execute": [
                             {
-                                "let": {
-                                    "customer": {
-                                        "repository": {
-                                            "type": "#/core/entities/customer",
-                                            "findOne": {
-                                                "userId": "@identity.claims.sub"
+                                "aggregate": {
+                                    "type": "#/domain/entities/customer",
+                                    "findOne": {
+                                        "userId": "@identity.claims.sub"
+                                    },
+                                    "actions": [
+                                        {
+                                            "name": "updateAddress",
+                                            "parameters": {
+                                                "id": "@input.id",
+                                                "data": "@input.data"
                                             }
                                         }
-                                    }
-                                }
-                            },
-                            {
-                                "invoke": {
-                                    "target": "@let.customer",
-                                    "method": {
-                                        "updateAddress": {
-                                            "id": "@input.id",
-                                            "data": "@input.data"
+                                    ],
+                                    "saveOptions": {
+                                        "persistChanges": true,
+                                        "auditTrail": {
+                                            "userId": "@identity.claims.sub",
+                                            "reason": "Update address"
                                         }
-                                    }
-                                }
-                            },
-                            {
-                                "repository": {
-                                    "type": "#/core/entities/customer",
-                                    "update": {
-                                        "userId": "@identity.claims.sub",
-                                        "data": "@let.customer"
                                     }
                                 }
                             }
@@ -446,18 +415,23 @@
                     },
                     "deleteAddress": {
                         "input": {
-                            "fields": {
-                                "id": {
-                                    "type": "string"
-                                }
+                            "id": {
+                                "type": "text"
                             }
                         },
                         "execute": [
                             {
-                                "repository": {
-                                    "type": "#/core/entities/customer",
+                                "aggregate": {
+                                    "type": "#/domain/entities/customer",
                                     "deleteOne": {
-                                        "id": "@input.id"
+                                        "userId": "@identity.claims.sub"
+                                    },
+                                    "saveOptions": {
+                                        "persistChanges": true,
+                                        "auditTrail": {
+                                            "userId": "@identity.claims.sub",
+                                            "reason": "Update address"
+                                        }
                                     }
                                 }
                             }
@@ -468,11 +442,13 @@
                     "getCustomer": {
                         "execute": [
                             {
-                                "repository": {
-                                    "type": "#/core/entities/customer",
-                                    "findOne": {
-                                        "filter": {
-                                            "id": "@identity.claims.sub"
+                                "return": {
+                                    "aggregate": {
+                                        "type": "#/domain/entities/customer",
+                                        "findOne": {
+                                            "filter": {
+                                                "id": "@identity.claims.sub"
+                                            }
                                         }
                                     }
                                 }
@@ -513,7 +489,7 @@
                                 "response": {
                                     "success": {
                                         "201": {
-                                            "body": "#/core/entities/customer"
+                                            "body": "#/domain/entities/customer"
                                         }
                                     }
                                 },
@@ -548,7 +524,7 @@
                                 "response": {
                                     "success": {
                                         "200": {
-                                            "body": "#/core/entities/customer"
+                                            "body": "#/domain/entities/customer"
                                         }
                                     }
                                 },
@@ -568,7 +544,7 @@
                                 "response": {
                                     "success": {
                                         "201": {
-                                            "body": "#/core/entities/address"
+                                            "body": "#/domain/entities/address"
                                         }
                                     }
                                 },
@@ -586,7 +562,7 @@
                                 "request": {
                                     "params": {
                                         "id": {
-                                            "type": "string"
+                                            "type": "text"
                                         }
                                     },
                                     "body": "#/application/commands/updateShippingAddress/input/fields/data"
@@ -594,7 +570,7 @@
                                 "response": {
                                     "success": {
                                         "201": {
-                                            "body": "#/core/entities/address"
+                                            "body": "#/domain/entities/address"
                                         }
                                     }
                                 },
@@ -613,7 +589,7 @@
                                 "request": {
                                     "params": {
                                         "id": {
-                                            "type": "string"
+                                            "type": "text"
                                         }
                                     }
                                 },
