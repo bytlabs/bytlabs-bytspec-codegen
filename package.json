@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bl": "^6.0.16",
     "case-anything": "^3.1.0",
     "change-case": "^5.4.4",
     "fs-extra": "^11.2.0",

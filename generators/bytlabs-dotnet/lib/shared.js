@@ -48,7 +48,7 @@ const parseTemplateWithPath = async (srcDir, destDir, extension, data) => {
     }
 }
 
-const getClassTemplateData = (entity, boundedContext) => 
+const getClassTemplateData = (entity, boundedContext, { isEntity } = {}) => 
     {
         const projectName = pascalCase(boundedContext.name);
         const className = pascalCase(entity.name);
@@ -78,8 +78,10 @@ const getClassTemplateData = (entity, boundedContext) =>
             },
             class: {
                 name: className,
-                fields: fields,
-                methods: methods
+                fields: isEntity? fields.filter(x=> x.name != "Id") : fields,
+                methods: methods,
+                aggregate: entity.aggregate,
+                idType: isEntity? fields.find(x=>x.name == "Id")?.type : null
             }
         };
 }

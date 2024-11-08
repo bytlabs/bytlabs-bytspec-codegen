@@ -2,6 +2,7 @@ import fs from "fs-extra";
 import "./lib/partials.js"
 import generateSolutionFiles from "./lib/generators/generateSolutionFiles.js";
 import generateDomainModels from "./lib/generators/generateDomainModels.js";
+import generateCommands from "./lib/generators/generateCommands.js"
 
 async function generateApp(spec, outputDirectory, options) {
   console.log("Generating application...");
@@ -15,6 +16,7 @@ async function generateApp(spec, outputDirectory, options) {
   //call generators
   await generateSolutionFiles(spec, outputDirectory);
   await generateDomainModels(spec, outputDirectory);
+  await generateCommands(spec, outputDirectory)
 
   console.log("Application generated successfully!");
 }

@@ -18,7 +18,7 @@ const generateDomainModels = async (spec, buildDirectory) => {
     for (let boundedContext of unwrapObj(spec.boundedContexts)) {
 
         const templatesData = unwrapObj(boundedContext.domain.entities)
-            .map(entity => getClassTemplateData(entity, boundedContext))
+            .map(entity => getClassTemplateData(entity, boundedContext, { isEntity: true }))
 
         for (let templateData of templatesData) {
             const destinationDirectory = path.join(buildDirectory, templateData.project.name);

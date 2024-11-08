@@ -214,6 +214,7 @@
                                 ]
                             }
                         },
+                        "returns": "#/domain/entities/customer",
                         "execute": [
                             {
                                 "let": {
@@ -334,6 +335,7 @@
                                 ]
                             }
                         },
+                        "returns": "#/domain/entities/address",
                         "execute": [
                             {
                                 "let": {

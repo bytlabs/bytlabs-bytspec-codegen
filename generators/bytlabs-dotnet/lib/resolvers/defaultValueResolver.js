@@ -23,7 +23,7 @@ const defaultValueResolver = (type, itemType) => {
         case "collection":
             return `new List<${typeResolver(itemType)}>()`
         default:
-            return type;
+            return `new ${type}()`;
     }
 }
 

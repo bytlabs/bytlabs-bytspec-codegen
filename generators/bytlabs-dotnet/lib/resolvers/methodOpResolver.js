@@ -5,6 +5,7 @@ import unlessResolver from "./unlessResolver.js";
 import mapFieldResolver from "./mapFieldResolver.js";
 import ifResolver from "./ifResolver.js";
 import invokeResolver from "./invokeResolver.js"
+import aggregateResolver from "./aggregateResolver.js";
 
 const methodOpResolver = (op, boundedContext, options) => {
     if (op.let) {
@@ -35,6 +36,9 @@ const methodOpResolver = (op, boundedContext, options) => {
     }
     if(op.invoke) {
         return invokeResolver(op.invoke, boundedContext)
+    }
+    if(op.aggregate) {
+        return aggregateResolver(op.aggregate, boundedContext, options)
     }
 }
 
