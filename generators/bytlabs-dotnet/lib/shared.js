@@ -2,10 +2,12 @@ import fs from "fs-extra";
 import path from "path";
 import Handlebars from "handlebars";
 import { pascalCase } from "change-case";
-import typeResolver from "./resolvers/typeResolver.js";
-import methodOpResolver from "./resolvers/methodOpResolver.js";
+import typeResolver from "./resolvers/type.js";
+import methodOpResolver from "./resolvers/op.js";
 import unwrapObj from "./utils/unwrapObj.js";
-import defaultValueResolver from "./resolvers/defaultValueResolver.js";
+import defaultValueResolver from "./resolvers/typeDefault.js";
+import { readdir } from 'fs/promises';
+import { basename, extname, join } from 'path';
 
 const parseTemplateWithPath = async (srcDir, destDir, extension, data) => {
     try {
@@ -48,12 +50,27 @@ const parseTemplateWithPath = async (srcDir, destDir, extension, data) => {
     }
 }
 
+
+
+// Function to get filenames without extensions
+async function getFilenamesWithoutExtension(directory) {
+  try {
+    const files = await readdir(directory);
+    return files
+      .filter(file => file !== '.' && file !== '..') // Filter out '.' and '..' if present
+      .map(file => basename(file, extname(file))); // Remove extensions
+  } catch (error) {
+    console.error('Error reading directory:', error);
+    return [];
+  }
+}
+
 const getClassTemplateData = (entity, boundedContext, { isEntity } = {}) => 
     {
         const projectName = pascalCase(boundedContext.name);
         const className = pascalCase(entity.name);
 
-        const fields = unwrapObj(entity.properties)
+        const fields = unwrapObj(entity.properties || {})
             .map(field => ({
                 type: typeResolver(field.type, field.items),
                 name: pascalCase(field.name),
@@ -88,5 +105,6 @@ const getClassTemplateData = (entity, boundedContext, { isEntity } = {}) =>
 
 export {
     parseTemplateWithPath,
-    getClassTemplateData
+    getClassTemplateData,
+    getFilenamesWithoutExtension
 };

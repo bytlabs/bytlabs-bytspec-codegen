@@ -1,5 +1,5 @@
 import { pascalCase } from "change-case";
-import variableResolver from "./variableResolver.js";
+import variableResolver from "./variable.js";
 
 export default function matchSyntaxResolver(mongoFilter) {
   const operatorsMap = {

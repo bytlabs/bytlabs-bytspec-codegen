@@ -1,6 +1,6 @@
 import lodash from "lodash"
 import { pascalCase } from "change-case"
-import typeResolver from "./typeResolver.js"
+import typeResolver from "./type.js"
 
 const defaultValueResolver = (type, itemType) => {
     if(type && type.startsWith("#")) {

@@ -1,5 +1,5 @@
-import conditionResolver from "./conditionResolver.js";
-import methodOpResolver from "./methodOpResolver.js";
+import conditionResolver from "./condition.js";
+import methodOpResolver from "./op.js";
 
 export default function ifResolver(ifObject, boundedContext) {
     const condition = conditionResolver(ifObject.condition)

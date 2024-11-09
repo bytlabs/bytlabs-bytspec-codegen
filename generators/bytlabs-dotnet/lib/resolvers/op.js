@@ -1,11 +1,11 @@
-import variableResolver from "./variableResolver.js";
-import matchSyntaxResolver from "./matchSyntaxResolver.js";
+import variableResolver from "./variable.js";
+import matchSyntaxResolver from "./match.js";
 import lodash from "lodash"
-import unlessResolver from "./unlessResolver.js";
+import unlessResolver from "./unless.js";
 import mapFieldResolver from "./mapFieldResolver.js";
-import ifResolver from "./ifResolver.js";
-import invokeResolver from "./invokeResolver.js"
-import aggregateResolver from "./aggregateResolver.js";
+import ifResolver from "./if.js";
+import invokeResolver from "./invoke.js"
+import aggregateResolver from "./aggregate.js";
 
 const methodOpResolver = (op, boundedContext, options) => {
     if (op.let) {

@@ -1,4 +1,4 @@
-import variableResolver from "./variableResolver.js";
+import variableResolver from "./variable.js";
 import { pascalCase } from "change-case";
 
  export default function invokeResolver(invokeObject, boundedContext) {

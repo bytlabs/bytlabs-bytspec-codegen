@@ -1,11 +1,11 @@
 import fs from "fs-extra";
 import "./lib/partials.js"
-import generateSolutionFiles from "./lib/generators/generateSolutionFiles.js";
-import generateDomainModels from "./lib/generators/generateDomainModels.js";
-import generateCommands from "./lib/generators/generateCommands.js"
+import { createContainer } from "./di.js";
 
 async function generateApp(spec, outputDirectory, options) {
   console.log("Generating application...");
+
+  const container = await createContainer();
 
   // Ensure output directory is clean
   if (options.deleteExistingFiles) {
@@ -13,10 +13,10 @@ async function generateApp(spec, outputDirectory, options) {
     await fs.ensureDir(outputDirectory);
   }
 
-  //call generators
-  await generateSolutionFiles(spec, outputDirectory);
-  await generateDomainModels(spec, outputDirectory);
-  await generateCommands(spec, outputDirectory)
+  const generators = await container.resolve('generators').all();
+
+  for (let generator of generators)
+    await generator.execute(spec, outputDirectory);
 
   console.log("Application generated successfully!");
 }

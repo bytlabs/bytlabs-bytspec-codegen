@@ -12,8 +12,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "awilix": "^12.0.3",
     "bl": "^6.0.16",
     "case-anything": "^3.1.0",
+    "chance": "^1.1.12",
     "change-case": "^5.4.4",
     "fs-extra": "^11.2.0",
     "handlebars": "^4.7.8",

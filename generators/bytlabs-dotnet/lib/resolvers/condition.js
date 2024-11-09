@@ -1,4 +1,4 @@
-import variableResolver from "./variableResolver.js"
+import variableResolver from "./variable.js"
 
 const conditionResolver = (condition, boundedContext) => {
     if(condition.isEmpty) {

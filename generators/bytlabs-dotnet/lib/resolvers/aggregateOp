@@ -1,0 +1,14 @@
+import _ from "lodash"
+
+
+export default function (opts) {
+    return {
+        parse: async (context) => {
+            const aggregateName = _last(context.type.split("/"))
+            const operationName = _.first(_.keys(_.pick(context, ['findOne'])))
+            if (operationName == 'findOne') {
+                return `(await ${aggregateName}Repository.FindAllByAsync(${opts.resolverMatch(input)}, cancellationToken)).SingleOrDefault()`;
+            }
+        }
+    }
+}

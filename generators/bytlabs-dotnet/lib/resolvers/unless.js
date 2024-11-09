@@ -1,6 +1,6 @@
 
-import conditionResolver from "./conditionResolver.js";
-import methodOpResolver from "./methodOpResolver.js"
+import conditionResolver from "./condition.js";
+import methodOpResolver from "./op.js"
 
 export default function unlessResolver(unlessObject, boundedContext) {
     const condition = conditionResolver(unlessObject.condition)

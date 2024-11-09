@@ -1,4 +1,4 @@
-import variableResolver from "./variableResolver.js";
+import variableResolver from "./variable.js";
 import lodash from "lodash"
 import unwrapObj from "./../utils/unwrapObj.js";
 import { pascalCase } from "change-case";
