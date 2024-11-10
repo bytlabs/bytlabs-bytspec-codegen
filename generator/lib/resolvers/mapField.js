@@ -1,16 +1,34 @@
-import variableResolver from "./variable.js";
-import lodash from "lodash"
-import unwrapObj from "./../utils/unwrapObj.js";
-import { pascalCase } from "change-case";
+import _ from "lodash"
+import { compileTemplate } from './utils';
+import { Builder } from 'builder-pattern';
+import path from "path"
 
+export default function (opts) {
+    return {
+        execute: async ({ context, ...options }) => {
 
-export default function mapFieldResolver(mapFieldsObject, boundedContext, { executionContext: entity }) {
-    const fromField = variableResolver(mapFieldsObject.from);
-    let fields = entity.properties
-    fields = lodash.omit(fields, mapFieldsObject.omit || [])
-    const result = unwrapObj(fields)
-        .map(field => `${pascalCase(field.name)} = ${fromField}.${pascalCase(field.name)};`)
-        .join("\n\t")
-    return result;
+            if(!options.domainObject && !options.domainObject.properties) throw new Error("'mapField' only works with domain objects for field mapping");
+
+            const props = await Promise.all(_.chain(options.domainObject.properties)
+                                                .omit(context.omit || [])
+                                                .map(async field => await opts.propertyResolver.execute({ context: field.name, ...options }))
+                                                .value());
+
+            const invokeContext = Builder(MapFields)
+                .source(await opts.variableResolver.execute({ context: context.from, ...options }))
+                .props(props)
+                .build()
+
+            return await compileTemplate(path.join(opts.templatesDir, `resolvers/mapField.hbs`), invokeContext)
+        }
+    }
 }
+
+
+class MapFields {
+    source
+    dest
+    props
+}
+
 

@@ -111,9 +111,7 @@
                                             "onTarget": "@let.existingAddress",
                                             "method": {
                                                 "name": "update",
-                                                "parameters": {
-                                                    "data": "@parameters.data"
-                                                }
+                                                "parameters": ["@parameters.data"]
                                             }
                                         }
                                     }
@@ -305,9 +303,7 @@
                                     "actions": [
                                         {
                                             "name": "update",
-                                            "parameters": {
-                                                "data": "@input.data"
-                                            }
+                                            "parameters": ["@input.data"]
                                         }
                                     ],
                                     "saveOptions": {
@@ -348,9 +344,7 @@
                                             "actions": [
                                                 {
                                                     "name": "addAddress",
-                                                    "parameters": {
-                                                        "data": "@input.data"
-                                                    }
+                                                    "parameters": ["@input.data"]
                                                 }
                                             ],
                                             "saveOptions": {
@@ -400,10 +394,7 @@
                                     "actions": [
                                         {
                                             "name": "updateAddress",
-                                            "parameters": {
-                                                "id": "@input.id",
-                                                "data": "@input.data"
-                                            }
+                                            "parameters": ["@input.id", "@input.data"]
                                         }
                                     ],
                                     "saveOptions": {
@@ -427,9 +418,7 @@
                             {
                                 "aggregate": {
                                     "type": "#/domain/entities/customer",
-                                    "deleteOne": {
-                                        "userId": "@identity.claims.sub"
-                                    },
+                                    "deleteOne": ["@identity.claims.sub"],
                                     "saveOptions": {
                                         "persistChanges": true,
                                         "auditTrail": {

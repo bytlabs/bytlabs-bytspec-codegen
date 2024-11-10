@@ -1,20 +1,29 @@
-import variableResolver from "./variable.js";
-import { pascalCase } from "change-case";
+import _ from "lodash"
+import { compileTemplate } from './utils';
+import { Builder } from 'builder-pattern';
+import path from "path"
 
- export default function invokeResolver(invokeObject, boundedContext) {
-    const target = variableResolver(invokeObject.onTarget);
-    const methodName = invokeObject.method.name
-    const result = [];
-    result.push(`${target}.${pascalCase(methodName)}(`)
-    const paraNames = Object.keys(invokeObject.method.parameters);
-    paraNames.forEach((paraName, index)=>{
-        result.push(variableResolver(invokeObject.method.parameters[paraName]))
-        if(index < (paraNames.length - 1)) {
-            result.push(`,`)
-        }        
-    });
-    result.push(`);`)
-    return result.join("");
-  }
-  
- 
+export default function (opts) {
+    return {
+        execute: async ({ context, ...options }) => {
+
+            const parameters = await Promise.all(context.method.parameters
+                .map(async value => await opts.variableResolver.execute({ context: value, ...options })))
+
+            const invokeContext = Builder(Invoke)
+                .target(await opts.variableResolver.execute({ context: context.onTarget, ...options }))
+                .name(await opts.methodResolver.execute({ context: context.method.name, ...options }))
+                .parameters(parameters)
+                .build()
+
+            return await compileTemplate(path.join(opts.templatesDir, `resolvers/invoke.hbs`), invokeContext)
+        }
+    }
+}
+
+
+class Invoke {
+    target
+    name
+    parameters
+}

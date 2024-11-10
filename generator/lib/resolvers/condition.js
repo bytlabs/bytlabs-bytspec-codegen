@@ -5,7 +5,7 @@ import path from "path"
 
 export default function (opts) {
     return {
-        execute: async ({ context }) => {
+        execute: async ({ context, ...options }) => {
 
             const opKey = _.chain(context)
                                 .pick(['isEmpty', 'not'])   
@@ -15,11 +15,11 @@ export default function (opts) {
 
             //build context
             const variable = context.isEmpty? Builder(Variable)
-                                                .name(await opts.variableResolver.execute(context.isEmpty))
+                                                .name(await opts.variableResolver.execute({ context: context.isEmpty, ...options }))
                                                 .build() : null;
 
             const not = context.not? Builder(Not)
-                                                .expression(await opts.conditionResolver.execute(context.isEmpty))
+                                                .expression(await opts.conditionResolver.execute({ context: context.not, ...options }))
                                                 .build() : null;
 
             const conditionContext = Builder(Condition)

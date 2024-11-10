@@ -1,9 +1,25 @@
-import conditionResolver from "./condition.js";
-import methodOpResolver from "./op.js";
+import _ from "lodash"
+import { compileTemplate } from './utils';
+import { Builder } from 'builder-pattern';
+import path from "path"
 
-export default function ifResolver(ifObject, boundedContext) {
-    const condition = conditionResolver(ifObject.condition)
-    return `if (${condition}) {
-        ${methodOpResolver(ifObject.then, boundedContext)}
-    }`;
+export default function (opts) {
+    return {
+        execute: async ({ context, ...options }) => {
+
+            const ifContext = Builder(If)
+                                .expression(await opts.conditionResolver.execute({ context: context.condition, ...options }))
+                                .then(await opts.opResolver.execute({ context: context.then, ...options }))
+                                .build()
+
+            //parse template
+            return await compileTemplate(path.join(opts.templatesDir, `resolvers/if.hbs`), ifContext)
+        }
+    }
+}
+
+
+class If {
+    expression
+    then
 }

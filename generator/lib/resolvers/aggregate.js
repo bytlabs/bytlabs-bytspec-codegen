@@ -4,20 +4,20 @@ import path from "path"
 
 export default function (opts) {
     return {
-        execute: async ({ context }) => {
+        execute: async ({ context, ...options }) => {
 
             //build context
             const actions = await Promise.all(
                 context.actions.map(async action => 
                     Builder(Action)
-                        .name(await opts.aggregateActionResolver.execute(action.name))
-                        .parameters(await opts.variableResolver.execute(action.parameters))
+                        .name(await opts.aggregateActionResolver.execute({ context: action.name, ...options }))
+                        .parameters(await opts.variableResolver.execute({ context: action.parameters, ...options }))
                         .build()
                 ));
 
             const aggregateContext = Builder(Aggregate)
                                         .name(randomName())
-                                        .op(await opts.aggregateOpResolver.execute(context))
+                                        .op(await opts.aggregateOpResolver.execute({ context, ...options }))
                                         .actions(actions)
                                         .build()
 

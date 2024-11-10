@@ -5,7 +5,7 @@ import path from "path"
 
 export default function (opts) {
     return {
-        execute: async ({ context }) => {
+        execute: async ({ context, ...options }) => {
 
             const opKey = _.chain(context)
                                 .pick(['findOne'])   
@@ -15,7 +15,7 @@ export default function (opts) {
 
             //build context
             const findOne = context.findOne? Builder(FindOne)
-                                                .predicate(await opts.matchResolver.execute(context.findOne))
+                                                .predicate(await opts.matchResolver.execute({ context: context.findOne, ...options }))
                                                 .build() : null;
 
             const opContext = Builder(Op)
