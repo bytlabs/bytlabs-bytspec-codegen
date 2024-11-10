@@ -1,9 +1,9 @@
 import _ from "lodash"
-import { compileTemplate } from '../utils/utils.js';
+import compileTemplate from '../../utils/compileTemplate';
 import { Builder } from 'builder-pattern';
 import path from "path"
 
-export default function (opts) {
+export default function (provider) {
     return {
         execute: async ({ context, ...options }) => {
 
@@ -15,7 +15,7 @@ export default function (opts) {
 
             //build context
             const findOne = context.findOne? Builder(FindOne)
-                                                .predicate(await opts.matchResolver.execute({ context: context.findOne, ...options }))
+                                                .predicate(await provider.schemaMatchResolver.execute({ context: context.findOne, ...options }))
                                                 .build() : null;
 
             const opContext = Builder(Op)
@@ -24,7 +24,7 @@ export default function (opts) {
                                 .build()
 
             //parse template
-            return await compileTemplate(path.join(opts.templatesDir, `resolvers/aggregateOps/${opKey}.hbs`), opContext)
+            return await compileTemplate(path.join(provider.schemaTemplate, `aggregateOps/${opKey}.hbs`), opContext)
         }
     }
 }

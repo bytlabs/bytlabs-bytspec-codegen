@@ -9,7 +9,7 @@ export default function (opts) {
                                 .first()
                                 .value();
 
-            const resolverName = `${opKey}Resolver`;
+            const resolverName = `schema${opKey}Resolver`;
             
             return await opts[resolverName].execute({ context: context[opKey], ...options })
         }

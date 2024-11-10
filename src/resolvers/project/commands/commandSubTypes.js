@@ -1,7 +1,7 @@
 import { Builder } from "builder-pattern";
 import _ from "lodash";
 
-export default function (opts) {
+export default function (provider) {
     return {
         execute: async ({ context, ...options }) => {
 
@@ -23,7 +23,7 @@ export default function (opts) {
                         const nestedOtherClasses = await Promise.all(
                             unwrapObj(context.with)
                                 .map(childContext => {
-                                    const args = Builder(InnerCommandInputSubTypesArgs)
+                                    const args = Builder(InnerCommandSubTypesArgs)
                                         .context(childContext)
                                         .boundedContext(boundedContext)
                                         .classNamePrefix(inlineClass.name)
@@ -38,7 +38,7 @@ export default function (opts) {
 
                     }
 
-                    return [...classes, await opts.classContextBuilder.execute({ context: inlineClass, boundedContext })]
+                    return [...classes, await provider.projectCommandClassResolver.execute({ context: inlineClass, boundedContext })]
 
                 }
 
@@ -50,13 +50,13 @@ export default function (opts) {
     }
 }
 
-export class CommandInputSubTypesArgs {
+export class CommandSubTypesArgs {
     context
     boundedContext
     classNamePrefix
 }
 
-class InnerCommandInputSubTypesArgs {
+class InnerCommandSubTypesArgs {
     context
     boundedContext
     classNamePrefix

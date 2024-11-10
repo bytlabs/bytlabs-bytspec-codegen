@@ -1,9 +1,9 @@
 import _ from "lodash"
-import { compileTemplate } from '../utils/utils.js';
+import compileTemplate from '../../utils/compileTemplate';
 import { Builder } from 'builder-pattern';
 import path from "path"
 
-export default function (opts) {
+export default function (provider) {
     return {
         execute: async ({ context, ...options }) => {
 
@@ -14,11 +14,11 @@ export default function (opts) {
 
             const letContext = Builder(Let)
                 .name(letName)
-                .expression(await opts.opResolver.execute({ context: context[letName], ...options }))
+                .expression(await provider.schemaOpResolver.execute({ context: context[letName], ...options }))
                 .build()
 
             //parse template
-            return await compileTemplate(path.join(opts.templatesDir, `resolvers/let.hbs`), letContext)
+            return await compileTemplate(path.join(provider.schemaTemplate, `let.hbs`), letContext)
         }
     }
 }

@@ -2,7 +2,7 @@ import { Builder } from "builder-pattern";
 import { pascalCase } from "change-case";
 import unwrapObj from "../utils/unwrapObj";
 
-export default function (opts) {
+export default function (provider) {
     return {
         execute: async ({ context, boundedContext }) => {
             const project = Builder(Project)
@@ -12,13 +12,13 @@ export default function (opts) {
             const properties = await Promise.all(unwrapObj(context.properties || {})
                 .map(async field =>
                     Builder(Property)
-                        .type(await opts.typeResolver.execute({
+                        .type(await provider.schemaTypeResolver.execute({
                             context: field,
                             domainObject: context,
                             boundedContext
                         }))
                         .name(pascalCase(field.name))
-                        .default(await opts.defaultValueResolver.execute({
+                        .default(await provider.schemaDefaultValueResolver.execute({
                             context: field,
                             domainObject: context,
                             boundedContext

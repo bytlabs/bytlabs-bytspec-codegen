@@ -1,5 +1,4 @@
 import { pascalCase } from "change-case";
-import variableResolver from "./variable.js";
 
 export default function (opts) {
   return {
@@ -24,14 +23,14 @@ export default function (opts) {
           const expressions = [];
           for (let [operator, value] of Object.entries(condition)) {
             if (operator === "$in") {
-              expressions.push(`${parseField(key)}.${operatorsMap[operator]}(${variableResolver(value)})`);
+              expressions.push(`${parseField(key)}.${operatorsMap[operator]}(${opts.schemaVariableResolver.execute({ context: value })})`);
             } else if (operatorsMap[operator]) {
-              expressions.push(`${parseField(key)} ${operatorsMap[operator]} ${variableResolver(value)}`);
+              expressions.push(`${parseField(key)} ${operatorsMap[operator]} ${opts.schemaVariableResolver.execute({ context: value })}`);
             }
           }
           return expressions.join(" && ");
         } else {
-          return `${parseField(key)} == ${variableResolver(condition)}`;
+          return `${parseField(key)} == ${opts.schemaVariableResolver.execute({ context: condition })}`;
         }
       }
 

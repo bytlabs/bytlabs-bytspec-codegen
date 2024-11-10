@@ -1,5 +1,6 @@
+import spec from "./../specs/commerce-platform.json" with  { type: 'json' };
 import fs from "fs-extra";
-import "./lib/partials.js"
+import "./partials.js"
 import { createContainer } from "./di.js";
 
 async function generateApp(spec, outputDirectory, options) {
@@ -21,4 +22,11 @@ async function generateApp(spec, outputDirectory, options) {
   console.log("Application generated successfully!");
 }
 
-export default generateApp;
+
+
+async function main() {
+    const OUTPUT_DIR = "./build";
+    await generateApp(spec, OUTPUT_DIR, { deleteExistingFiles: false });
+}
+
+main().catch(err => console.log(err));

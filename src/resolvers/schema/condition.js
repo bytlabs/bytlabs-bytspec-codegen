@@ -1,9 +1,9 @@
 import _ from "lodash"
-import { compileTemplate } from '../utils/utils.js';
+import compileTemplate from '../../utils/compileTemplate';
 import { Builder } from 'builder-pattern';
 import path from "path"
 
-export default function (opts) {
+export default function (provider) {
     return {
         execute: async ({ context, ...options }) => {
 
@@ -15,11 +15,11 @@ export default function (opts) {
 
             //build context
             const variable = context.isEmpty? Builder(Variable)
-                                                .name(await opts.variableResolver.execute({ context: context.isEmpty, ...options }))
+                                                .name(await provider.schemaVariableResolver.execute({ context: context.isEmpty, ...options }))
                                                 .build() : null;
 
             const not = context.not? Builder(Not)
-                                                .expression(await opts.conditionResolver.execute({ context: context.not, ...options }))
+                                                .expression(await provider.schemaConditionResolver.execute({ context: context.not, ...options }))
                                                 .build() : null;
 
             const conditionContext = Builder(Condition)
@@ -28,7 +28,7 @@ export default function (opts) {
                                 .build()
 
             //parse template
-            return await compileTemplate(path.join(opts.templatesDir, `resolvers/conditions/${opKey}.hbs`), conditionContext)
+            return await compileTemplate(path.join(provider.schemaTemplate, `conditions/${opKey}.hbs`), conditionContext)
         }
     }
 }

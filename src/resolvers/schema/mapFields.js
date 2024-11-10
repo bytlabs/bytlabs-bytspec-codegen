@@ -1,9 +1,9 @@
 import _ from "lodash"
-import { compileTemplate } from '../utils/utils.js';
+import compileTemplate from '../../utils/compileTemplate';
 import { Builder } from 'builder-pattern';
 import path from "path"
 
-export default function (opts) {
+export default function (provider) {
     return {
         execute: async ({ context, ...options }) => {
 
@@ -11,15 +11,15 @@ export default function (opts) {
 
             const props = await Promise.all(_.chain(options.domainObject.properties)
                                                 .omit(context.omit || [])
-                                                .map(async field => await opts.propertyResolver.execute({ context: field.name, ...options }))
+                                                .map(async field => await provider.schemaPropertyResolver.execute({ context: field.name, ...options }))
                                                 .value());
 
             const invokeContext = Builder(MapFields)
-                .source(await opts.variableResolver.execute({ context: context.from, ...options }))
+                .source(await provider.schemaVariableResolver.execute({ context: context.from, ...options }))
                 .props(props)
                 .build()
 
-            return await compileTemplate(path.join(opts.templatesDir, `resolvers/mapField.hbs`), invokeContext)
+            return await compileTemplate(path.join(provider.schemaTemplate, `mapField.hbs`), invokeContext)
         }
     }
 }
