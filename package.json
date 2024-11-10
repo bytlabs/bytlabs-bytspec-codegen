@@ -14,6 +14,7 @@
   "dependencies": {
     "awilix": "^12.0.3",
     "bl": "^6.0.16",
+    "builder-pattern": "^2.2.0",
     "case-anything": "^3.1.0",
     "chance": "^1.1.12",
     "change-case": "^5.4.4",
