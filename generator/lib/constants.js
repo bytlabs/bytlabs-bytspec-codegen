@@ -1,4 +1,4 @@
-const TEMPLATE_PATH = "./generators/bytlabs-dotnet/template";
+const TEMPLATE_PATH = "./generators/template/standard/project";
 
 export {
     TEMPLATE_PATH

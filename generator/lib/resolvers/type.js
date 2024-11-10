@@ -1,29 +1,43 @@
-import lodash from "lodash"
 import { pascalCase } from "change-case"
+import _ from "lodash"
 
-const typeResolver = (type, itemType) => {
-    if(type && type.startsWith("#")) {
-        const typeName = lodash.last(type.split("/"))
-        return pascalCase(typeName)
-    }
+export default function (opts) {
+    return {
+        execute: async ({ context, ...options }) => {
 
-    switch (type) {
-        case "number":
-            return "double";
-        case "text":
-        case "string":
-            return "string"
-        case "date":
-            return "DateTime"
-        case "boolean":
-            return "bool"
-        case "void":
-            return "void"
-        case "collection":
-            return `ICollection<${typeResolver(itemType)}>`
-        default:
-            return type;
+            const typeResolver = async (type, itemType) => {
+                if (type && type.startsWith("#")) {
+                    const typeName = _.last(type.split("/"))
+                    return pascalCase(typeName)
+                }
+
+                switch (type) {
+                    case "number":
+                        return "double";
+                    case "text":
+                    case "string":
+                        return "string"
+                    case "date":
+                        return "DateTime"
+                    case "boolean":
+                        return "bool"
+                    case "void":
+                        return "void"
+                    case "collection":
+                        return `ICollection<${await typeResolver(itemType)}>`
+                    default:
+                        return type;
+                }
+            }
+
+            //parse template
+            return await typeResolver(context.type, context.itemType)
+        }
     }
 }
 
-export default typeResolver;
+
+class Let {
+    name
+    expression
+}

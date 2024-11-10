@@ -1,76 +1,58 @@
 import { pascalCase } from "change-case";
 import path from "path"
-import {
-    getClassTemplateData,
-    parseTemplateWithPath
-} from "../shared.js"
+import { parseTemplateWithPath } from "../shared.js"
 import unwrapObj from "../utils/unwrapObj.js";
 import { TEMPLATE_PATH } from "../constants.js"
-import typeResolver from "../resolvers/type.js";
-import defaultValueResolver from "../resolvers/typeDefault.js";
-import lodash from "lodash";
-import methodOpResolver from "../resolvers/op.js";
-
-const buildInlineClassesTemplateData = (field, boundedContext, classNamePrefix, classes = []) => {
-
-    if (field.hasPropertiesOf) {
-        let inlineClass = boundedContext;
-        const breadcrumbs = field.hasPropertiesOf.split("/").slice(1);
-        for (let breadcrumb of breadcrumbs) {
-            inlineClass = inlineClass[breadcrumb];
-            inlineClass.name = classNamePrefix + "_" + field.name;
-        }
-
-        if (field.except) {
-            inlineClass.properties = lodash.omit(inlineClass.properties, field.except)
-        }
-
-        if (field.with) {
-            const otherClasses = lodash.flatMap(unwrapObj(field.with), childField => buildInlineClassesTemplateData(childField, boundedContext, inlineClass.name))
-            classes = [...classes, ...otherClasses]
-
-        }
-
-        return [...classes, getClassTemplateData(inlineClass, boundedContext)]
-
-    }
-
-    return classes;
-}
+import _ from "lodash";
+import { Builder } from "builder-pattern";
 
 
-const buildTemplateData = (command, boundedContext) => {
+
+
+
+
+const commandContext = async ({ command, boundedContext, opts }) => {
     const projectName = pascalCase(boundedContext.name);
     const className = pascalCase(command.name);
 
 
 
-    const fields = unwrapObj(command.input)
-        .map(field => {
+    const fields = await Promise.all(unwrapObj(command.input)
+        .map(async field => {
 
             let type = null;
             let subTypes;
 
             if (field.hasPropertiesOf) {
-                subTypes = buildInlineClassesTemplateData(field, boundedContext, command.name)
-                type = lodash.last(subTypes).class.name;
+
+                const args = Builder(CommandInputSubTypesArgs)
+                    .field(field)
+                    .boundedContext(boundedContext)
+                    .classNamePrefix(command.name)
+                    .classes([])
+                    .opts(opts)
+                    .build();
+
+                subTypes = opts.commandInputSubTypesContextBuilder(args) || []
+
+                type = _.last(subTypes).class.name;
             }
             else {
-                type = typeResolver(field.type, field.items)
+                type = await opts.typeResolver.execute({ context: { type: field.type, items: field.items } })
             }
 
             return {
                 type: type,
                 name: pascalCase(field.name),
-                default: defaultValueResolver(type),
-                subTypes: subTypes || []
+                default: await opts.defaultValueResolver.execute({ context: { type } }),
+                subTypes: subTypes
             }
-        })
+        }))
 
     let returnType = null;
 
     if (command.returns) {
-        returnType = typeResolver(command.returns);
+        returnType = await opts.typeResolver.execute({ context: command.returns, boundedContext });
     }
 
     const body = command.execute.map(line => methodOpResolver(line, boundedContext, { executionContext: command }))
@@ -78,7 +60,7 @@ const buildTemplateData = (command, boundedContext) => {
     const repoDeps = command.execute
         .filter(op => op.aggregate || (op.let && op.let.aggregate))
         .map(op => op.aggregate ? op.aggregate.type : op.let.aggregate.type)
-        .map(type => ({ type: `IRepository<${typeResolver(type)}, string>`, name: `${lodash.camelCase(typeResolver(type))}Repository` })) || []
+        .map(type => ({ type: `IRepository<${typeResolver(type)}, string>`, name: `${_.camelCase(typeResolver(type))}Repository` })) || []
     deps = [...deps, ...repoDeps]
 
     return {
@@ -88,7 +70,7 @@ const buildTemplateData = (command, boundedContext) => {
         command: {
             name: className,
             fields: fields,
-            subTypes: lodash.flatMap(fields, field => field.subTypes),
+            subTypes: _.flatMap(fields, field => field.subTypes),
             returnType: returnType,
             body: body,
             deps: deps
@@ -105,8 +87,8 @@ export default function () {
 
             for (let boundedContext of unwrapObj(spec.boundedContexts)) {
 
-                const templatesData = unwrapObj(boundedContext.application.commands)
-                    .map(command => buildTemplateData(command, boundedContext))
+                const templatesData = Promise.all(unwrapObj(boundedContext.application.commands)
+                    .map(async command => await commandContext(command, boundedContext)))
 
                 for (let templateData of templatesData) {
                     const destinationDirectory = path.join(buildDirectory, templateData.project.name);

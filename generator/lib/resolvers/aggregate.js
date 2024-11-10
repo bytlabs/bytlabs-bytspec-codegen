@@ -1,4 +1,4 @@
-import { compileTemplate, randomName } from './utils';
+import { compileTemplate, randomName } from '../utils/utils.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
 

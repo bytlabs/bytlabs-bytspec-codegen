@@ -9,24 +9,25 @@ export async function createContainer() {
         strict: true,
     })
 
-    await registerGenerators(container);
+    await registerMultiImplServices(container, 'generator/lib/generators', (name) => `${pascalCase(name)}Generator`);
+    await registerMultiImplServices(container, 'generator/lib/resolvers', (name) => `${name}Resolver`);
+    container.register({
+        templateDir: awilix.asValue("generator/template/standard")
+    })
 
     return container;
 }
 
-async function registerGenerators(container) {
-    const toGeneratorName = (name) => `generator${pascalCase(name)}`;
-
+async function registerMultiImplServices(container, dir, formatName) {
     await container.loadModules(
         [
-            'generators/bytlabs-dotnet/lib/generators/*.js'
+            `${dir}/*.js`
         ],
         {
-            formatName: toGeneratorName,
+            formatName: formatName,
             resolverOptions: {
                 lifetime: awilix.Lifetime.SINGLETON,
-                register: awilix.asFunction,
-                tags: ['generators']
+                register: awilix.asFunction
             },
             esModules: true
         }
@@ -36,8 +37,8 @@ async function registerGenerators(container) {
         generators: awilix.asFunction((opt) => {
             return {
                 all: async () => {
-                    return (await getFilenamesWithoutExtension('generators/bytlabs-dotnet/lib/generators'))
-                        .map(toGeneratorName)
+                    return (await getFilenamesWithoutExtension(dir))
+                        .map(formatName)
                         .map(name => opt[name])
                 }
             }

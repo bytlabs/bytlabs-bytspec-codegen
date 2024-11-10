@@ -1,13 +1,20 @@
 import fs from "fs-extra";
 import path from "path";
 import Handlebars from "handlebars";
-import { pascalCase } from "change-case";
-import typeResolver from "./resolvers/type.js";
-import methodOpResolver from "./resolvers/op.js";
-import unwrapObj from "./utils/unwrapObj.js";
-import defaultValueResolver from "./resolvers/typeDefault.js";
 import { readdir } from 'fs/promises';
-import { basename, extname, join } from 'path';
+import { basename, extname } from 'path';
+
+async function getFilenamesWithoutExtension(directory) {
+    try {
+        const files = await readdir(directory);
+        return files
+            .filter(file => file !== '.' && file !== '..') // Filter out '.' and '..' if present
+            .map(file => basename(file, extname(file))); // Remove extensions
+    } catch (error) {
+        console.error('Error reading directory:', error);
+        return [];
+    }
+}
 
 const parseTemplateWithPath = async (srcDir, destDir, extension, data) => {
     try {
@@ -52,59 +59,9 @@ const parseTemplateWithPath = async (srcDir, destDir, extension, data) => {
 
 
 
-// Function to get filenames without extensions
-async function getFilenamesWithoutExtension(directory) {
-  try {
-    const files = await readdir(directory);
-    return files
-      .filter(file => file !== '.' && file !== '..') // Filter out '.' and '..' if present
-      .map(file => basename(file, extname(file))); // Remove extensions
-  } catch (error) {
-    console.error('Error reading directory:', error);
-    return [];
-  }
-}
 
-const getClassTemplateData = (entity, boundedContext, { isEntity } = {}) => 
-    {
-        const projectName = pascalCase(boundedContext.name);
-        const className = pascalCase(entity.name);
-
-        const fields = unwrapObj(entity.properties || {})
-            .map(field => ({
-                type: typeResolver(field.type, field.items),
-                name: pascalCase(field.name),
-                default: defaultValueResolver(field.type, field.items)
-            }))
-
-        let methods = [];
-
-        if (entity.actions) {
-            methods = unwrapObj(entity.actions)
-                .map(method => ({
-                    name: pascalCase(method.name),
-                    type: "void",
-                    parameters: unwrapObj(method.parameters).map(param=>({name: param.name, type: typeResolver(param.type)})),
-                    body: method.execute.map(line => methodOpResolver(line, boundedContext, { executionContext: entity }))
-                }))
-        }
-
-        return {
-            project: {
-                name: projectName
-            },
-            class: {
-                name: className,
-                fields: isEntity? fields.filter(x=> x.name != "Id") : fields,
-                methods: methods,
-                aggregate: entity.aggregate,
-                idType: isEntity? fields.find(x=>x.name == "Id")?.type : null
-            }
-        };
-}
 
 export {
     parseTemplateWithPath,
-    getClassTemplateData,
     getFilenamesWithoutExtension
 };

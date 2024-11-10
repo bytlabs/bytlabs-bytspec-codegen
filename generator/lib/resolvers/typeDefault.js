@@ -1,30 +1,43 @@
-import lodash from "lodash"
 import { pascalCase } from "change-case"
-import typeResolver from "./type.js"
+import _ from "lodash"
 
-const defaultValueResolver = (type, itemType) => {
-    if(type && type.startsWith("#")) {
-        const typeName = lodash.last(type.split("/"))
-        return `new ${pascalCase(typeName)}()`
-    }
+export default function (opts) {
+    return {
+        execute: async ({ context, ...options }) => {
 
-    switch (type) {
-        case "number":
-            return "0";
-        case "text":
-        case "string":
-            return "string.Empty"
-        case "date":
-            return "DateTime.Now()"
-        case "boolean":
-            return "false"
-        case "void":
-            return "null"
-        case "collection":
-            return `new List<${typeResolver(itemType)}>()`
-        default:
-            return `new ${type}()`;
+            const defaultValueResolver = async (type, itemType) => {
+                if(type && type.startsWith("#")) {
+                    const typeName = lodash.last(type.split("/"))
+                    return `new ${pascalCase(typeName)}()`
+                }
+            
+                switch (type) {
+                    case "number":
+                        return "0";
+                    case "text":
+                    case "string":
+                        return "string.Empty"
+                    case "date":
+                        return "DateTime.Now()"
+                    case "boolean":
+                        return "false"
+                    case "void":
+                        return "null"
+                    case "collection":
+                        return `new List<${await opts.typeResolver.execute(itemType)}>()`
+                    default:
+                        return `new ${type}()`;
+                }
+            }
+
+            //parse template
+            return await defaultValueResolver(context.type, context.itemType)
+        }
     }
 }
 
-export default defaultValueResolver;
+
+class Let {
+    name
+    expression
+}
