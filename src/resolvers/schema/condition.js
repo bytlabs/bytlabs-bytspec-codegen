@@ -7,6 +7,7 @@ import path from "path"
  * Condition schema resolver
  *
  * @export
+ * @function condition
  * @param {Provider} provider
  * @returns {Resolver}
  */

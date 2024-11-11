@@ -7,6 +7,7 @@ import path from "path"
  * AggregateOp schema resolver
  *
  * @export
+ * @function aggregateOp
  * @param {Provider} provider
  * @returns {Resolver}
  * 
