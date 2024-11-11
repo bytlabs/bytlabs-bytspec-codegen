@@ -1,5 +1,5 @@
 {
-  "name": "bytlabs-ddd-generator",
+  "name": "bytlabs-bytspec-codegen",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
