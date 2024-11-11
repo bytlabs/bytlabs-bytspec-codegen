@@ -1,66 +1,0 @@
----
-custom_edit_url: null
----
-
-```ts
-class ConditionSchemaResolver
-```
-
-<div>
-
-</div>
-
-Resolver for evaluating condition schemas.This resolver is responsible for processing a condition block that may containmultiple methods to evaluate an expression. The result of the evaluation is aboolean condition, which determines the flow of the program based on the logicdefined within the condition block.### Usage- This resolver is primarily used by `IfSchemaResolver`, which leverages the condition  to make decisions based on the outcome of the evaluation.### Purpose- To allow flexible condition evaluation within schema-driven logic.- To integrate condition schemas seamlessly with other parts of the application.### Template Details- The resolver utilizes the template located at `conditions/${opKey}.hbs`.- The template is populated using `ConditionTemplateContext`, which provides  the necessary context and data for evaluating the condition.
-
-**See**:
-- [ConditionTemplateContext](ConditionTemplateContext)
-- IfSchemaResolver
-
-<div className="container">
-  <div className="row mb-2"><div className="col col--6"><strong>Properties</strong></div><div className="col col--6"><strong>Methods</strong></div></div>
-  <div className="row"><div className="col col--6"><a href="#provider">provider</a></div><div className="col col--6"><a href="#execute">execute</a></div></div>
-</div>
-
-## constructor
-```ts
-new ConditionSchemaResolver(provider)
-```
-
-<div>
-
-</div>
-
-Creates an instance of SchemaAggregateResolver.
-
-|PARAMETER|TYPE|OPTIONAL|DEFAULT|DESCRIPTION|
-|:---:|:---:|:---:|:---:|:---:|
-|provider|[Provider](Provider)||||
-
-## Properties
-
-### provider {#provider}
-
-<div>
-
-</div>
-
-Container
-
-**Type**: [Provider](Provider)
-
-## Methods
-
-### execute {#execute}
-
-<div>
-  <span className="badge badge--success">async</span>
-</div>
-
-Generates code based on a given schema object, using a specified template.
-
-**Returns**: string
-
-|PARAMETER|TYPE|OPTIONAL|DEFAULT|DESCRIPTION|
-|:---:|:---:|:---:|:---:|:---:|
-|param|[ExecutionArgs](ExecutionArgs)||||
-

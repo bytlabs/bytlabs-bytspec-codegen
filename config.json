@@ -1,7 +1,7 @@
 {
-    "locales": ["ko"],
-    "outDir": "./docs/docs/API",
-    "localesDir": "./docs/i18n/{locale}/docusaurus-plugin-content-docs/current/API",
+    "locales": [],
+    "outDir": "./../bytlabs-bytspec-codegen-docs/docs/docs/API",
+    "localesDir": "./../bytlabs-bytspec-codegen-docs/docs/i18n/{locale}/docusaurus-plugin-content-docs/current/API",
     "sidebar": "./docs",
     "jsdoc": "./jsdoc.json",
     "bulma": false
