@@ -3,7 +3,16 @@ import compileTemplate from '../../utils/compileTemplate';
 import { Builder } from 'builder-pattern';
 import path from "path"
 
-export default function (provider) {
+/**
+ * AggregateOp schema resolver
+ *
+ * @export
+ * @param {Provider} provider
+ * @returns {Resolver}
+ * 
+ * @see aggregate
+ */
+export default function aggregateOp(provider) {
     return {
         execute: async ({ context, ...options }) => {
 

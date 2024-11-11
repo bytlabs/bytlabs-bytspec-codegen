@@ -3,7 +3,14 @@ import compileTemplate from '../../utils/compileTemplate';
 import { Builder } from 'builder-pattern';
 import path from "path"
 
-export default function (provider) {
+/**
+ * Condition schema resolver
+ *
+ * @export
+ * @param {Provider} provider
+ * @returns {Resolver}
+ */
+export default function condition (provider) {
     return {
         execute: async ({ context, ...options }) => {
 
