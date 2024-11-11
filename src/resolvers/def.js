@@ -1,53 +1,12 @@
 /**
- * Defination for a resolver
- *
- * @class Resolver
- * @typedef {Resolver}
- */
-class Resolver {
-
-    /**
-     * execute method details
-     *
-     * @async
-     * @param {Object} param
-     * @param {Object} param.context
-     * @param {Object} param.boundedContext
-     * @param {Object} param.domainObject
-     * @param {Object} param.command
-     * @returns {string}
-     */
-    async execute({ context, ...options }) {
-        return ""
-    }
-}
-
-
-
-/**
  * Defination for the container
- *
- * @class Provider
- * @typedef {Provider}
  */
 class Provider {
     /**
-     * @see aggregate
-     *
-     * @type {Resolver}
+     * @type {SchemaAggregateResolver}
      */
     schemaAggregateResolver
-    /**
-     * @see aggregateOp
-     *
-     * @type {Resolver}
-     */
     schemaAggregateOpResolver
-    /**
-     * @see aggregateOp
-     *
-     * @type {Resolver}
-     */
     schemaConditionResolver
     schemaFindResolver
     schemaIfResolver
@@ -62,4 +21,31 @@ class Provider {
     schemaUnlessResolver
     schemaVariableResolver
     schemaTemplate
+}
+
+
+/**
+ * Defination for the resolver argument
+ */
+class ExecutionArgs {
+    /**
+     * Contains information of the schema object
+     * @type {Object}
+     */
+    context
+    /**
+     * Contains information of executing BoundedContext
+     * @type {Object}
+     */
+    boundedContext
+    /**
+     * Contains information of executing Domain object
+     * @type {Object}
+     */
+    domainObject
+    /**
+     * Contains information of executing Command
+     * @type {Object}
+     */
+    command
 }

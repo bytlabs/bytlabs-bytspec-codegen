@@ -3,17 +3,18 @@ custom_edit_url: null
 ---
 
 ```ts
-class SchemaAggregateResolver
+class ConditionSchemaResolver
 ```
 
 <div>
 
 </div>
 
-Resolves an aggregate schema object within the application.This resolver defines the flow for retrieving an aggregate from the repository,following the patterns established in the Domain-Driven Design (DDD) approach.It facilitates actions on the aggregate, allowing for operations definedin the domain layer to be applied effectively.### Purpose- Retrieve a specific aggregate instance based on the provided criteria.- Perform domain-specific operations on the aggregate, maintaining consistency  and adhering to business rules as defined by the domain layer.### Template Details- Utilizes the `aggregate.hbs` template to generate the necessary code.- Passes `SchemaAggregateTemplateContext` as the template context, providing relevant metadata and  configuration for the generated code to function according to the aggregate's schema.
+Resolver for evaluating condition schemas.This resolver is responsible for processing a condition block that may containmultiple methods to evaluate an expression. The result of the evaluation is aboolean condition, which determines the flow of the program based on the logicdefined within the condition block.### Usage- This resolver is primarily used by `IfSchemaResolver`, which leverages the condition  to make decisions based on the outcome of the evaluation.### Purpose- To allow flexible condition evaluation within schema-driven logic.- To integrate condition schemas seamlessly with other parts of the application.### Template Details- The resolver utilizes the template located at `conditions/${opKey}.hbs`.- The template is populated using `ConditionTemplateContext`, which provides  the necessary context and data for evaluating the condition.
 
 **See**:
-- [SchemaAggregateTemplateContext](SchemaAggregateTemplateContext)
+- [ConditionTemplateContext](ConditionTemplateContext)
+- IfSchemaResolver
 
 <div className="container">
   <div className="row mb-2"><div className="col col--6"><strong>Properties</strong></div><div className="col col--6"><strong>Methods</strong></div></div>
@@ -22,7 +23,7 @@ Resolves an aggregate schema object within the application.This resolver defin
 
 ## constructor
 ```ts
-new SchemaAggregateResolver(provider)
+new ConditionSchemaResolver(provider)
 ```
 
 <div>

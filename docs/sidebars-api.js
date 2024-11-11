@@ -1,23 +1,27 @@
 module.exports = {
-  "api": [
+  "API": [
     {
       "type": "category",
-      "label": "Typedef",
+      "label": "Types",
       "items": [
-        "api/Resolver",
-        "api/Provider",
-        "api/SchemaAggregateResolver",
-        "api/Action",
-        "api/Aggregate"
+        "API/Provider",
+        "API/ExecutionArgs",
+        "API/AggregateOpTemplateContext",
+        "API/AggregateOpTemplateContextFindOne",
+        "API/AggregateTemplateContextAction",
+        "API/AggregateTemplateContext",
+        "API/ConditionTemplateContext",
+        "API/ConditionTemplateContextVariable",
+        "API/ConditionTemplateContextNot"
       ]
     },
     {
       "type": "category",
-      "label": "Global",
+      "label": "Resolvers",
       "items": [
-        "api/execute",
-        "api/aggregateOp",
-        "api/condition"
+        "API/AggregateOpSchemaResolver",
+        "API/AggregateSchemaResolver",
+        "API/ConditionSchemaResolver",
       ]
     }
   ]

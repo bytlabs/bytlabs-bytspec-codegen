@@ -1,0 +1,65 @@
+---
+custom_edit_url: null
+---
+
+```ts
+class AggregateOpSchemaResolver
+```
+
+<div>
+
+</div>
+
+Contains the core logic for creating an instance of an aggregate.This method handles the instantiation of an aggregate, ensuring the correct approach is used based on the scenario. It supports multiple methods of aggregate creation, including:1. **Retrieving from the repository**: If the aggregate already exists in the repository,   it will be fetched and returned.2. **Instantiating via a factory method**: If no instance is found, the method will   use a predefined factory method to create a new instance.3. **Using a constructor**: Alternatively, a constructor can be used to instantiate   the aggregate directly.### Purpose- Ensures that aggregates are created consistently according to the domain layer rules.- Allows flexibility in how aggregates are instantiated, whether from a repository,  a factory method, or via a constructor.### Template Details- Utilizes the `aggregateOps/${opKey}.hbs` template to generate the necessary code.- Passes `AggregateOpTemplateContext` as the template context, providing relevant metadata and  configuration for the generated code to function according to the aggregate's schema.
+
+**See**:
+- [AggregateOpTemplateContext](AggregateOpTemplateContext)
+
+<div className="container">
+  <div className="row mb-2"><div className="col col--6"><strong>Properties</strong></div><div className="col col--6"><strong>Methods</strong></div></div>
+  <div className="row"><div className="col col--6"><a href="#provider">provider</a></div><div className="col col--6"><a href="#execute">execute</a></div></div>
+</div>
+
+## constructor
+```ts
+new AggregateOpSchemaResolver(provider)
+```
+
+<div>
+
+</div>
+
+Creates an instance of SchemaAggregateResolver.
+
+|PARAMETER|TYPE|OPTIONAL|DEFAULT|DESCRIPTION|
+|:---:|:---:|:---:|:---:|:---:|
+|provider|[Provider](Provider)||||
+
+## Properties
+
+### provider {#provider}
+
+<div>
+
+</div>
+
+Container
+
+**Type**: [Provider](Provider)
+
+## Methods
+
+### execute {#execute}
+
+<div>
+  <span className="badge badge--success">async</span>
+</div>
+
+Generates code based on a given schema object, using a specified template.
+
+**Returns**: string
+
+|PARAMETER|TYPE|OPTIONAL|DEFAULT|DESCRIPTION|
+|:---:|:---:|:---:|:---:|:---:|
+|param|[ExecutionArgs](ExecutionArgs)||||
+

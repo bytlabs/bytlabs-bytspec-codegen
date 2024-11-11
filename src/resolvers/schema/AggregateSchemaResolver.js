@@ -6,20 +6,37 @@ import compileTemplate from '../../utils/compileTemplate';
 
 
 /**
- * Resolves aggregate schemas.
+ * Resolves an aggregate schema object within the application.
+ * 
  * This resolver defines the flow for retrieving an aggregate from the repository,
- * allowing actions to be performed on the aggregate as specified in the domain layer.
- *
- * @export
- * @class SchemaAggregateResolver
- * @typedef {SchemaAggregateResolver}
+ * following the patterns established in the Domain-Driven Design (DDD) approach.
+ * It facilitates actions on the aggregate, allowing for operations defined
+ * in the domain layer to be applied effectively.
+ * 
+ * ### Purpose
+ * - Retrieve a specific aggregate instance based on the provided criteria.
+ * - Perform domain-specific operations on the aggregate, maintaining consistency
+ *   and adhering to business rules as defined by the domain layer.
+ * 
+ * ### Template Details
+ * - Utilizes the `aggregate.hbs` template to generate the necessary code.
+ * - Passes `AggregateTemplateContext` as the template context, providing relevant metadata and
+ *   configuration for the generated code to function according to the aggregate's schema.
+ * 
+ * @see AggregateTemplateContext
+ * 
  */
-export default class SchemaAggregateResolver {
+class AggregateSchemaResolver {
+
+    /**
+     * Container
+     * @type {Provider}
+     */
+    provider
+
     
     /**
      * Creates an instance of SchemaAggregateResolver.
-     *
-     * @constructor
      * @param {Provider} provider
      */
     constructor(provider) {
@@ -27,30 +44,25 @@ export default class SchemaAggregateResolver {
     }
     
     /**
-     * execute method details
-     *
-     * @async
-     * @param {Object} param
-     * @param {Object} param.context
-     * @param {Object} param.boundedContext
-     * @param {Object} param.domainObject
-     * @param {Object} param.command
+     * Generates code based on a given schema object, using a specified template.
+     * @param {ExecutionArgs} param
      * @returns {string}
+     * 
      */
     async execute({ context, ...options }) {
 
         //build context
         const actions = await Promise.all(
             context.actions.map(async action =>
-                Builder(Action)
+                Builder(AggregateTemplateContextAction)
                     .name(await this.provider.schemaAggregateActionResolver.execute({ context: action.name, ...options }))
                     .parameters(Promise.all(action.parameters.map(async param => await this.provider.schemaVariableResolver.execute({ context: param, ...options }))))
                     .build()
             ));
 
-        const aggregateContext = Builder(Aggregate)
+        const aggregateContext = Builder(AggregateTemplateContext)
             .name(randomName())
-            .op(await this.provider.schemaAggregateOpResolver.execute({ context, ...options }))
+            .op(await this.provider.aggregateOpSchemaResolver.execute({ context, ...options }))
             .actions(actions)
             .build()
 
@@ -60,50 +72,43 @@ export default class SchemaAggregateResolver {
     }
 }
 
+
+
+export default AggregateSchemaResolver;
+
 /**
  * This class contains method details to invoke on an aggregate instance
- *
- * @class Action
- * @typedef {Action}
  */
-class Action {
+class AggregateTemplateContextAction {
     /**
      * Domain object's action name
-     *
      * @type {string}
      */
     name
     /**
-     * Description placeholder
-     *
-     * @type {Object[]}
+     * List of parameters to be passed in the invoking action
+     * @type {string[]}
      */
     parameters
 }
 
 /**
  * This class contains details to retreive and perfrom operation on an aggregate
- *
- * @class Aggregate
- * @typedef {Aggregate}
  */
-class Aggregate {
+class AggregateTemplateContext {
     /**
      * Variable name for aggregate instance
-     *
      * @type {string}
      */
     name
     /**
      * Operation to retreive aggregate instance
-     *
      * @type {string}
      */
     op
     /**
      * List of actions to perform on aggregate instance
-     *
-     * @type {Action[]}
+     * @type {AggregateTemplateContextAction[]}
      */
     actions
 }
