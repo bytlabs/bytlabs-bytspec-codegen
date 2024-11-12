@@ -1,7 +1,5 @@
 /**
  * Defination for the container
- * 
- * @typedef {Provider}
  */
 class Provider {
     /**
@@ -21,7 +19,7 @@ class Provider {
     /**
      * Description placeholder
      *
-     * @type {ConditionSchemResolver}
+     * @type {ConditionSchemaResolver}
      */
     conditionSchemaResolver
 
@@ -136,7 +134,7 @@ class Provider {
     /**
      * Description placeholder
      *
-     * @type {schemaTemplate}
+     * @type {string}
      */
     schemaTemplate
 }
