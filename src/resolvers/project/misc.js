@@ -1,7 +1,5 @@
 import path from "path";
 import { pascalCase } from "change-case";
-import { TEMPLATE_PATH } from "../constants.js"
-import { parseTemplateWithPath } from "../shared.js"
 
 export default function() {
     return {

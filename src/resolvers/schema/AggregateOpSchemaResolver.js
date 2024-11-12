@@ -65,7 +65,7 @@ class AggregateOpSchemaResolver {
 
         //build context
         const findOne = context.findOne? Builder(AggregateOpTemplateContextFindOne)
-                                            .predicate(await provider.schemaMatchResolver.execute({ context: context.findOne, ...options }))
+                                            .predicate(await this.provider.matchSchemaResolver.execute({ context: context.findOne, ...options }))
                                             .build() : null;
 
         const opContext = Builder(AggregateOpTemplateContext)
@@ -74,7 +74,7 @@ class AggregateOpSchemaResolver {
                             .build()
 
         //parse template
-        return await compileTemplate(path.join(provider.schemaTemplate, `aggregateOps/${opKey}.hbs`), opContext)
+        return await compileTemplate(path.join(this.provider.schemaTemplate, `aggregateOps/${opKey}.hbs`), opContext)
     }
 }
 
@@ -85,25 +85,28 @@ export default AggregateOpSchemaResolver;
  * This class contains details to retreive/instantiate an aggregate instance
  */
 class AggregateOpTemplateContext {
+
     /**
      * Name of aggregate
      * @type {string}
      */
-    name;
+    name
+
     /**
      * FindOne method details
      * @type {AggregateOpTemplateContextFindOne}
      */
-    findOne;
+    findOne
 }
 
 /**
  * This class contains details to retreive an aggregate instance
  */
 class AggregateOpTemplateContextFindOne {
+
     /**
      * Predicate to be passed in findOne method
      * @type {string}
      */
-    predicate;
+    predicate
 }

@@ -55,8 +55,8 @@ class AggregateSchemaResolver {
         const actions = await Promise.all(
             context.actions.map(async action =>
                 Builder(AggregateTemplateContextAction)
-                    .name(await this.provider.schemaAggregateActionResolver.execute({ context: action.name, ...options }))
-                    .parameters(Promise.all(action.parameters.map(async param => await this.provider.schemaVariableResolver.execute({ context: param, ...options }))))
+                    .name(await this.provider.aggregateActionSchemaResolver.execute({ context: action.name, ...options }))
+                    .parameters(Promise.all(action.parameters.map(async param => await this.provider.variableSchemaResolver.execute({ context: param, ...options }))))
                     .build()
             ));
 

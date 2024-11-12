@@ -61,11 +61,11 @@ class ConditionSchemaResolver {
 
         //build context
         const variable = context.isEmpty ? Builder(ConditionTemplateContextVariable)
-            .name(await provider.schemaVariableResolver.execute({ context: context.isEmpty, ...options }))
+            .name(await this.provider.variableSchemaResolver.execute({ context: context.isEmpty, ...options }))
             .build() : null;
 
         const not = context.not ? Builder(ConditionTemplateContextNot)
-            .expression(await provider.schemaConditionResolver.execute({ context: context.not, ...options }))
+            .expression(await this.provider.conditionSchemaResolver.execute({ context: context.not, ...options }))
             .build() : null;
 
         const conditionContext = Builder(ConditionTemplateContext)
@@ -74,7 +74,7 @@ class ConditionSchemaResolver {
             .build()
 
         //parse template
-        return await compileTemplate(path.join(provider.schemaTemplate, `conditions/${opKey}.hbs`), conditionContext)
+        return await compileTemplate(path.join(this.provider.schemaTemplate, `conditions/${opKey}.hbs`), conditionContext)
     }
 }
 

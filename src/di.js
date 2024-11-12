@@ -8,8 +8,8 @@ export async function createContainer() {
         strict: true,
     })
 
-    await autoloadModules(container, 'src/resolvers/project', (name) => `project${pascalCase(name)}Resolver`);
-    await autoloadModules(container, 'src/resolvers/schema', (name) => `schema${pascalCase(name)}Resolver`);
+    await autoloadModules(container, 'src/resolvers/project', (name) => 'camelCase');
+    await autoloadModules(container, 'src/resolvers/schema', (name) => 'camelCase');
 
     const PROJECT_TEMPLATE = "./src/templates/project";
     const SCHEMA_TEMPLATE = "./src/templates/schema";
@@ -30,8 +30,8 @@ async function autoloadModules(container, dir, formatName) {
         {
             formatName: formatName,
             resolverOptions: {
-                lifetime: awilix.Lifetime.SINGLETON,
-                register: awilix.asFunction
+                lifetime: awilix.Lifetime.TRANSIENT,
+                register: awilix.asClass
             },
             esModules: true
         }
