@@ -101,6 +101,13 @@ class ConditionTemplateContext {
  * This class contains details to evaluate a variable state
  */
 class ConditionTemplateContextVariable {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
     name;
 }
 
@@ -108,5 +115,12 @@ class ConditionTemplateContextVariable {
  * This class contains details to invert an expression
  */
 class ConditionTemplateContextNot {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
     expression
 }
