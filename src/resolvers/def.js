@@ -22,7 +22,7 @@ import UnlessSchemaResolver from "./schema/UnlessSchemaResolver.js"
 import VariableSchemaResolver from "./schema/VariableSchemaResolver.js"
 import CommandInputClassTemplateContextResolver from "./project/commands/CommandInputClassTemplateContextResolver.js"
 import CommandTemplateContextResolver from "./project/commands/CommandTemplateContextResolver.js"
-import CommandInputPropertyTemplateContextResolver from "./project/commands/CommandInputTemplateContextResolver.js"
+import CommandInputPropertyTemplateContextResolver from "./project/commands/CommandInputPropertyTemplateContextResolver.js"
 
 /**
  * Defination for the container

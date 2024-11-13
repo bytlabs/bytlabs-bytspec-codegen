@@ -4,7 +4,7 @@ import { Provider, ExecutionArgs } from "./../../def.js"
 import { CommandDepsTemplateContext } from "./CommandDepsTemplateContextResolver.js";
 import unwrapObj from "../../../utils/unwrapObj.js";
 import _ from "lodash"
-import { CommandInputPropertyTemplateContext } from "./CommandInputTemplateContextResolver.js";
+import { CommandInputPropertyTemplateContext } from "./CommandInputPropertyTemplateContextResolver.js";
 import { CommandInputClassTemplateContext } from "./CommandInputClassTemplateContextResolver.js";
 import { CommandInputSubTypesExecutionArgsInputProperty } from "./CommandInputSubTypesTemplateContextResolver.js";
 
