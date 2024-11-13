@@ -1,7 +1,8 @@
 import _ from "lodash"
-import compileTemplate from '../../utils/compileTemplate';
+import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
+import { Provider, ExecutionArgs } from "./../def.js"
 
 /**
 * Description placeholder
@@ -24,8 +25,8 @@ class MapFieldsSchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs} param
-    * @returns {string}
+    * @param {MapFieldsExecutionArgs} param
+    * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
@@ -46,6 +47,41 @@ class MapFieldsSchemaResolver {
 }
 
 export default MapFieldsSchemaResolver
+
+/**
+* Description placeholder
+*/
+export class MapFieldsExecutionArgsContext {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string[]}
+     */
+    omit
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    from
+}
+
+/**
+* Description placeholder
+*/
+export class MapFieldsExecutionArgs extends ExecutionArgs {
+    
+    /**
+     * Description placeholder
+     *
+     * @type {MapFieldsExecutionArgsContext}
+     */
+    context
+}
 
 /**
 * Description placeholder

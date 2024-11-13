@@ -1,4 +1,5 @@
 import { pascalCase } from "change-case";
+import { Provider, ExecutionArgs } from "./../def.js"
 
 /**
 * Description placeholder
@@ -21,8 +22,8 @@ class MatchSchemaResolver {
 
   /**
   * Generates code based on a given schema object, using a specified template.
-  * @param {ExecutionArgs} param
-  * @returns {string}
+  * @param {MatchExecutionArgs} param
+  * @returns {Promise<string>}
   * 
   */
   async execute({ context, ...options }) {
@@ -46,27 +47,27 @@ class MatchSchemaResolver {
         const expressions = [];
         for (let [operator, value] of Object.entries(condition)) {
           if (operator === "$in") {
-            expressions.push(`${parseField(key)}.${operatorsMap[operator]}(${await this.provider.variableSchemaResolver.execute({ context: value })})`);
+            expressions.push(`${parseField(key)}.${operatorsMap[operator]}(${await this.provider.variableSchemaResolver.execute({ context: value, ...options })})`);
           } else if (operatorsMap[operator]) {
-            expressions.push(`${parseField(key)} ${operatorsMap[operator]} ${await this.provider.variableSchemaResolver.execute({ context: value })}`);
+            expressions.push(`${parseField(key)} ${operatorsMap[operator]} ${await this.provider.variableSchemaResolver.execute({ context: value, ...options })}`);
           }
         }
         return expressions.join(" && ");
       } else {
-        return `${parseField(key)} == ${await this.provider.variableSchemaResolver.execute({ context: condition })}`;
+        return `${parseField(key)} == ${await this.provider.variableSchemaResolver.execute({ context: condition, ...options })}`;
       }
     }
 
     const parseLogicalOperator = async (operator, conditions) => {
       const expressions = conditions.map(condition => {
-        return mongoToCSharpPredicate(condition);  // Recursively parse each condition
+        return this.provider.matchSchemaResolver.execute({context: condition, ...options});  // Recursively parse each condition
       });
       const csharpOperator = operator === "$or" ? " || " : " && ";
       return `(${expressions.join(csharpOperator)})`;
     }
 
     const predicateClauses = [];
-    for (let [key, value] of Object.entries(mongoFilter)) {
+    for (let [key, value] of Object.entries(context)) {
       if (key === "$or" || key === "$and") {
         predicateClauses.push(await parseLogicalOperator(key, value));
       } else {
@@ -79,3 +80,17 @@ class MatchSchemaResolver {
 }
 
 export default MatchSchemaResolver
+
+/**
+* Description placeholder
+*/
+export class MatchExecutionArgs extends ExecutionArgs {
+
+  
+  /**
+   * Description placeholder
+   *
+   * @type {Object}
+   */
+  context
+}

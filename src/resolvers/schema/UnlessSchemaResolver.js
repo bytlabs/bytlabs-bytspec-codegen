@@ -1,7 +1,9 @@
 import _ from "lodash"
-import compileTemplate from '../../utils/compileTemplate';
+import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
+import { Provider, ExecutionArgs } from "./../def.js"
+import { ConditionExecutionArgsContext } from "./ConditionSchemaResolver.js";
 
 /**
 * Description placeholder
@@ -24,8 +26,8 @@ class UnlessSchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs} param
-    * @returns {string}
+    * @param {UnlessExecutionArgs} param
+    * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
@@ -44,7 +46,45 @@ export default UnlessSchemaResolver
 /**
 * Description placeholder
 */
-class UnlessTemplateContext {
+export class UnlessExecutionArgsContext {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {ConditionExecutionArgsContext}
+     */
+    condition
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {Object}
+     */
+    then
+
+}
+
+/**
+* Description placeholder
+*/
+export class UnlessExecutionArgs extends ExecutionArgs {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {UnlessExecutionArgsContext}
+     */
+    context
+}
+
+
+/**
+* Description placeholder
+*/
+export class UnlessTemplateContext {
 
     /**
     * Description placeholder

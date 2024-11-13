@@ -1,5 +1,5 @@
 import { pascalCase } from "change-case";
-
+import { Provider, ExecutionArgs } from "./../def.js"
 
 /**
 * Description placeholder
@@ -22,8 +22,8 @@ class AggregateActionSchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs} param
-    * @returns {string}
+    * @param {AggregateActionExecutionArgs} param
+    * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
@@ -31,4 +31,18 @@ class AggregateActionSchemaResolver {
     }
 }
 
-export default AggregateActionSchemaResolver
+export default AggregateActionSchemaResolver;
+
+/**
+* Description placeholder
+*/
+export class AggregateActionExecutionArgs extends ExecutionArgs
+{
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    context
+}

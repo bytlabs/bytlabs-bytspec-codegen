@@ -1,4 +1,5 @@
 import _ from "lodash"
+import { Provider, ExecutionArgs } from "./../def.js"
 
 /**
 * Description placeholder
@@ -21,8 +22,8 @@ class OpSchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs} param
-    * @returns {string}
+    * @param {OpExecutionArgs} param
+    * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
@@ -33,8 +34,22 @@ class OpSchemaResolver {
 
         const resolverName = `schema${opKey}Resolver`;
 
-        return await opts[resolverName].execute({ context: context[opKey], ...options })
+        return await this.provider[resolverName].execute({ context: context[opKey], ...options })
     }
 }
 
 export default OpSchemaResolver
+
+/**
+* Description placeholder
+*/
+export class OpExecutionArgs extends ExecutionArgs {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {Object}
+     */
+    context
+}

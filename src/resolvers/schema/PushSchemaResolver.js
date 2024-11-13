@@ -1,7 +1,8 @@
 import _ from "lodash"
-import compileTemplate from '../../utils/compileTemplate';
+import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
+import { Provider, ExecutionArgs } from "./../def.js"
 
 /**
 * Description placeholder
@@ -24,8 +25,8 @@ class PushSchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs} param
-    * @returns {string}
+    * @param {PushExectionArgs} param
+    * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
@@ -40,6 +41,44 @@ class PushSchemaResolver {
 }
 
 export default PushSchemaResolver
+
+
+/**
+* Description placeholder
+*/
+export class PushExectionArgsContext {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    to
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    value
+}
+
+
+/**
+* Description placeholder
+*/
+export class PushExectionArgs extends ExecutionArgs {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {PushExectionArgsContext}
+     */
+    context
+}
 
 /**
 * Description placeholder

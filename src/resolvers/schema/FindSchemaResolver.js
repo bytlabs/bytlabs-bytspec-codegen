@@ -1,8 +1,9 @@
 import _ from "lodash"
-import compileTemplate from '../../utils/compileTemplate';
+import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
-
+import { Provider, ExecutionArgs } from "./../def.js"
+import { MapFieldsExecutionArgsContext } from "./MapFieldsSchemaResolver.js";
 
 /**
 * Description placeholder
@@ -24,8 +25,8 @@ class FindSchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs} param
-    * @returns {string}
+    * @param {FindExecutionArgs} param
+    * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
@@ -41,11 +42,47 @@ class FindSchemaResolver {
 
 export default FindSchemaResolver
 
+/**
+* Description placeholder
+*/
+export class FindExecutionArgsContext {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    in
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {MapFieldsExecutionArgsContext}
+     */
+    value
+}
+
+/**
+* Description placeholder
+*/
+export class FindExecutionArgs extends ExecutionArgs {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {FindExecutionArgsContext}
+     */
+    context
+}
+
 
 /**
  * Description placeholder
  */
-class FindTemplateContext {
+export class FindTemplateContext {
     
     /**
     * Description placeholder

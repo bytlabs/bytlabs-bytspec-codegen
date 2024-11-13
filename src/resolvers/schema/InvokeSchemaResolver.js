@@ -1,7 +1,8 @@
 import _ from "lodash"
-import compileTemplate from '../../utils/compileTemplate';
+import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
+import { Provider, ExecutionArgs } from "./../def.js"
 
 /**
 * Description placeholder
@@ -23,8 +24,8 @@ class InvokeSchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs} param
-    * @returns {string}
+    * @param {InvokeExecutionArgs} param
+    * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
@@ -46,7 +47,65 @@ export default InvokeSchemaResolver
 /**
 * Description placeholder
 */
-class InvokeTempleContext {
+export class InvokeExecutionArgsContextMethod {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    name
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string[]}
+     */
+    parameters
+}
+
+/**
+* Description placeholder
+*/
+export class InvokeExecutionArgsContext {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {InvokeExecutionArgsContextMethod}
+     */
+    method
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    onTarget
+}
+
+/**
+* Description placeholder
+*/
+export class InvokeExecutionArgs extends ExecutionArgs {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {InvokeExecutionArgsContext}
+     */
+    context
+}
+
+/**
+* Description placeholder
+*/
+export class InvokeTempleContext {
     /**
     * Description placeholder
     */

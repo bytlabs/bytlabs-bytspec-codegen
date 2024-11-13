@@ -1,7 +1,8 @@
 import _ from "lodash"
-import compileTemplate from '../../utils/compileTemplate';
+import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
+import { Provider, ExecutionArgs } from "./../def.js"
 
 /**
 * Description placeholder
@@ -24,8 +25,8 @@ class LetSchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs} param
-    * @returns {string}
+    * @param {LetExecutionArgs} param
+    * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
@@ -46,10 +47,23 @@ class LetSchemaResolver {
 
 export default LetSchemaResolver
 
+
+export class LetExecutionArgs extends ExecutionArgs {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {Object}
+     */
+    context
+}
+
+
 /**
 * Description placeholder
 */
-class LetTemplateContext {
+export class LetTemplateContext {
 
     /**
     * Description placeholder

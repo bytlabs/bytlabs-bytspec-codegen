@@ -1,7 +1,16 @@
 import { readdir } from 'fs/promises';
 import { basename, extname } from 'path';
 
-async function getFilenamesWithoutExtension(directory) {
+
+/**
+ * Description placeholder
+ *
+ * @export
+ * @async
+ * @param {string} directory
+ * @returns {Promise<string[]>}
+ */
+export default async function getFilenamesWithoutExtension(directory) {
     try {
         const files = await readdir(directory);
         return files
@@ -12,5 +21,3 @@ async function getFilenamesWithoutExtension(directory) {
         return [];
     }
 }
-
-export default getFilenamesWithoutExtension;

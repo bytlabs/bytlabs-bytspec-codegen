@@ -1,3 +1,4 @@
+// @ts-ignore
 import spec from "./../specs/commerce-platform.json" with  { type: 'json' };
 import fs from "fs-extra";
 import "./partials.js"

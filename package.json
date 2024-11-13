@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node index.js",
-    "docs": "jsdoc-to-mdx -c config.json"
+    "docs": "jsdoc-to-mdx -c jsdoc-to-mdx.config.json"
   },
   "type": "module",
   "keywords": [],

@@ -1,8 +1,9 @@
 import _ from "lodash"
-import compileTemplate from '../../utils/compileTemplate';
+import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
-
+import { Provider, ExecutionArgs } from "./../def.js"
+import { ConditionExecutionArgsContext } from "./ConditionSchemaResolver.js";
 
 /**
 * Description placeholder
@@ -25,8 +26,8 @@ class IfSchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs} param
-    * @returns {string}
+    * @param {IfExecutionArgs} param
+    * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
@@ -46,7 +47,44 @@ export default IfSchemaResolver
 /**
 * Description placeholder
 */
-class IfTemplateContext {
+export class IfExecutionArgsContext {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {ConditionExecutionArgsContext}
+     */
+    condition
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {Object}
+     */
+    then
+}
+
+/**
+* Description placeholder
+*/
+export class IfExecutionArgs extends ExecutionArgs {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {IfExecutionArgsContext}
+     */
+    context
+}
+
+
+/**
+* Description placeholder
+*/
+export class IfTemplateContext {
     /**
     * Description placeholder
     */

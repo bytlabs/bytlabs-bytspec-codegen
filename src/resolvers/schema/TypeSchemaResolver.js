@@ -1,5 +1,6 @@
 import { pascalCase } from "change-case"
 import _ from "lodash"
+import { Provider, ExecutionArgs } from "./../def.js"
 
 /**
 * Description placeholder
@@ -22,8 +23,8 @@ class TypeSchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs} param
-    * @returns {string}
+    * @param {TypeExecutionArgs} param
+    * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
@@ -58,3 +59,40 @@ class TypeSchemaResolver {
 }
 
 export default TypeSchemaResolver
+
+/**
+* Description placeholder
+*/
+export class TypeExecutionArgsContext {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    type
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    itemType
+
+}
+
+/**
+* Description placeholder
+*/
+export class TypeExecutionArgs extends ExecutionArgs {
+  
+    
+    /**
+     * Description placeholder
+     *
+     * @type {TypeExecutionArgsContext}
+     */
+    context
+}

@@ -1,5 +1,6 @@
 import { pascalCase } from "change-case"
 import _ from "lodash"
+import { Provider, ExecutionArgs } from "./../def.js"
 
 /**
 * Description placeholder
@@ -22,14 +23,14 @@ class TypeDefaultSchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs} param
-    * @returns {string}
+    * @param {TypeDefaultExecutionArgs} param
+    * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
         const defaultValueResolver = async (type, itemType) => {
             if (type && type.startsWith("#")) {
-                const typeName = lodash.last(type.split("/"))
+                const typeName = _.last(type.split("/"))
                 return `new ${pascalCase(typeName)}()`
             }
 
@@ -46,7 +47,7 @@ class TypeDefaultSchemaResolver {
                 case "void":
                     return "null"
                 case "collection":
-                    return `new List<${await opts.typeResolver.execute(itemType)}>()`
+                    return `new List<${await this.provider.typeSchemaResolver.execute(itemType)}>()`
                 default:
                     return `new ${type}()`;
             }
@@ -58,3 +59,41 @@ class TypeDefaultSchemaResolver {
 }
 
 export default TypeDefaultSchemaResolver
+
+
+/**
+* Description placeholder
+*/
+export class TypeDefaultExecutionArgsContext {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    type
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    itemType
+}
+
+
+/**
+* Description placeholder
+*/
+export class TypeDefaultExecutionArgs extends ExecutionArgs {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {TypeDefaultExecutionArgsContext}
+     */
+    context
+}

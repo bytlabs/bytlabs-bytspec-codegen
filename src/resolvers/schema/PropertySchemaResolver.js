@@ -1,4 +1,5 @@
 import { pascalCase } from "change-case";
+import { Provider, ExecutionArgs } from "./../def.js"
 
 /**
 * Description placeholder
@@ -21,8 +22,8 @@ class PropertySchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs} param
-    * @returns {string}
+    * @param {PropertyExecutionArgs} param
+    * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
@@ -31,3 +32,16 @@ class PropertySchemaResolver {
 }
 
 export default PropertySchemaResolver
+
+/**
+* Description placeholder
+*/
+export class PropertyExecutionArgs {
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    context
+}

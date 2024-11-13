@@ -1,5 +1,6 @@
 import { pascalCase } from "change-case"
 import _ from "lodash"
+import { Provider, ExecutionArgs } from "./../def.js"
 
 /**
 * Description placeholder
@@ -22,8 +23,8 @@ class VariableSchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs} param
-    * @returns {string}
+    * @param {VariableExecutionArgs} param
+    * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
@@ -67,3 +68,18 @@ class VariableSchemaResolver {
 }
 
 export default VariableSchemaResolver
+
+
+/**
+* Description placeholder
+*/
+export class VariableExecutionArgs extends ExecutionArgs {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    context
+}

@@ -1,4 +1,5 @@
 import { pascalCase } from "change-case";
+import { Provider, ExecutionArgs } from "./../def.js"
 
 /**
 * Description placeholder
@@ -21,8 +22,8 @@ class MethodSchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs} param
-    * @returns {string}
+    * @param {MethodExecutionArgs} param
+    * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
@@ -31,3 +32,17 @@ class MethodSchemaResolver {
 }
 
 export default MethodSchemaResolver
+
+/**
+* Description placeholder
+*/
+export class MethodExecutionArgs extends ExecutionArgs {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    context
+}

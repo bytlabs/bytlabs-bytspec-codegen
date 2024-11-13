@@ -2,7 +2,19 @@ import fs from "fs-extra";
 import path from "path";
 import Handlebars from "handlebars";
 
-const parseTemplateWithPath = async (srcDir, destDir, extension, data) => {
+
+/**
+ * Description placeholder
+ *
+ * @export
+ * @async
+ * @param {string} srcDir
+ * @param {string} destDir
+ * @param {string} extension
+ * @param {*} data
+ * @returns {Promise}
+ */
+export default async function parseTemplateWithPath (srcDir, destDir, extension, data) {
     try {
         // Recursively process each file and directory
         async function processDirectory(currentSrcDir, currentDestDir) {
@@ -42,5 +54,3 @@ const parseTemplateWithPath = async (srcDir, destDir, extension, data) => {
         console.error("Error processing "+ extension +" files:", err);
     }
 }
-
-export default parseTemplateWithPath;

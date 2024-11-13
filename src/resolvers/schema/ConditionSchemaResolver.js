@@ -1,8 +1,8 @@
 import _ from "lodash"
-import compileTemplate from '../../utils/compileTemplate';
+import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
-
+import { Provider, ExecutionArgs } from "./../def.js"
 
 /**
  * Resolver for evaluating condition schemas.
@@ -47,8 +47,8 @@ class ConditionSchemaResolver {
 
     /**
      * Generates code based on a given schema object, using a specified template.
-     * @param {ExecutionArgs} param
-     * @returns {string}
+     * @param {ConditionExecutionArgs} param
+     * @returns {Promise<string>}
      * 
      */
     async execute({ context, ...options }) {
@@ -82,9 +82,48 @@ export default ConditionSchemaResolver;
 
 
 /**
+* Description placeholder
+*/
+export class ConditionExecutionArgsContext {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    isEmpty
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {ConditionExecutionArgsContext}
+     */
+    not    
+}
+
+
+/**
+* Description placeholder
+*/
+export class ConditionExecutionArgs extends ExecutionArgs {
+
+    /**
+     * Description placeholder
+     *
+     * @type {ConditionExecutionArgsContext}
+     */
+    context
+    
+}
+
+
+
+/**
  * This class contains details to evaluate condition block
  */
-class ConditionTemplateContext {
+export class ConditionTemplateContext {
     /**
      * Contains info to evaluate a variable
      * @type {ConditionTemplateContextVariable}
@@ -100,7 +139,7 @@ class ConditionTemplateContext {
 /**
  * This class contains details to evaluate a variable state
  */
-class ConditionTemplateContextVariable {
+export class ConditionTemplateContextVariable {
 
     
     /**
@@ -114,7 +153,7 @@ class ConditionTemplateContextVariable {
 /**
  * This class contains details to invert an expression
  */
-class ConditionTemplateContextNot {
+export class ConditionTemplateContextNot {
 
     
     /**

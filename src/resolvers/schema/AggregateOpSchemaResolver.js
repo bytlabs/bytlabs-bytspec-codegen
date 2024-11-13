@@ -1,8 +1,9 @@
 import _ from "lodash"
-import compileTemplate from '../../utils/compileTemplate';
+import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
-
+import { Provider, ExecutionArgs } from "./../def.js"
+import { AggregateExecutionArgsContext } from "./AggregateSchemaResolver.js";
 
 /**
  * Contains the core logic for creating an instance of an aggregate.
@@ -51,8 +52,8 @@ class AggregateOpSchemaResolver {
 
     /**
      * Generates code based on a given schema object, using a specified template.
-     * @param {ExecutionArgs} param
-     * @returns {string}
+     * @param {AggregateOpExecutionArgs} param
+     * @returns {Promise<string>}
      * 
      */
     async execute ({ context, ...options }) {
@@ -69,7 +70,7 @@ class AggregateOpSchemaResolver {
                                             .build() : null;
 
         const opContext = Builder(AggregateOpTemplateContext)
-                            .name(_last(context.type.split("/")))
+                            .name(_.last(context.type.split("/")))
                             .findOne(findOne)
                             .build()
 
@@ -81,10 +82,28 @@ class AggregateOpSchemaResolver {
 export default AggregateOpSchemaResolver;
 
 
+
+/**
+* Description placeholder
+*/
+export class AggregateOpExecutionArgs extends ExecutionArgs
+{
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {AggregateExecutionArgsContext}
+     */
+    context  
+    
+}
+
+
 /**
  * This class contains details to retreive/instantiate an aggregate instance
  */
-class AggregateOpTemplateContext {
+export class AggregateOpTemplateContext {
 
     /**
      * Name of aggregate
@@ -102,7 +121,7 @@ class AggregateOpTemplateContext {
 /**
  * This class contains details to retreive an aggregate instance
  */
-class AggregateOpTemplateContextFindOne {
+export class AggregateOpTemplateContextFindOne {
 
     /**
      * Predicate to be passed in findOne method

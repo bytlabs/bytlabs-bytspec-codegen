@@ -1,7 +1,30 @@
+import CommandDepsTemplateContextResolver from "./project/commands/CommandDepsTemplateContextResolver.js"
+import CommandExecuteTemplateContextResolver from "./project/commands/CommandExecuteTemplateContextResolver.js"
+import CommandInputTypesTemplateContextResolver from "./project/commands/CommandInputTypesTemplateContextResolver.js"
+import CommandInputTypeContextResolver from "./project/commands/CommandInputTypeTemplateContextResolver.js"
+import AggregateActionSchemaResolver from "./schema/AggregateActionSchemaResolver.js"
+import AggregateOpSchemaResolver from "./schema/AggregateOpSchemaResolver.js"
+import AggregateSchemaResolver from "./schema/AggregateSchemaResolver.js"
+import ConditionSchemaResolver from "./schema/ConditionSchemaResolver.js"
+import FindSchemaResolver from "./schema/FindSchemaResolver.js"
+import IfSchemaResolver from "./schema/IfSchemaResolver.js"
+import InvokeSchemaResolver from "./schema/InvokeSchemaResolver.js"
+import LetSchemaResolver from "./schema/LetSchemaResolver.js"
+import MapFieldsSchemaResolver from "./schema/MapFieldsSchemaResolver.js"
+import MatchSchemaResolver from "./schema/MatchSchemaResolver.js"
+import MethodSchemaResolver from "./schema/MethodSchemaResolver.js"
+import OpSchemaResolver from "./schema/OpSchemaResolver.js"
+import PropertySchemaResolver from "./schema/PropertySchemaResolver.js"
+import PushSchemaResolver from "./schema/PushSchemaResolver.js"
+import TypeDefaultSchemaResolver from "./schema/TypeDefaultSchemaResolver.js"
+import TypeSchemaResolver from "./schema/TypeSchemaResolver.js"
+import UnlessSchemaResolver from "./schema/UnlessSchemaResolver.js"
+import VariableSchemaResolver from "./schema/VariableSchemaResolver.js"
+
 /**
  * Defination for the container
  */
-class Provider {
+export class Provider {
     /**
      * Description placeholder
      * 
@@ -137,20 +160,44 @@ class Provider {
      * @type {string}
      */
     schemaTemplate
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {CommandExecuteTemplateContextResolver}
+     */
+    commandExecuteTemplateContextResolver
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {CommandDepsTemplateContextResolver}
+     */
+    commandDepsTemplateContextResolver
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {CommandInputTypesTemplateContextResolver}
+     */
+    commandInputTypesTemplateContextResolver
+
+    /**
+     * Description placeholder
+     *
+     * @type {CommandInputTypeContextResolver}
+     */
+    commandInputTypeContextResolver
 }
 
 
 /**
  * Defination for the resolver argument
  */
-class ExecutionArgs {
-
-    /**
-     * Contains information of the schema object
-     * 
-     * @type {Object}
-     */
-    context
+export class ExecutionArgs {
 
     /**
      * Contains information of executing BoundedContext

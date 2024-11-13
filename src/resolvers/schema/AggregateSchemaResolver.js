@@ -1,8 +1,9 @@
 
 import { Builder } from 'builder-pattern';
 import path from "path"
-import randomName from '../../utils/randomName';
-import compileTemplate from '../../utils/compileTemplate';
+import randomName from '../../utils/randomName.js';
+import compileTemplate from '../../utils/compileTemplate.js';
+import { Provider, ExecutionArgs } from "./../def.js"
 
 
 /**
@@ -45,8 +46,8 @@ class AggregateSchemaResolver {
     
     /**
      * Generates code based on a given schema object, using a specified template.
-     * @param {ExecutionArgs} param
-     * @returns {string}
+     * @param {AggregateExecutionArgs} param
+     * @returns {Promise<string>}
      * 
      */
     async execute({ context, ...options }) {
@@ -56,7 +57,9 @@ class AggregateSchemaResolver {
             context.actions.map(async action =>
                 Builder(AggregateTemplateContextAction)
                     .name(await this.provider.aggregateActionSchemaResolver.execute({ context: action.name, ...options }))
-                    .parameters(Promise.all(action.parameters.map(async param => await this.provider.variableSchemaResolver.execute({ context: param, ...options }))))
+                    .parameters(await Promise.all(
+                        action.parameters.map(async param => 
+                            await this.provider.variableSchemaResolver.execute({ context: param, ...options }))))
                     .build()
             ));
 
@@ -72,14 +75,81 @@ class AggregateSchemaResolver {
     }
 }
 
-
-
 export default AggregateSchemaResolver;
+
+/**
+* Description placeholder
+*/
+export class AggregateExecutionArgsContextAction {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    name
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string[]}
+     */
+    parameters
+}
+
+/**
+* Description placeholder
+*/
+export class AggregateExecutionArgsContext {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {AggregateExecutionArgsContextAction[]}
+     */
+    actions
+
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    type
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {Object}
+     */
+    findOne
+}
+
+
+/**
+* Description placeholder
+*/
+export class AggregateExecutionArgs extends ExecutionArgs {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {AggregateExecutionArgsContext}
+     */
+    context
+}
+
+
+
 
 /**
  * This class contains method details to invoke on an aggregate instance
  */
-class AggregateTemplateContextAction {
+export class AggregateTemplateContextAction {
     /**
      * Domain object's action name
      * @type {string}
@@ -95,7 +165,7 @@ class AggregateTemplateContextAction {
 /**
  * This class contains details to retreive and perfrom operation on an aggregate
  */
-class AggregateTemplateContext {
+export class AggregateTemplateContext {
     /**
      * Variable name for aggregate instance
      * @type {string}
