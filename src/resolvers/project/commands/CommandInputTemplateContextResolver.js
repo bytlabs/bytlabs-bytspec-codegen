@@ -3,7 +3,7 @@ import unwrapObj from "../../../utils/unwrapObj.js";
 import { ExecutionArgs, Provider } from "../../def.js";
 import { pascalCase } from "change-case";
 import _ from "lodash"
-import { CommandTemplateExecutionArgsContextInputProperty } from "./CommandTemplateContextResolver.js";
+import { CommandInputSubTypesExecutionArgsInputProperty } from "./CommandInputSubTypesTemplateContextResolver.js";
 
 /**
 * Description placeholder
@@ -35,8 +35,8 @@ class CommandInputPropertyTemplateContextResolver {
         /**
              * Description placeholder
              *
-             * @param {Object<string, CommandTemplateExecutionArgsContextInputProperty>} obj
-             * @returns {(CommandTemplateExecutionArgsContextInputProperty & { name: string })[]}
+             * @param {Object<string, CommandInputSubTypesExecutionArgsInputProperty>} obj
+             * @returns {(CommandInputSubTypesExecutionArgsInputProperty & { name: string })[]}
              */
         const unwrapWith = (obj) => {
             return unwrapObj(obj)
@@ -76,7 +76,7 @@ export class CommandInputExecutionArgs extends ExecutionArgs {
     /**
      * Description placeholder
      *
-     * @type {Object<string, CommandTemplateExecutionArgsContextInputProperty>}
+     * @type {Object<string, CommandInputSubTypesExecutionArgsInputProperty>}
      */
     context
 }
