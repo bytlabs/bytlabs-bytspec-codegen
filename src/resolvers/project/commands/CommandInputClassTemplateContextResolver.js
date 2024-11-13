@@ -6,7 +6,7 @@ import unwrapObj from "../../../utils/unwrapObj.js";
 /**
 * Description placeholder
 */
-class CommandInputTypeContextResolver {
+class CommandInputClassTemplateContextResolver {
 
     /**
     * Container
@@ -15,7 +15,7 @@ class CommandInputTypeContextResolver {
     provider
 
     /**
-    * Creates an instance of CommandInputTypeContextResolver.
+    * Creates an instance of CommandInputClassContextResolver.
     * @param {Provider} provider
     */
     constructor(provider) {
@@ -24,18 +24,18 @@ class CommandInputTypeContextResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs} param
-    * @returns {Promise<>}
+    * @param {CommandInputClassExecutionArgs} param
+    * @returns {Promise<CommandInputClassTemplateContext>}
     * 
     */
     async execute({ context, ...options }) {
-        const project = Builder(CommandInputTypeTemplateContextProject)
+        const project = Builder(CommandInputClassTemplateContextProject)
             .name(pascalCase(options.boundedContext.name))
             .build();
 
         const properties = await Promise.all(unwrapObj(context.properties || {})
             .map(async field =>
-                Builder(CommandInputTypeTemplateContextClassProperty)
+                Builder(CommandInputClassTemplateContextClassProperty)
                     .type(await this.provider.typeSchemaResolver.execute({
                         context: field,
                         domainObject: context,
@@ -50,32 +50,66 @@ class CommandInputTypeContextResolver {
                     .build()
             ))
 
-        const $class = Builder(CommandInputTypeTemplateContextClass)
+        const $class = Builder(CommandInputClassTemplateContextClass)
             .name(pascalCase(context.name))
             .properties(properties)
             .build();
 
-        return Builder(CommandInputTypeTemplateContext)
+        return Builder(CommandInputClassTemplateContext)
             .project(project)
             .class($class)
             .build();
     }
 }
 
-export default CommandInputTypeContextResolver
-
-
+export default CommandInputClassTemplateContextResolver
 
 /**
 * Description placeholder
 */
-export class CommandInputTypeTemplateContext {
+export class CommandInputClassExecutionArgsContext {
 
     
     /**
      * Description placeholder
      *
-     * @type {CommandInputTypeTemplateContextProject}
+     * @type {string}
+     */
+    name
+
+    /**
+     * Description placeholder
+     *
+     * @type {Object<string, { type: string, itemType: string }>}
+     */
+    properties
+
+}
+
+/**
+* Description placeholder
+*/
+export class CommandInputClassExecutionArgs extends ExecutionArgs {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {CommandInputClassExecutionArgsContext}
+     */
+    context
+}
+
+/**
+* Description placeholder
+*/
+export class CommandInputClassTemplateContext {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {CommandInputClassTemplateContextProject}
      */
     project
 
@@ -83,7 +117,7 @@ export class CommandInputTypeTemplateContext {
     /**
      * Description placeholder
      *
-     * @type {CommandInputTypeTemplateContextClass}
+     * @type {CommandInputClassTemplateContextClass}
      */
     class
 }
@@ -91,7 +125,7 @@ export class CommandInputTypeTemplateContext {
 /**
 * Description placeholder
 */
-export class CommandInputTypeTemplateContextProject {
+export class CommandInputClassTemplateContextProject {
 
     
     /**
@@ -105,7 +139,7 @@ export class CommandInputTypeTemplateContextProject {
 /**
 * Description placeholder
 */
-export class CommandInputTypeTemplateContextClass {
+export class CommandInputClassTemplateContextClass {
 
     
     /**
@@ -119,7 +153,7 @@ export class CommandInputTypeTemplateContextClass {
     /**
      * Description placeholder
      *
-     * @type {CommandInputTypeTemplateContextClassProperty[]}
+     * @type {CommandInputClassTemplateContextClassProperty[]}
      */
     properties
 }
@@ -127,7 +161,7 @@ export class CommandInputTypeTemplateContextClass {
 /**
 * Description placeholder
 */
-export class CommandInputTypeTemplateContextClassProperty {
+export class CommandInputClassTemplateContextClassProperty {
 
     
     /**

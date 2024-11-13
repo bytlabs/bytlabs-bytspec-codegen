@@ -1,7 +1,8 @@
 import CommandDepsTemplateContextResolver from "./project/commands/CommandDepsTemplateContextResolver.js"
 import CommandExecuteTemplateContextResolver from "./project/commands/CommandExecuteTemplateContextResolver.js"
-import CommandInputTypesTemplateContextResolver from "./project/commands/CommandInputTypesTemplateContextResolver.js"
-import CommandInputTypeContextResolver from "./project/commands/CommandInputTypeTemplateContextResolver.js"
+import CommandInputSubTypesTemplateContextResolver from "./project/commands/CommandInputSubTypesTemplateContextResolver.js"
+import CommandInputTemplateContextResolver from "./project/commands/CommandInputTemplateContextResolver.js"
+import CommandInputTypeContextResolver from "./project/commands/CommandInputClassTemplateContextResolver.js"
 import AggregateActionSchemaResolver from "./schema/AggregateActionSchemaResolver.js"
 import AggregateOpSchemaResolver from "./schema/AggregateOpSchemaResolver.js"
 import AggregateSchemaResolver from "./schema/AggregateSchemaResolver.js"
@@ -20,6 +21,8 @@ import TypeDefaultSchemaResolver from "./schema/TypeDefaultSchemaResolver.js"
 import TypeSchemaResolver from "./schema/TypeSchemaResolver.js"
 import UnlessSchemaResolver from "./schema/UnlessSchemaResolver.js"
 import VariableSchemaResolver from "./schema/VariableSchemaResolver.js"
+import CommandInputClassTemplateContextResolver from "./project/commands/CommandInputClassTemplateContextResolver.js"
+import CommandTemplateContextResolver from "./project/commands/CommandTemplateContextResolver.js"
 
 /**
  * Defination for the container
@@ -161,6 +164,13 @@ export class Provider {
      */
     schemaTemplate
 
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    projectTemplate
+
     
     /**
      * Description placeholder
@@ -181,9 +191,9 @@ export class Provider {
     /**
      * Description placeholder
      *
-     * @type {CommandInputTypesTemplateContextResolver}
+     * @type {CommandInputSubTypesTemplateContextResolver}
      */
-    commandInputTypesTemplateContextResolver
+    commandInputSubTypesTemplateContextResolver
 
     /**
      * Description placeholder
@@ -191,6 +201,31 @@ export class Provider {
      * @type {CommandInputTypeContextResolver}
      */
     commandInputTypeContextResolver
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {CommandInputTemplateContextResolver}
+     */
+    commandInputTemplateContextResolver
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {CommandInputClassTemplateContextResolver}
+     */
+    commandInputClassTemplateContextResolver
+
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {CommandTemplateContextResolver}
+     */
+    commandTemplateContextResolver
 }
 
 
@@ -219,4 +254,26 @@ export class ExecutionArgs {
      * @type {Object}
      */
     command
+}
+
+/**
+* Description placeholder
+*/
+export class FileResolverArgs {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {{boundedContexts: any}}
+     */
+    spec
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    outputDirectory
 }

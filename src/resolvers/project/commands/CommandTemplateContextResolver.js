@@ -1,8 +1,9 @@
 import { pascalCase } from "change-case";
 import { Builder } from "builder-pattern";
-import { CommandSubTypesArgs } from "./CommandInputTypesTemplateContextResolver.js";
 import { Provider, ExecutionArgs } from "./../../def.js"
 import { CommandDepsTemplateContext } from "./CommandDepsTemplateContextResolver.js";
+import unwrapObj from "../../../utils/unwrapObj.js";
+import _ from "lodash"
 
 /**
 * Description placeholder
@@ -25,48 +26,175 @@ class CommandTemplateContextResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {*} param
-    * @returns {CommandTemplateContext}
+    * @param {CommandTemplateExecutionArgs} param
+    * @returns {Promise<CommandTemplateContext>}
     * 
     */
     async execute({ context, ...options }) {
 
-            
+        /**
+         * Description placeholder
+         *
+         * @param {Object<string, CommandTemplateExecutionArgsContextInputProperty>} obj
+         * @returns {(CommandTemplateExecutionArgsContextInputProperty & { name: string })[]}
+         */
+        const unwrapWith = (obj) => {
+            return unwrapObj(obj)
+        }
+
+        const getSubTypes = async () => {
+            _.flatMap(await Promise.all(
+                unwrapWith(context.input)
+                    .map(async field => {
+
+                        if (field.hasPropertiesOf) {
+
+                            const subTypes = await this.provider.commandInputSubTypesTemplateContextResolver.execute({ context: field, ...options })
+
+                            return subTypes;
+                        }
+
+                        return []
+                    })
+            ))
+        }
 
 
-            const subTypes = _.flatMap(fields, field => field.subTypes);
 
-            const repositoryTypes = _.chain(context.execute)
-                                        .filter(op => op.aggregate || (op.let && op.let.aggregate))
-                                        .map(op => op.aggregate ? op.aggregate.type : op.let.aggregate.type)
-                                        .uniq()
-                                        .value()
-            
+        const repositoryTypes = _.chain(context.execute)
+            .filter(op => op.aggregate || (op.let && op.let.aggregate))
+            .map(op => op.aggregate ? op.aggregate.type : op.let.aggregate.type)
+            .uniq()
+            .value()
 
-            return Builder(CommandTemplateContext)
-                        .project(Builder(ProjectTemplateContext)
-                                    .name(pascalCase(options.boundedContext.name))
-                                    .build())
-                        .context(Builder(CommandTemplateContextContext)
-                                    .name(pascalCase(context.name))
-                                    .fields(fields)
-                                    .subTypes(subTypes)
-                                    .returnType(context.returns ? await this.provider.typeSchemaResolver.execute({ context: context.returns, command: context, ...options }) : null)
-                                    .body(await this.provider.commandExecuteTemplateContextResolver.execute({ context: context.execute, command: context, ...options}))
-                                    .deps(await this.provider.commandDepsTemplateContextResolver.execute({ context: { repositoryTypes }, command: context, ...options }))
-                                    .build())
-                        
+
+        return Builder(CommandTemplateContext)
+            .project(Builder(ProjectTemplateContext)
+                .name(pascalCase(options.boundedContext.name))
+                .build())
+            .context(Builder(CommandTemplateContextContext)
+                .name(pascalCase(context.name))
+                .fields(await this.provider.commandInputTemplateContextResolver.execute({ context: context.input, ...options }))
+                .subTypes(await getSubTypes())
+                .returnType(context.returns ? await this.provider.typeSchemaResolver.execute({ context: { type: context.returns, itemType: null }, command: context, ...options }) : null)
+                .body(await this.provider.commandExecuteTemplateContextResolver.execute({ context: context.execute, command: context, ...options }))
+                .deps(await this.provider.commandDepsTemplateContextResolver.execute({ context: { repositoryTypes }, command: context, ...options }))
+                .build())
+            .build()
+
     }
 }
 
 export default CommandTemplateContextResolver
+
+
+/**
+* Description placeholder
+*/
+export class CommandTemplateExecutionArgsContext {
+
+
+    /**
+     * Description placeholder
+     *
+     * @type {*}
+     */
+    execute
+
+
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    name
+
+
+
+    /**
+     * Description placeholder
+     *
+     * @type {Object<string, CommandTemplateExecutionArgsContextInputProperty>}
+     */
+    input
+
+
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    returns
+
+}
+
+/**
+* Description placeholder
+*/
+export class CommandTemplateExecutionArgsContextInputProperty {
+
+
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    hasPropertiesOf
+
+
+    /**
+     * Description placeholder
+     *
+     * @type {string[]}
+     */
+    except
+
+
+    /**
+     * Description placeholder
+     *
+     * @type {Object<string, CommandTemplateExecutionArgsContextInputProperty>}
+     */
+    with
+
+
+    /**
+     * Description placeholder
+     *
+     * @type {string | undefined}
+     */
+    type
+
+    /**
+     * Description placeholder
+     *
+     * @type {string | undefined}
+     */
+    items
+}
+
+
+/**
+* Description placeholder
+*/
+export class CommandTemplateExecutionArgs extends ExecutionArgs {
+
+
+    /**
+     * Description placeholder
+     *
+     * @type {CommandTemplateExecutionArgsContext}
+     */
+    context
+}
+
 
 /**
 * Description placeholder
 */
 class CommandTemplateContext {
 
-    
+
     /**
      * Description placeholder
      *
@@ -74,7 +202,7 @@ class CommandTemplateContext {
      */
     project
 
-    
+
     /**
      * Description placeholder
      *
@@ -87,9 +215,8 @@ class CommandTemplateContext {
 /**
 * Description placeholder
 */
-class ProjectTemplateContext
-{
-    
+class ProjectTemplateContext {
+
     /**
      * Description placeholder
      *
@@ -98,9 +225,8 @@ class ProjectTemplateContext
     name
 }
 
-class CommandTemplateContextField
-{
-    
+class CommandTemplateContextField {
+
     /**
      * Description placeholder
      *
@@ -108,7 +234,7 @@ class CommandTemplateContextField
      */
     name
 
-    
+
     /**
      * Description placeholder
      *
@@ -116,7 +242,7 @@ class CommandTemplateContextField
      */
     type
 
-    
+
     /**
      * Description placeholder
      *
@@ -131,7 +257,7 @@ class CommandTemplateContextField
  */
 export class CommandTemplateContextContext {
 
-    
+
     /**
      * Description placeholder
      *
@@ -139,7 +265,7 @@ export class CommandTemplateContextContext {
      */
     name
 
-    
+
     /**
      * Description placeholder
      *
@@ -147,18 +273,18 @@ export class CommandTemplateContextContext {
      */
     fields
 
-    
+
     /**
      * Description placeholder
      *
      * @type {*}
      */
     subTypes
-    
+
     returnType
     body
 
-    
+
     /**
      * Description placeholder
      *
