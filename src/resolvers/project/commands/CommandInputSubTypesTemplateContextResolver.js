@@ -3,7 +3,6 @@ import _ from "lodash";
 import unwrapObj from "../../../utils/unwrapObj.js";
 import { ExecutionArgs, Provider } from "../../def.js";
 import { pascalCase } from "change-case";
-import { CommandTemplateExecutionArgsContextInputProperty } from "./CommandTemplateContextResolver.js";
 import { CommandInputClassExecutionArgsContext, CommandInputClassTemplateContext } from "./CommandInputClassTemplateContextResolver.js";
 
 
@@ -46,8 +45,8 @@ class CommandInputSubTypesTemplateContextResolver {
             /**
              * Description placeholder
              *
-             * @param {Object<string, CommandTemplateExecutionArgsContextInputProperty>} obj
-             * @returns {(CommandTemplateExecutionArgsContextInputProperty & { name: string })[]}
+             * @param {Object<string, CommandInputSubTypesExecutionArgsInputProperty>} obj
+             * @returns {(CommandInputSubTypesExecutionArgsInputProperty & { name: string })[]}
              */
             const unwrapWith = (obj) => {
                 return unwrapObj(obj)
@@ -110,9 +109,52 @@ class CommandInputSubTypesTemplateContextResolver {
 
 export default CommandInputSubTypesTemplateContextResolver
 
+
 /**
 * Description placeholder
 */
+export class CommandInputSubTypesExecutionArgsInputProperty {
+
+
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    hasPropertiesOf
+
+
+    /**
+     * Description placeholder
+     *
+     * @type {string[]}
+     */
+    except
+
+
+    /**
+     * Description placeholder
+     *
+     * @type {Object<string, CommandInputSubTypesExecutionArgsInputProperty>}
+     */
+    with
+
+
+    /**
+     * Description placeholder
+     *
+     * @type {string | undefined}
+     */
+    type
+
+    /**
+     * Description placeholder
+     *
+     * @type {string | undefined}
+     */
+    items
+}
+
 
 
 /**
@@ -124,7 +166,7 @@ export class CommandInputSubTypesExecutionArgs extends ExecutionArgs {
     /**
      * Description placeholder
      *
-     * @type {CommandTemplateExecutionArgsContextInputProperty & { name: string} }
+     * @type {CommandInputSubTypesExecutionArgsInputProperty & { name: string} }
      */
     context
 }
@@ -139,7 +181,7 @@ class GetSubTypesArgs {
     /**
      * Description placeholder
      *
-     * @type {CommandTemplateExecutionArgsContextInputProperty & { name: string}}
+     * @type {CommandInputSubTypesExecutionArgsInputProperty & { name: string}}
      */
     context
 

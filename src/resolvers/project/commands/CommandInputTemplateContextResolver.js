@@ -8,7 +8,7 @@ import { CommandTemplateExecutionArgsContextInputProperty } from "./CommandTempl
 /**
 * Description placeholder
 */
-class CommandInputTemplateContextResolver {
+class CommandInputPropertyTemplateContextResolver {
 
     /**
     * Container
@@ -27,7 +27,7 @@ class CommandInputTemplateContextResolver {
     /**
     * Generates code based on a given schema object, using a specified template.
     * @param {CommandInputExecutionArgs} param
-    * @returns {Promise<CommandInputTemplateContextField[]>}
+    * @returns {Promise<CommandInputPropertyTemplateContext[]>}
     * 
     */
     async execute({ context, ...options }) {
@@ -57,7 +57,7 @@ class CommandInputTemplateContextResolver {
                         type = await this.provider.typeSchemaResolver.execute({ context: { type: field.type, itemType: field.items }, ...options })
                     }
 
-                    return Builder(CommandInputTemplateContextField)
+                    return Builder(CommandInputPropertyTemplateContext)
                             .type(type)
                             .name(pascalCase(field.name))
                             .default(await this.provider.typeDefaultSchemaResolver.execute({ context: { type, itemType: null }, ...options }))
@@ -66,7 +66,7 @@ class CommandInputTemplateContextResolver {
     }
 }
 
-export default CommandInputTemplateContextResolver
+export default CommandInputPropertyTemplateContextResolver
 
 /**
 * Description placeholder
@@ -87,7 +87,7 @@ export class CommandInputExecutionArgs extends ExecutionArgs {
 /**
 * Description placeholder
 */
-export class CommandInputTemplateContextField {
+export class CommandInputPropertyTemplateContext {
 
     
     /**

@@ -1,7 +1,6 @@
 import CommandDepsTemplateContextResolver from "./project/commands/CommandDepsTemplateContextResolver.js"
 import CommandExecuteTemplateContextResolver from "./project/commands/CommandExecuteTemplateContextResolver.js"
 import CommandInputSubTypesTemplateContextResolver from "./project/commands/CommandInputSubTypesTemplateContextResolver.js"
-import CommandInputTemplateContextResolver from "./project/commands/CommandInputTemplateContextResolver.js"
 import CommandInputTypeContextResolver from "./project/commands/CommandInputClassTemplateContextResolver.js"
 import AggregateActionSchemaResolver from "./schema/AggregateActionSchemaResolver.js"
 import AggregateOpSchemaResolver from "./schema/AggregateOpSchemaResolver.js"
@@ -23,6 +22,7 @@ import UnlessSchemaResolver from "./schema/UnlessSchemaResolver.js"
 import VariableSchemaResolver from "./schema/VariableSchemaResolver.js"
 import CommandInputClassTemplateContextResolver from "./project/commands/CommandInputClassTemplateContextResolver.js"
 import CommandTemplateContextResolver from "./project/commands/CommandTemplateContextResolver.js"
+import CommandInputPropertyTemplateContextResolver from "./project/commands/CommandInputTemplateContextResolver.js"
 
 /**
  * Defination for the container
@@ -206,9 +206,9 @@ export class Provider {
     /**
      * Description placeholder
      *
-     * @type {CommandInputTemplateContextResolver}
+     * @type {CommandInputPropertyTemplateContextResolver}
      */
-    commandInputTemplateContextResolver
+    commandInputPropertyTemplateContextResolver
 
     
     /**

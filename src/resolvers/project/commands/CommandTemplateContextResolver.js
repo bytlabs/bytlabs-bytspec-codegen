@@ -4,6 +4,9 @@ import { Provider, ExecutionArgs } from "./../../def.js"
 import { CommandDepsTemplateContext } from "./CommandDepsTemplateContextResolver.js";
 import unwrapObj from "../../../utils/unwrapObj.js";
 import _ from "lodash"
+import { CommandInputPropertyTemplateContext } from "./CommandInputTemplateContextResolver.js";
+import { CommandInputClassTemplateContext } from "./CommandInputClassTemplateContextResolver.js";
+import { CommandInputSubTypesExecutionArgsInputProperty } from "./CommandInputSubTypesTemplateContextResolver.js";
 
 /**
 * Description placeholder
@@ -35,15 +38,15 @@ class CommandTemplateContextResolver {
         /**
          * Description placeholder
          *
-         * @param {Object<string, CommandTemplateExecutionArgsContextInputProperty>} obj
-         * @returns {(CommandTemplateExecutionArgsContextInputProperty & { name: string })[]}
+         * @param {Object<string, CommandInputSubTypesExecutionArgsInputProperty>} obj
+         * @returns {(CommandInputSubTypesExecutionArgsInputProperty & { name: string })[]}
          */
         const unwrapWith = (obj) => {
             return unwrapObj(obj)
         }
 
         const getSubTypes = async () => {
-            _.flatMap(await Promise.all(
+            return _.flatMap(await Promise.all(
                 unwrapWith(context.input)
                     .map(async field => {
 
@@ -74,7 +77,7 @@ class CommandTemplateContextResolver {
                 .build())
             .context(Builder(CommandTemplateContextContext)
                 .name(pascalCase(context.name))
-                .fields(await this.provider.commandInputTemplateContextResolver.execute({ context: context.input, ...options }))
+                .properties(await this.provider.commandInputPropertyTemplateContextResolver.execute({ context: context.input, ...options }))
                 .subTypes(await getSubTypes())
                 .returnType(context.returns ? await this.provider.typeSchemaResolver.execute({ context: { type: context.returns, itemType: null }, command: context, ...options }) : null)
                 .body(await this.provider.commandExecuteTemplateContextResolver.execute({ context: context.execute, command: context, ...options }))
@@ -114,7 +117,7 @@ export class CommandTemplateExecutionArgsContext {
     /**
      * Description placeholder
      *
-     * @type {Object<string, CommandTemplateExecutionArgsContextInputProperty>}
+     * @type {Object<string, CommandInputSubTypesExecutionArgsInputProperty>}
      */
     input
 
@@ -128,50 +131,6 @@ export class CommandTemplateExecutionArgsContext {
 
 }
 
-/**
-* Description placeholder
-*/
-export class CommandTemplateExecutionArgsContextInputProperty {
-
-
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    hasPropertiesOf
-
-
-    /**
-     * Description placeholder
-     *
-     * @type {string[]}
-     */
-    except
-
-
-    /**
-     * Description placeholder
-     *
-     * @type {Object<string, CommandTemplateExecutionArgsContextInputProperty>}
-     */
-    with
-
-
-    /**
-     * Description placeholder
-     *
-     * @type {string | undefined}
-     */
-    type
-
-    /**
-     * Description placeholder
-     *
-     * @type {string | undefined}
-     */
-    items
-}
 
 
 /**
@@ -225,31 +184,6 @@ class ProjectTemplateContext {
     name
 }
 
-class CommandTemplateContextField {
-
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    name
-
-
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    type
-
-
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    default
-}
 
 
 /**
@@ -269,19 +203,32 @@ export class CommandTemplateContextContext {
     /**
      * Description placeholder
      *
-     * @type {CommandTemplateContextField[]}
+     * @type {CommandInputPropertyTemplateContext[]}
      */
-    fields
+    properties
 
 
     /**
      * Description placeholder
      *
-     * @type {*}
+     * @type {CommandInputClassTemplateContext[]}
      */
     subTypes
 
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
     returnType
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string[]}
+     */
     body
 
 

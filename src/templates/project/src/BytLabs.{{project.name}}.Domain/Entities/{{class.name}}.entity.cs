@@ -10,7 +10,7 @@ namespace BytLabs.{{project.name}}.Domain.Entities
         {
         }
 
-        {{#each class.fields}}
+        {{#each class.properties}}
         {{>propTemplatePrivateSetter this}}
         {{/each}}
 

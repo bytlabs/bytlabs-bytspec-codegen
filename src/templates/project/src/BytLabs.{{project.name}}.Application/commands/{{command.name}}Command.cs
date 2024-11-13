@@ -6,7 +6,7 @@ using BytLabs.{{project.name}}.Domain.Entities;
 
 public class {{command.name}}Command : ICommand{{#if command.returnType}}<{{command.returnType}}>{{/if}}
 {
-{{#each command.fields}}
+{{#each command.properties}}
     {{>propTemplate this}}
 {{/each}}
 
@@ -14,7 +14,7 @@ public class {{command.name}}Command : ICommand{{#if command.returnType}}<{{comm
 {{#each command.subTypes}}
     public class {{this.class.name}}
     {
-        {{#each this.class.fields}}
+        {{#each this.class.properties}}
             {{>propTemplate this}}
         {{/each}}
     }

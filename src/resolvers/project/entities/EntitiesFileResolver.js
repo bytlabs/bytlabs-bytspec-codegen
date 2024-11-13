@@ -1,8 +1,8 @@
 import { pascalCase } from "change-case";
 import path from "path"
-import { FileResolverArgs, Provider } from "../def.js";
-import unwrapObj from "../../utils/unwrapObj.js";
-import parseTemplateWithPath from "../../utils/parseTemplateWithPath.js";
+import { FileResolverArgs, Provider } from "../../def.js";
+import unwrapObj from "../../../utils/unwrapObj.js";
+import parseTemplateWithPath from "../../../utils/parseTemplateWithPath.js";
 
 
 
@@ -51,7 +51,7 @@ class EntitiesFileResolver {
         const projectName = pascalCase(boundedContext.name);
         const className = pascalCase(entity.name);
     
-        const fields = unwrapObj(entity.properties || {})
+        const properties = unwrapObj(entity.properties || {})
             .map(field => ({
                 type: this.provider.typeSchemaResolver.execute({ ...field, boundedContext, domainObject: entity, command: null}),
                 name: pascalCase(field.name),
@@ -77,10 +77,10 @@ class EntitiesFileResolver {
             },
             class: {
                 name: className,
-                fields: isEntity ? fields.filter(x => x.name != "Id") : fields,
+                properties: isEntity ? properties.filter(x => x.name != "Id") : properties,
                 methods: methods,
                 aggregate: entity.aggregate,
-                idType: isEntity ? fields.find(x => x.name == "Id")?.type : null
+                idType: isEntity ? properties.find(x => x.name == "Id")?.type : null
             }
         };
     }
