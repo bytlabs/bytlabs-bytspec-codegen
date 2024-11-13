@@ -3,6 +3,7 @@ import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
 import { Provider, ExecutionArgs } from "./../def.js"
+import { MapFieldsSchema } from "../../schema.js";
 
 /**
 * Description placeholder
@@ -48,27 +49,7 @@ class MapFieldsSchemaResolver {
 
 export default MapFieldsSchemaResolver
 
-/**
-* Description placeholder
-*/
-export class MapFieldsExecutionArgsContext {
 
-    
-    /**
-     * Description placeholder
-     *
-     * @type {string[]}
-     */
-    omit
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    from
-}
 
 /**
 * Description placeholder
@@ -78,7 +59,7 @@ export class MapFieldsExecutionArgs extends ExecutionArgs {
     /**
      * Description placeholder
      *
-     * @type {MapFieldsExecutionArgsContext}
+     * @type {MapFieldsSchema}
      */
     context
 }

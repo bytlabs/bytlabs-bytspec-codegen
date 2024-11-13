@@ -3,7 +3,7 @@ import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
 import { Provider, ExecutionArgs } from "./../def.js"
-import { ConditionExecutionArgsContext } from "./ConditionSchemaResolver.js";
+import { ConditionSchema, UnlessSchema } from "../../schema.js";
 
 /**
 * Description placeholder
@@ -43,28 +43,7 @@ class UnlessSchemaResolver {
 
 export default UnlessSchemaResolver
 
-/**
-* Description placeholder
-*/
-export class UnlessExecutionArgsContext {
 
-    
-    /**
-     * Description placeholder
-     *
-     * @type {ConditionExecutionArgsContext}
-     */
-    condition
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {Object}
-     */
-    then
-
-}
 
 /**
 * Description placeholder
@@ -75,7 +54,7 @@ export class UnlessExecutionArgs extends ExecutionArgs {
     /**
      * Description placeholder
      *
-     * @type {UnlessExecutionArgsContext}
+     * @type {UnlessSchema}
      */
     context
 }

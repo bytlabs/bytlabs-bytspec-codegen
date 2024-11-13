@@ -4,6 +4,7 @@ import path from "path"
 import randomName from '../../utils/randomName.js';
 import compileTemplate from '../../utils/compileTemplate.js';
 import { Provider, ExecutionArgs } from "./../def.js"
+import { AggregateActionSchema, AggregateSchema } from '../../schema.js';
 
 
 /**
@@ -55,7 +56,7 @@ class AggregateSchemaResolver {
         //build context
         const actions = await Promise.all(
             context.actions.map(async action =>
-                Builder(AggregateTemplateContextAction)
+                Builder(AggregateActionSchema)
                     .name(await this.provider.aggregateActionSchemaResolver.execute({ context: action.name, ...options }))
                     .parameters(await Promise.all(
                         action.parameters.map(async param => 
@@ -77,57 +78,6 @@ class AggregateSchemaResolver {
 
 export default AggregateSchemaResolver;
 
-/**
-* Description placeholder
-*/
-export class AggregateExecutionArgsContextAction {
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    name
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {string[]}
-     */
-    parameters
-}
-
-/**
-* Description placeholder
-*/
-export class AggregateExecutionArgsContext {
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {AggregateExecutionArgsContextAction[]}
-     */
-    actions
-
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    type
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {Object}
-     */
-    findOne
-}
-
 
 /**
 * Description placeholder
@@ -138,29 +88,11 @@ export class AggregateExecutionArgs extends ExecutionArgs {
     /**
      * Description placeholder
      *
-     * @type {AggregateExecutionArgsContext}
+     * @type {AggregateSchema}
      */
     context
 }
 
-
-
-
-/**
- * This class contains method details to invoke on an aggregate instance
- */
-export class AggregateTemplateContextAction {
-    /**
-     * Domain object's action name
-     * @type {string}
-     */
-    name
-    /**
-     * List of parameters to be passed in the invoking action
-     * @type {string[]}
-     */
-    parameters
-}
 
 /**
  * This class contains details to retreive and perfrom operation on an aggregate
@@ -178,7 +110,7 @@ export class AggregateTemplateContext {
     op
     /**
      * List of actions to perform on aggregate instance
-     * @type {AggregateTemplateContextAction[]}
+     * @type {AggregateActionSchema[]}
      */
     actions
 }

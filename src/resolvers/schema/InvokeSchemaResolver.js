@@ -3,6 +3,7 @@ import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
 import { Provider, ExecutionArgs } from "./../def.js"
+import { InvokeSchema } from "../../schema.js";
 
 /**
 * Description placeholder
@@ -44,49 +45,7 @@ class InvokeSchemaResolver {
 
 export default InvokeSchemaResolver
 
-/**
-* Description placeholder
-*/
-export class InvokeExecutionArgsContextMethod {
 
-    
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    name
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {string[]}
-     */
-    parameters
-}
-
-/**
-* Description placeholder
-*/
-export class InvokeExecutionArgsContext {
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {InvokeExecutionArgsContextMethod}
-     */
-    method
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    onTarget
-}
 
 /**
 * Description placeholder
@@ -97,7 +56,7 @@ export class InvokeExecutionArgs extends ExecutionArgs {
     /**
      * Description placeholder
      *
-     * @type {InvokeExecutionArgsContext}
+     * @type {InvokeSchema}
      */
     context
 }

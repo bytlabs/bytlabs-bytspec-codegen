@@ -3,7 +3,7 @@ import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
 import { Provider, ExecutionArgs } from "./../def.js"
-import { AggregateExecutionArgsContext } from "./AggregateSchemaResolver.js";
+import { AggregateSchema } from "../../schema.js";
 
 /**
  * Contains the core logic for creating an instance of an aggregate.
@@ -93,7 +93,7 @@ export class AggregateOpExecutionArgs extends ExecutionArgs
     /**
      * Description placeholder
      *
-     * @type {AggregateExecutionArgsContext}
+     * @type {AggregateSchema}
      */
     context  
     

@@ -3,7 +3,7 @@ import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
 import { Provider, ExecutionArgs } from "./../def.js"
-import { ConditionExecutionArgsContext } from "./ConditionSchemaResolver.js";
+import { IfSchema } from "../../schema.js";
 
 /**
 * Description placeholder
@@ -47,35 +47,13 @@ export default IfSchemaResolver
 /**
 * Description placeholder
 */
-export class IfExecutionArgsContext {
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {ConditionExecutionArgsContext}
-     */
-    condition
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {Object}
-     */
-    then
-}
-
-/**
-* Description placeholder
-*/
 export class IfExecutionArgs extends ExecutionArgs {
 
     
     /**
      * Description placeholder
      *
-     * @type {IfExecutionArgsContext}
+     * @type {IfSchema}
      */
     context
 }

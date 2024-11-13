@@ -1,3 +1,4 @@
+import { CommandSchema, EntitySchema } from "../../../schema.js"
 import { ExecutionArgs } from "../../def.js"
 
 /**
@@ -9,7 +10,7 @@ export class CommandExecutionArgs extends ExecutionArgs {
     /**
      * Description placeholder
      *
-     * @type {CommandExecutionArgsContext}
+     * @type {CommandSchema & { name:string}}
      */
     context
 }
@@ -17,90 +18,7 @@ export class CommandExecutionArgs extends ExecutionArgs {
 /**
 * Description placeholder
 */
-export class CommandExecutionArgsContext  {
-
-
-    /**
-     * Description placeholder
-     *
-     * @type {*}
-     */
-    execute
-
-
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    name
-
-
-
-    /**
-     * Description placeholder
-     *
-     * @type {Object<string, CommandExecutionArgsInputProperty>}
-     */
-    input
-
-
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    returns
-
-}
-
-
-/**
-* Description placeholder
-*/
-export class CommandExecutionArgsInputProperty {
-
-
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    hasPropertiesOf
-
-
-    /**
-     * Description placeholder
-     *
-     * @type {string[]}
-     */
-    except
-
-
-    /**
-     * Description placeholder
-     *
-     * @type {Object<string, CommandExecutionArgsInputProperty>}
-     */
-    with
-
-
-    /**
-     * Description placeholder
-     *
-     * @type {string | undefined}
-     */
-    type
-
-    /**
-     * Description placeholder
-     *
-     * @type {string | undefined}
-     */
-    items
-}
-
-export class CommandExecutionArgsSubType {
+export class CommandExecutionArgsSubType extends EntitySchema {
 
     
     /**
@@ -109,15 +27,9 @@ export class CommandExecutionArgsSubType {
      * @type {string}
      */
     name
-
-    /**
-     * Description placeholder
-     *
-     * @type {Object<string, { type: string, itemType: string }>}
-     */
-    properties
-
 }
+
+
 
 export class CommandExecutionArgsDeps {
 

@@ -4,7 +4,7 @@ import _ from "lodash";
 import unwrapObj from "../../../utils/unwrapObj.js";
 import { ExecutionArgs, FileResolverArgs, Provider } from "../../def.js";
 import parseTemplateWithPath from "../../../utils/parseTemplateWithPath.js";
-import { CommandExecutionArgs, CommandExecutionArgsDeps, CommandExecutionArgsInputProperty, CommandExecutionArgsSubType } from "./CommandExecutionArgs.js";
+import { CommandExecutionArgs, CommandExecutionArgsDeps, CommandExecutionArgsSubType } from "./CommandExecutionArgs.js";
 import {
     CommandInputClassTemplateContextClassProperty,
     CommandTemplateContext,
@@ -17,6 +17,7 @@ import {
 } from "./CommandTemplateContext.js";
 import { Builder } from "builder-pattern";
 import { pascalCase } from "change-case";
+import { CommandInputSchema, TypeSchema } from "../../../schema.js";
 
 /**
 * Description placeholder
@@ -102,7 +103,7 @@ class CommandFileResolver {
                 .name(pascalCase(context.name))
                 .properties(await this.getProperties({ context: context, ...options }))
                 .subTypes(await getSubTypes())
-                .returnType(context.returns ? await this.provider.typeSchemaResolver.execute({ context: { type: context.returns, itemType: null }, command: context, ...options }) : null)
+                .returnType(context.returns ? await this.provider.typeSchemaResolver.execute({ context: { type: context.returns, items: null }, command: context, ...options }) : null)
                 .body(await this.getBody({ context, ...options }))
                 .deps(await this.getDeps({ context: { repositoryTypes }, command: context, ...options }))
                 .build())
@@ -128,13 +129,13 @@ class CommandFileResolver {
                     type = _.last(subTypes).class.name;
                 }
                 else {
-                    type = await this.provider.typeSchemaResolver.execute({ context: { type: field.type, itemType: field.items }, ...options })
+                    type = await this.provider.typeSchemaResolver.execute({ context: { type: field.type, items: field.items }, ...options })
                 }
 
                 return Builder(CommandTemplateContextCommandInputProperty)
                     .type(type)
                     .name(pascalCase(field.name))
-                    .default(await this.provider.typeDefaultSchemaResolver.execute({ context: { type, itemType: null }, ...options }))
+                    .default(await this.provider.typeDefaultSchemaResolver.execute({ context: { type, items: null }, ...options }))
                     .build()
             }))
     }
@@ -248,8 +249,8 @@ class CommandFileResolver {
     async getDeps({ context, ...options }) {
         const repositories = context.repositoryTypes.map(async type =>
             Builder(CommandTemplateContextCommandDep)
-                .type(`IRepository<${await this.provider.typeSchemaResolver.execute({ context: { type, itemType: null }, ...options })}, string>`)
-                .name(`${_.camelCase(await this.provider.typeSchemaResolver.execute({ context: { type, itemType: null }, ...options }))}Repository`)
+                .type(`IRepository<${await this.provider.typeSchemaResolver.execute({ context: { type, items: null }, ...options })}, string>`)
+                .name(`${_.camelCase(await this.provider.typeSchemaResolver.execute({ context: { type, items: null }, ...options }))}Repository`)
                 .build()
         );
 
@@ -276,8 +277,8 @@ class CommandFileResolver {
     /**
      * Description placeholder
      *
-     * @param {Object<string, CommandExecutionArgsInputProperty>} obj
-     * @returns {(CommandExecutionArgsInputProperty & { name: string })[]}
+     * @param {Object<string, CommandInputSchema>} obj
+     * @returns {(CommandInputSchema & { name: string })[]}
      */
     unwrapWith(obj) {
         return unwrapObj(obj)
@@ -286,8 +287,8 @@ class CommandFileResolver {
     /**
      * Description placeholder
      *
-     * @param {Object<string, { type: string, itemType: string }>} obj
-     * @returns {({ type: string, itemType: string } & { name: string })[]}
+     * @param {Object<string, TypeSchema>} obj
+     * @returns {(TypeSchema & { name: string })[]}
      */
     unwrapProps(obj) {
         return unwrapObj(obj)
@@ -305,7 +306,7 @@ class CommandExecutionArgsGetSubTypes extends ExecutionArgs {
     /**
      * Description placeholder
      *
-     * @type {CommandExecutionArgsInputProperty & { name: string}}
+     * @type {CommandInputSchema & { name: string}}
      */
     context
 

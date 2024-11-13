@@ -3,6 +3,7 @@ import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
 import { Provider, ExecutionArgs } from "./../def.js"
+import { ConditionSchema } from "../../schema.js";
 
 /**
  * Resolver for evaluating condition schemas.
@@ -81,27 +82,7 @@ class ConditionSchemaResolver {
 export default ConditionSchemaResolver;
 
 
-/**
-* Description placeholder
-*/
-export class ConditionExecutionArgsContext {
 
-    
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    isEmpty
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {ConditionExecutionArgsContext}
-     */
-    not    
-}
 
 
 /**
@@ -112,7 +93,7 @@ export class ConditionExecutionArgs extends ExecutionArgs {
     /**
      * Description placeholder
      *
-     * @type {ConditionExecutionArgsContext}
+     * @type {ConditionSchema}
      */
     context
     

@@ -3,7 +3,7 @@ import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
 import { Provider, ExecutionArgs } from "./../def.js"
-import { MapFieldsExecutionArgsContext } from "./MapFieldsSchemaResolver.js";
+import { FindSchema } from "../../schema.js";
 
 /**
 * Description placeholder
@@ -42,27 +42,7 @@ class FindSchemaResolver {
 
 export default FindSchemaResolver
 
-/**
-* Description placeholder
-*/
-export class FindExecutionArgsContext {
 
-    
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    in
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {MapFieldsExecutionArgsContext}
-     */
-    value
-}
 
 /**
 * Description placeholder
@@ -73,7 +53,7 @@ export class FindExecutionArgs extends ExecutionArgs {
     /**
      * Description placeholder
      *
-     * @type {FindExecutionArgsContext}
+     * @type {FindSchema}
      */
     context
 }

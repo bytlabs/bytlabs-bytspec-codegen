@@ -1,8 +1,9 @@
 import { pascalCase } from "change-case";
 import path from "path"
-import { FileResolverArgs, Provider } from "../../def.js";
+import { ExecutionArgs, FileResolverArgs, Provider } from "../../def.js";
 import unwrapObj from "../../../utils/unwrapObj.js";
 import parseTemplateWithPath from "../../../utils/parseTemplateWithPath.js";
+import { EntitySchema } from "../../../schema.js";
 
 
 
@@ -38,7 +39,7 @@ class EntitiesFileResolver {
         for (let boundedContext of unwrapObj(spec.boundedContexts)) {
 
             const templatesData = await Promise.all(unwrapObj(boundedContext.domain.entities)
-            .map(async entity => await this.getClassTemplateData(entity, boundedContext, { isEntity: true })))
+            .map(async entity => await this.getClassTemplateData({ context: entity, boundedContext, domainObject: null, command: null, isEntity: true })))
 
             for (let templateData of templatesData) {
                 const destinationDirectory = path.join(outputDirectory, templateData.project.name);
@@ -47,27 +48,33 @@ class EntitiesFileResolver {
         }
     }
 
-    async getClassTemplateData (entity, boundedContext, { isEntity } = { isEntity: false}) {
-        const projectName = pascalCase(boundedContext.name);
-        const className = pascalCase(entity.name);
+    /**
+    * Generates code based on a given schema object, using a specified template.
+    * @param {{context: (EntitySchema & { name: string})} & ExecutionArgs & { isEntity: boolean}} param
+    * @returns {Promise<Object>}
+    * 
+    */
+    async getClassTemplateData ({context, ...options}) {
+        const projectName = pascalCase(options.boundedContext.name);
+        const className = pascalCase(context.name);
     
-        const properties = unwrapObj(entity.properties || {})
+        const properties = unwrapObj(context.properties || {})
             .map(field => ({
-                type: this.provider.typeSchemaResolver.execute({ ...field, boundedContext, domainObject: entity, command: null}),
+                type: this.provider.typeSchemaResolver.execute({ ...field, boundedContext: options.boundedContext, domainObject: context, command: null}),
                 name: pascalCase(field.name),
-                default: this.provider.typeDefaultSchemaResolver.execute({ context: field, boundedContext, domainObject: entity, command: null}),
+                default: this.provider.typeDefaultSchemaResolver.execute({ context: field, boundedContext: options.boundedContext, domainObject: context, command: null}),
             }))
     
         let methods = [];
     
-        if (entity.actions) {
-            methods = await Promise.all(unwrapObj(entity.actions)
+        if (context.actions) {
+            methods = await Promise.all(unwrapObj(context.actions)
             .map(async method => ({
                 name: pascalCase(method.name),
                 type: "void",
                 parameters: await Promise.all(unwrapObj(method.parameters)
-                .map(async param => ({ name: param.name, type: await this.provider.typeSchemaResolver.execute({ context: param, boundedContext, domainObject: entity, command: null}) }))),
-                body: method.execute.map(line => this.provider.opSchemaResolver.execute({ context: line, boundedContext, domainObject: entity, command: null }))
+                .map(async param => ({ name: param.name, type: await this.provider.typeSchemaResolver.execute({ context: param, boundedContext: options.boundedContext, domainObject: context, command: null}) }))),
+                body: method.execute.map(line => this.provider.opSchemaResolver.execute({ context: line, boundedContext: options.boundedContext, domainObject: context, command: null }))
             })))
         }
     
@@ -77,10 +84,10 @@ class EntitiesFileResolver {
             },
             class: {
                 name: className,
-                properties: isEntity ? properties.filter(x => x.name != "Id") : properties,
+                properties: options.isEntity ? properties.filter(x => x.name != "Id") : properties,
                 methods: methods,
-                aggregate: entity.aggregate,
-                idType: isEntity ? properties.find(x => x.name == "Id")?.type : null
+                aggregate: context.aggregate,
+                idType: options.isEntity ? properties.find(x => x.name == "Id")?.type : null
             }
         };
     }

@@ -3,6 +3,7 @@ import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
 import { Provider, ExecutionArgs } from "./../def.js"
+import { PushSchema } from "../../schema.js";
 
 /**
 * Description placeholder
@@ -43,27 +44,6 @@ class PushSchemaResolver {
 export default PushSchemaResolver
 
 
-/**
-* Description placeholder
-*/
-export class PushExectionArgsContext {
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    to
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    value
-}
 
 
 /**
@@ -75,7 +55,7 @@ export class PushExectionArgs extends ExecutionArgs {
     /**
      * Description placeholder
      *
-     * @type {PushExectionArgsContext}
+     * @type {PushSchema}
      */
     context
 }

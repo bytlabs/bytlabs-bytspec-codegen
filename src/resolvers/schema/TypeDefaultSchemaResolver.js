@@ -1,6 +1,7 @@
 import { pascalCase } from "change-case"
 import _ from "lodash"
 import { Provider, ExecutionArgs } from "./../def.js"
+import { TypeSchema } from "../../schema.js";
 
 /**
 * Description placeholder
@@ -28,7 +29,7 @@ class TypeDefaultSchemaResolver {
     * 
     */
     async execute({ context, ...options }) {
-        const defaultValueResolver = async (type, itemType) => {
+        const defaultValueResolver = async (type, items) => {
             if (type && type.startsWith("#")) {
                 const typeName = _.last(type.split("/"))
                 return `new ${pascalCase(typeName)}()`
@@ -47,41 +48,21 @@ class TypeDefaultSchemaResolver {
                 case "void":
                     return "null"
                 case "collection":
-                    return `new List<${await this.provider.typeSchemaResolver.execute(itemType)}>()`
+                    return `new List<${await this.provider.typeSchemaResolver.execute(items)}>()`
                 default:
                     return `new ${type}()`;
             }
         }
 
         //parse template
-        return await defaultValueResolver(context.type, context.itemType)
+        return await defaultValueResolver(context.type, context.items)
     }
 }
 
 export default TypeDefaultSchemaResolver
 
 
-/**
-* Description placeholder
-*/
-export class TypeDefaultExecutionArgsContext {
 
-    
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    type
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    itemType
-}
 
 
 /**
@@ -93,7 +74,7 @@ export class TypeDefaultExecutionArgs extends ExecutionArgs {
     /**
      * Description placeholder
      *
-     * @type {TypeDefaultExecutionArgsContext}
+     * @type {TypeSchema}
      */
     context
 }
