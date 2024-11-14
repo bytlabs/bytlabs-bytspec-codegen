@@ -1,5 +1,6 @@
 import * as awilix from 'awilix';
 import { pascalCase } from 'change-case';
+import ProjectResolver from './ProjectResolver.js';
 
 export async function createContainer() {
 
@@ -8,6 +9,9 @@ export async function createContainer() {
         strict: true,
     })
 
+    container.register({
+        projectResolver : awilix.asClass(ProjectResolver).transient()
+      })
 
     await container.loadModules(
         [

@@ -1,3 +1,6 @@
+import CommandFileResolver from "./project/commands/CommandFileResolver.js"
+import EntitiesFileResolver from "./project/entities/EntitiesFileResolver.js"
+import MiscFileResolver from "./project/MiscFileResolver.js"
 import AggregateActionSchemaResolver from "./schema/AggregateActionSchemaResolver.js"
 import AggregateOpSchemaResolver from "./schema/AggregateOpSchemaResolver.js"
 import AggregateSchemaResolver from "./schema/AggregateSchemaResolver.js"
@@ -16,6 +19,33 @@ import TypeDefaultSchemaResolver from "./schema/TypeDefaultSchemaResolver.js"
 import TypeSchemaResolver from "./schema/TypeSchemaResolver.js"
 import UnlessSchemaResolver from "./schema/UnlessSchemaResolver.js"
 import VariableSchemaResolver from "./schema/VariableSchemaResolver.js"
+
+/**
+ * Defination for the resolver argument
+ */
+export class ExecutionArgs {
+
+    /**
+     * Contains information of executing BoundedContext
+     * 
+     * @type {Object}
+     */
+    boundedContext
+
+    /**
+     * Contains information of executing Domain object
+     * 
+     * @type {Object | undefined}
+     */
+    domainObject
+
+    /**
+     * Contains information of executing Command
+     * 
+     * @type {Object | undefined}
+     */
+    command
+}
 
 /**
  * Defination for the container
@@ -163,34 +193,30 @@ export class Provider {
      * @type {string}
      */
     projectTemplate
-}
 
-
-/**
- * Defination for the resolver argument
- */
-export class ExecutionArgs {
-
+    
     /**
-     * Contains information of executing BoundedContext
-     * 
-     * @type {Object}
+     * Description placeholder
+     *
+     * @type {CommandFileResolver}
      */
-    boundedContext
+    commandFileResolver
 
+    
     /**
-     * Contains information of executing Domain object
-     * 
-     * @type {Object | undefined}
+     * Description placeholder
+     *
+     * @type {EntitiesFileResolver}
      */
-    domainObject
+    entitiesFileResolver
 
+    
     /**
-     * Contains information of executing Command
-     * 
-     * @type {Object | undefined}
+     * Description placeholder
+     *
+     * @type {MiscFileResolver}
      */
-    command
+    miscFileResolver
 }
 
 /**
