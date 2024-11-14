@@ -1,6 +1,6 @@
 import * as awilix from 'awilix';
 import { pascalCase } from 'change-case';
-import ProjectResolver from './ProjectResolver.js';
+import ProjectResolver from './resolvers/project/ProjectResolver.js';
 
 export async function createContainer() {
 

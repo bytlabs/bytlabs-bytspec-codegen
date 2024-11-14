@@ -1,6 +1,5 @@
-import options from "./cli.js"
 import fs from "fs-extra";
-import { Provider } from "./def/provider.js";
+import { Provider } from "../../def/provider.js";
 
 class ProjectResolver {
 
@@ -28,14 +27,6 @@ class ProjectResolver {
      */
     async execute({ spec, outputDirectory, deleteExistingFiles}) {
       console.log("Generating application...");
-  
-      
-    
-      // Ensure output directory is clean
-      if (options.deleteExistingFiles) {
-        await fs.remove(outputDirectory);
-        await fs.ensureDir(outputDirectory);
-      }
     
       const fileResolvers = [
         this.provider.commandFileResolver,
