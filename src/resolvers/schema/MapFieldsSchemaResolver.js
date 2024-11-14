@@ -2,8 +2,10 @@ import _ from "lodash"
 import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
-import { Provider, ExecutionArgs } from "./../def.js"
 import { MapFieldsSchema } from "../../schema.js";
+import { Provider } from "../../def/provider.js";
+import { ExecutionArgs } from "../../def/executionArgs.js";
+import unwrapObj from "../../utils/unwrapObj.js";
 
 /**
 * Description placeholder
@@ -33,7 +35,7 @@ class MapFieldsSchemaResolver {
     async execute({ context, ...options }) {
         if(!options.domainObject && !options.domainObject.properties) throw new Error("'mapField' only works with domain objects for field mapping");
 
-            const props = await Promise.all(_.chain(options.domainObject.properties)
+            const props = await Promise.all(_.chain(unwrapObj(options.domainObject.properties))
                                                 .omit(context.omit || [])
                                                 .map(async field => await this.provider.propertySchemaResolver.execute({ context: field.name, ...options }))
                                                 .value());

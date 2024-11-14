@@ -2,8 +2,9 @@ import _ from "lodash"
 import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
-import { Provider, ExecutionArgs } from "./../def.js"
 import { IfSchema } from "../../schema.js";
+import { Provider } from "../../def/provider.js";
+import { ExecutionArgs } from "../../def/executionArgs.js";
 
 /**
 * Description placeholder

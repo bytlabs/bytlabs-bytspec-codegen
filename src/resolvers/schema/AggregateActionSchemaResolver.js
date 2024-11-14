@@ -1,5 +1,6 @@
 import { pascalCase } from "change-case";
-import { Provider, ExecutionArgs } from "./../def.js"
+import { Provider } from "../../def/provider.js";
+import { ExecutionArgs } from "../../def/executionArgs.js";
 
 /**
 * Description placeholder

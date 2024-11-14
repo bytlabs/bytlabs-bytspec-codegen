@@ -1,11 +1,10 @@
-import { pascalCase } from "change-case";
-import { Provider } from "../../def/provider.js";
 import { ExecutionArgs } from "../../def/executionArgs.js";
+import { Provider } from "../../def/provider.js";
 
 /**
 * Description placeholder
 */
-class MethodSchemaResolver {
+class ErrorSchemaResolver {
 
     /**
     * Container
@@ -14,7 +13,7 @@ class MethodSchemaResolver {
     provider
 
     /**
-    * Creates an instance of MethodSchemaResolver.
+    * Creates an instance of ErrorSchemaResolver.
     * @param {Provider} provider
     */
     constructor(provider) {
@@ -23,27 +22,13 @@ class MethodSchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {MethodExecutionArgs} param
+    * @param {ExecutionArgs & { context: any }} param
     * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
-        return pascalCase(context)
+        return "//TODO ObjectSchemaResolver not implemented"
     }
 }
 
-export default MethodSchemaResolver
-
-/**
-* Description placeholder
-*/
-export class MethodExecutionArgs extends ExecutionArgs {
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    context
-}
+export default ErrorSchemaResolver

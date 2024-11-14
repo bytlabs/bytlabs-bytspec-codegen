@@ -213,17 +213,7 @@
                             }
                         },
                         "returns": "#/domain/entities/customer",
-                        "execute": [
-                            {
-                                "let": {
-                                    "hashedPassword": {
-                                        "hash": {
-                                            "value": "@input.data.password",
-                                            "salt": 10
-                                        }
-                                    }
-                                }
-                            },
+                        "execute": [                            
                             {
                                 "let": {
                                     "data": {
@@ -239,7 +229,6 @@
                                             },
                                             {
                                                 "merge": {
-                                                    "password": "@let.hashedPassword",
                                                     "userId": "@identity.claims.sub"
                                                 }
                                             }
@@ -359,11 +348,16 @@
                                 }
                             },
                             {
-                                "return": {
-                                    "last": {
-                                        "in": "@let.customer.addresses"
+                                "let": {
+                                    "result": {
+                                        "last": {
+                                            "in": "@let.customer.addresses"
+                                        }
                                     }
                                 }
+                            },
+                            {
+                                "return": "@let.result"
                             }
                         ]
                     },

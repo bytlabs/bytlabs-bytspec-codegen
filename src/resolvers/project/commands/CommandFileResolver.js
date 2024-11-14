@@ -2,7 +2,6 @@
 import path from "path"
 import _ from "lodash";
 import unwrapObj from "../../../utils/unwrapObj.js";
-import { ExecutionArgs, FileResolverArgs, Provider } from "../../def.js";
 import parseTemplateWithPath from "../../../utils/parseTemplateWithPath.js";
 import { CommandExecutionArgs, CommandExecutionArgsDeps, CommandExecutionArgsSubType } from "./CommandExecutionArgs.js";
 import {
@@ -18,6 +17,9 @@ import {
 import { Builder } from "builder-pattern";
 import { pascalCase } from "change-case";
 import { CommandInputSchema, TypeSchema } from "../../../schema.js";
+import { Provider } from "../../../def/provider.js";
+import { FileResolverArgs } from "../../../def/fileResolverArgs.js";
+import { ExecutionArgs } from "../../../def/executionArgs.js";
 
 /**
 * Description placeholder

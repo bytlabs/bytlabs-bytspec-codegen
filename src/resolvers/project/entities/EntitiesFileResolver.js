@@ -1,9 +1,11 @@
 import { pascalCase } from "change-case";
 import path from "path"
-import { ExecutionArgs, FileResolverArgs, Provider } from "../../def.js";
 import unwrapObj from "../../../utils/unwrapObj.js";
 import parseTemplateWithPath from "../../../utils/parseTemplateWithPath.js";
 import { EntitySchema } from "../../../schema.js";
+import { Provider } from "../../../def/provider.js";
+import { FileResolverArgs } from "../../../def/fileResolverArgs.js";
+import { ExecutionArgs } from "../../../def/executionArgs.js";
 
 
 
@@ -39,7 +41,7 @@ class EntitiesFileResolver {
         for (let boundedContext of unwrapObj(spec.boundedContexts)) {
 
             const templatesData = await Promise.all(unwrapObj(boundedContext.domain.entities)
-            .map(async entity => await this.getClassTemplateData({ context: entity, boundedContext, domainObject: null, command: null, isEntity: true })))
+            .map(async entity => await this.getClassTemplateData({ context: entity, boundedContext, domainObject: null, command: null, isEntity: true, primaryVariableName: null })))
 
             for (let templateData of templatesData) {
                 const destinationDirectory = path.join(outputDirectory, templateData.project.name);
@@ -60,9 +62,9 @@ class EntitiesFileResolver {
     
         const properties = unwrapObj(context.properties || {})
             .map(field => ({
-                type: this.provider.typeSchemaResolver.execute({ ...field, boundedContext: options.boundedContext, domainObject: context, command: null}),
+                type: this.provider.typeSchemaResolver.execute({ context: field, boundedContext: options.boundedContext, domainObject: context, command: null, primaryVariableName: null}),
                 name: pascalCase(field.name),
-                default: this.provider.typeDefaultSchemaResolver.execute({ context: field, boundedContext: options.boundedContext, domainObject: context, command: null}),
+                default: this.provider.typeDefaultSchemaResolver.execute({ context: field, boundedContext: options.boundedContext, domainObject: context, command: null, primaryVariableName: null}),
             }))
     
         let methods = [];
@@ -73,8 +75,8 @@ class EntitiesFileResolver {
                 name: pascalCase(method.name),
                 type: "void",
                 parameters: await Promise.all(unwrapObj(method.parameters)
-                .map(async param => ({ name: param.name, type: await this.provider.typeSchemaResolver.execute({ context: param, boundedContext: options.boundedContext, domainObject: context, command: null}) }))),
-                body: method.execute.map(line => this.provider.opSchemaResolver.execute({ context: line, boundedContext: options.boundedContext, domainObject: context, command: null }))
+                .map(async param => ({ name: param.name, type: await this.provider.typeSchemaResolver.execute({ context: param, boundedContext: options.boundedContext, domainObject: context, command: null, primaryVariableName: null}) }))),
+                body: method.execute.map(line => this.provider.opSchemaResolver.execute({ context: line, boundedContext: options.boundedContext, domainObject: context, command: null, primaryVariableName: null }))
             })))
         }
     

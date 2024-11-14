@@ -1,6 +1,6 @@
 import options from "./cli.js"
-import { Provider } from "./resolvers/def.js";
 import fs from "fs-extra";
+import { Provider } from "./def/provider.js";
 
 class ProjectResolver {
 

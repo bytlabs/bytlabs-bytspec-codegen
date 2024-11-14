@@ -2,8 +2,9 @@ import _ from "lodash"
 import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
-import { Provider, ExecutionArgs } from "./../def.js"
 import { FindSchema } from "../../schema.js";
+import { Provider } from "../../def/provider.js";
+import { ExecutionArgs } from "../../def/executionArgs.js";
 
 /**
 * Description placeholder
@@ -32,7 +33,7 @@ class FindSchemaResolver {
     async execute({ context, ...options }) {
         const findContext = Builder(FindTemplateContext)
             .in(await this.provider.variableSchemaResolver.execute({ context: context.in, ...options }))
-            .value(await this.provider.mapFieldsSchemaResolver.execute({ context: context.value, ...options }))
+            .value(await this.provider.matchSchemaResolver.execute({ context: context.where, ...options }))
             .build()
 
         //parse template

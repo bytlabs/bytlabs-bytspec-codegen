@@ -1,51 +1,24 @@
-import CommandFileResolver from "./project/commands/CommandFileResolver.js"
-import EntitiesFileResolver from "./project/entities/EntitiesFileResolver.js"
-import MiscFileResolver from "./project/MiscFileResolver.js"
-import AggregateActionSchemaResolver from "./schema/AggregateActionSchemaResolver.js"
-import AggregateOpSchemaResolver from "./schema/AggregateOpSchemaResolver.js"
-import AggregateSchemaResolver from "./schema/AggregateSchemaResolver.js"
-import ConditionSchemaResolver from "./schema/ConditionSchemaResolver.js"
-import FindSchemaResolver from "./schema/FindSchemaResolver.js"
-import IfSchemaResolver from "./schema/IfSchemaResolver.js"
-import InvokeSchemaResolver from "./schema/InvokeSchemaResolver.js"
-import LetSchemaResolver from "./schema/LetSchemaResolver.js"
-import MapFieldsSchemaResolver from "./schema/MapFieldsSchemaResolver.js"
-import MatchSchemaResolver from "./schema/MatchSchemaResolver.js"
-import MethodSchemaResolver from "./schema/MethodSchemaResolver.js"
-import OpSchemaResolver from "./schema/OpSchemaResolver.js"
-import PropertySchemaResolver from "./schema/PropertySchemaResolver.js"
-import PushSchemaResolver from "./schema/PushSchemaResolver.js"
-import TypeDefaultSchemaResolver from "./schema/TypeDefaultSchemaResolver.js"
-import TypeSchemaResolver from "./schema/TypeSchemaResolver.js"
-import UnlessSchemaResolver from "./schema/UnlessSchemaResolver.js"
-import VariableSchemaResolver from "./schema/VariableSchemaResolver.js"
-
-/**
- * Defination for the resolver argument
- */
-export class ExecutionArgs {
-
-    /**
-     * Contains information of executing BoundedContext
-     * 
-     * @type {Object}
-     */
-    boundedContext
-
-    /**
-     * Contains information of executing Domain object
-     * 
-     * @type {Object | undefined}
-     */
-    domainObject
-
-    /**
-     * Contains information of executing Command
-     * 
-     * @type {Object | undefined}
-     */
-    command
-}
+import CommandFileResolver from "../resolvers/project/commands/CommandFileResolver.js"
+import EntitiesFileResolver from "../resolvers/project/entities/EntitiesFileResolver.js"
+import MiscFileResolver from "../resolvers/project/MiscFileResolver.js"
+import AggregateActionSchemaResolver from "../resolvers/schema/AggregateActionSchemaResolver.js"
+import AggregateOpSchemaResolver from "../resolvers/schema/AggregateOpSchemaResolver.js"
+import AggregateSchemaResolver from "../resolvers/schema/AggregateSchemaResolver.js"
+import ConditionSchemaResolver from "../resolvers/schema/ConditionSchemaResolver.js"
+import FindSchemaResolver from "../resolvers/schema/FindSchemaResolver.js"
+import IfSchemaResolver from "../resolvers/schema/IfSchemaResolver.js"
+import InvokeSchemaResolver from "../resolvers/schema/InvokeSchemaResolver.js"
+import LetSchemaResolver from "../resolvers/schema/LetSchemaResolver.js"
+import MapFieldsSchemaResolver from "../resolvers/schema/MapFieldsSchemaResolver.js"
+import MatchSchemaResolver from "../resolvers/schema/MatchSchemaResolver.js"
+import MethodSchemaResolver from "../resolvers/schema/MethodSchemaResolver.js"
+import OpSchemaResolver from "../resolvers/schema/OpSchemaResolver.js"
+import PropertySchemaResolver from "../resolvers/schema/PropertySchemaResolver.js"
+import PushSchemaResolver from "../resolvers/schema/PushSchemaResolver.js"
+import TypeDefaultSchemaResolver from "../resolvers/schema/TypeDefaultSchemaResolver.js"
+import TypeSchemaResolver from "../resolvers/schema/TypeSchemaResolver.js"
+import UnlessSchemaResolver from "../resolvers/schema/UnlessSchemaResolver.js"
+import VariableSchemaResolver from "../resolvers/schema/VariableSchemaResolver.js"
 
 /**
  * Defination for the container
@@ -217,26 +190,4 @@ export class Provider {
      * @type {MiscFileResolver}
      */
     miscFileResolver
-}
-
-/**
-* Description placeholder
-*/
-export class FileResolverArgs {
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {{boundedContexts: any}}
-     */
-    spec
-
-    
-    /**
-     * Description placeholder
-     *
-     * @type {string}
-     */
-    outputDirectory
 }

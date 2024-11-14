@@ -1,5 +1,6 @@
 import _ from "lodash"
-import { Provider, ExecutionArgs } from "./../def.js"
+import { Provider } from "../../def/provider.js";
+import { ExecutionArgs } from "../../def/executionArgs.js";
 
 /**
 * Description placeholder
@@ -32,7 +33,7 @@ class OpSchemaResolver {
             .first()
             .value();
 
-        const resolverName = `schema${opKey}Resolver`;
+        const resolverName = `${opKey}SchemaResolver`;
 
         return await this.provider[resolverName].execute({ context: context[opKey], ...options })
     }

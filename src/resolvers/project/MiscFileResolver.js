@@ -1,7 +1,9 @@
 import path from "path";
 import { pascalCase } from "change-case";
-import { FileResolverArgs, Provider } from "../def.js";
+
 import parseTemplateWithPath from "../../utils/parseTemplateWithPath.js";
+import { Provider } from "../../def/provider.js";
+import { FileResolverArgs } from "../../def/fileResolverArgs.js";
 
 /**
 * Description placeholder

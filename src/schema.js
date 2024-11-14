@@ -153,7 +153,7 @@ export class FindSchema {
      *
      * @type {Object}
      */
-    value
+    where
 }
 
 /**
@@ -287,6 +287,20 @@ export class PushSchema {
      * @type {string}
      */
     value
+}
+
+/**
+* Description placeholder
+*/
+export class LastSchema {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    in
 }
 
 /**

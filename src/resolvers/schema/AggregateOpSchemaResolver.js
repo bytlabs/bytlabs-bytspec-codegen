@@ -2,8 +2,9 @@ import _ from "lodash"
 import compileTemplate from '../../utils/compileTemplate.js';
 import { Builder } from 'builder-pattern';
 import path from "path"
-import { Provider, ExecutionArgs } from "./../def.js"
 import { AggregateSchema } from "../../schema.js";
+import { Provider } from "../../def/provider.js";
+import { ExecutionArgs } from "../../def/executionArgs.js";
 
 /**
  * Contains the core logic for creating an instance of an aggregate.
@@ -59,7 +60,7 @@ class AggregateOpSchemaResolver {
     async execute ({ context, ...options }) {
 
         const opKey = _.chain(context)
-                            .pick(['findOne'])   
+                            .pick(['findOne', "deleteOne", "fromObject"])   
                             .keys()              
                             .first()
                             .value();

@@ -1,4 +1,4 @@
-import { ExecutionArgs } from "../../def.js"
+import { ExecutionArgs } from "../../../def/executionArgs.js"
 import { CommandSchema, EntitySchema } from "../../../schema.js"
 
 /**

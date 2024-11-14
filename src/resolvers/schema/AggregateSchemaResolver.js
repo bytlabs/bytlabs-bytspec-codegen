@@ -3,8 +3,9 @@ import { Builder } from 'builder-pattern';
 import path from "path"
 import randomName from '../../utils/randomName.js';
 import compileTemplate from '../../utils/compileTemplate.js';
-import { Provider, ExecutionArgs } from "./../def.js"
 import { AggregateActionSchema, AggregateSchema } from '../../schema.js';
+import { Provider } from '../../def/provider.js';
+import { ExecutionArgs } from '../../def/executionArgs.js';
 
 
 /**
@@ -54,7 +55,7 @@ class AggregateSchemaResolver {
     async execute({ context, ...options }) {
 
         //build context
-        const actions = await Promise.all(
+        const actions = context.actions? await Promise.all(
             context.actions.map(async action =>
                 Builder(AggregateActionSchema)
                     .name(await this.provider.aggregateActionSchemaResolver.execute({ context: action.name, ...options }))
@@ -62,10 +63,10 @@ class AggregateSchemaResolver {
                         action.parameters.map(async param => 
                             await this.provider.variableSchemaResolver.execute({ context: param, ...options }))))
                     .build()
-            ));
+            )) : [];
 
         const aggregateContext = Builder(AggregateTemplateContext)
-            .name(randomName())
+            .name(options.primaryVariableName || randomName())
             .op(await this.provider.aggregateOpSchemaResolver.execute({ context, ...options }))
             .actions(actions)
             .build()
