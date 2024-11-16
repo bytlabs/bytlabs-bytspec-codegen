@@ -49,7 +49,7 @@ class TypeDefaultSchemaResolver {
                 case "void":
                     return "null"
                 case "collection":
-                    return `new List<${await this.provider.typeSchemaResolver.execute(items)}>()`
+                    return `new List<${await this.provider.typeSchemaResolver.execute({ context: { type: items, items: null}, ...options})}>()`
                 default:
                     return `new ${type}()`;
             }

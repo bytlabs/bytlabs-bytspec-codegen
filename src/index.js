@@ -10,6 +10,7 @@ async function main() {
 
     const container = await createContainer();
     const spec = await fs.readJSON("./specs/commerce-platform.json");
+    Object.freeze(spec);
 
     // Ensure output directory is clean
     if (options.deleteExistingFiles) {

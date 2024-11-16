@@ -29,8 +29,8 @@ class ProjectResolver {
       console.log("Generating application...");
     
       const fileResolvers = [
-        this.provider.commandFileResolver,
         this.provider.entitiesFileResolver,
+        this.provider.commandFileResolver,        
         this.provider.miscFileResolver
       ];
     

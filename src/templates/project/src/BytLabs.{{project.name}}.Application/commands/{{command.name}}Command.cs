@@ -26,12 +26,12 @@ public class {{command.name}}Handler : ICommandHandler<{{command.name}}Command{{
 {
 
     {{#each command.deps}}
-    private readonly {{{this.type}}} {{this.name}};
+    private readonly {{this.type}} {{this.name}};
     {{/each}}
 
     public {{command.name}}Handler(
         {{#each command.deps}}
-            {{{this.type}}} {{this.name}} {{#unless @last}},{{/unless}}
+            {{this.type}} {{this.name}} {{#unless @last}},{{/unless}}
         {{/each}})
     {
         {{#each command.deps}}
@@ -42,7 +42,7 @@ public class {{command.name}}Handler : ICommandHandler<{{command.name}}Command{{
     public async Task{{#if command.returnType}}<{{command.returnType}}>{{/if}} Handle({{command.name}}Command input, CancellationToken cancellationToken)
     {
         {{#each command.body}}
-            {{{this}}}
+            {{this}}
         {{/each}}
     }
 }

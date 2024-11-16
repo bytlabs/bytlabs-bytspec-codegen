@@ -8,5 +8,6 @@
  */
 export default function unwrapObj(obj) {
     const keys = Object.keys(obj)
-    return keys.map(key => ({ name: key, ...obj[key] }))
+    const data = keys.map(key => ({ name: key, ...obj[key] }))
+    return data;
 }

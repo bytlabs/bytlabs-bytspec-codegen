@@ -13,7 +13,7 @@ import { readFile } from 'fs/promises';
  * @returns {Promise<string>}
  */
 export default async function compileTemplate (path, context) {
-    const template = Handlebars.compile(await readFile(path, 'utf-8'));
+    const template = Handlebars.compile(await readFile(path, 'utf-8'), {noEscape: true});
     const content = template(context);
     return content;
 }

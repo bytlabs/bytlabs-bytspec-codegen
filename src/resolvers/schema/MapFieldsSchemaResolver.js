@@ -35,8 +35,7 @@ class MapFieldsSchemaResolver {
     async execute({ context, ...options }) {
         if(!options.domainObject && !options.domainObject.properties) throw new Error("'mapField' only works with domain objects for field mapping");
 
-            const props = await Promise.all(_.chain(unwrapObj(options.domainObject.properties))
-                                                .omit(context.omit || [])
+            const props = await Promise.all(_.chain(unwrapObj(_.omit(options.domainObject.properties, context.omit || [])))                                                
                                                 .map(async field => await this.provider.propertySchemaResolver.execute({ context: field.name, ...options }))
                                                 .value());
 
@@ -45,7 +44,7 @@ class MapFieldsSchemaResolver {
                 .props(props)
                 .build()
 
-            return await compileTemplate(path.join(this.provider.schemaTemplate, `mapField.hbs`), invokeContext)
+            return await compileTemplate(path.join(this.provider.schemaTemplate, `mapFields.hbs`), invokeContext)
     }
 }
 

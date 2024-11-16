@@ -3,6 +3,7 @@ import _ from "lodash"
 import { TypeSchema } from "../../schema.js";
 import { Provider } from "../../def/provider.js";
 import { ExecutionArgs } from "../../def/executionArgs.js";
+import { ArgumentCannotBeNullError } from "../../def/errors.js";
 
 /**
 * Description placeholder
@@ -30,6 +31,8 @@ class TypeSchemaResolver {
     * 
     */
     async execute({ context, ...options }) {
+        if(!context) throw new ArgumentCannotBeNullError(`context`)
+
         const typeResolver = async (type, items) => {
             if (type && type.startsWith("#")) {
                 const typeName = _.last(type.split("/"))

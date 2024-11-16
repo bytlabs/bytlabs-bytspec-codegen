@@ -23,7 +23,7 @@ export default async function parseTemplateWithPath (srcDir, destDir, extension,
 
             for (const item of items) {
                 const srcPath = path.join(currentSrcDir, item);
-                const destPathTemplate = Handlebars.compile(item);
+                const destPathTemplate = Handlebars.compile(item, {noEscape: true});
                 const destPath = path.join(currentDestDir, destPathTemplate(data));
                 const stats = await fs.stat(srcPath);
 
@@ -34,7 +34,7 @@ export default async function parseTemplateWithPath (srcDir, destDir, extension,
                 } else if (item.endsWith(extension)) {
                     // Process .csproj files with Handlebars
                     const content = await fs.readFile(srcPath, "utf-8");
-                    const contentTemplate = Handlebars.compile(content);
+                    const contentTemplate = Handlebars.compile(content, {noEscape: true});
                     const newContent = contentTemplate(data);
 
                     // Ensure destination directory exists and write the new .csproj file

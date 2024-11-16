@@ -27,7 +27,7 @@ class ErrorSchemaResolver {
     * 
     */
     async execute({ context, ...options }) {
-        return "//TODO ObjectSchemaResolver not implemented"
+        return "//TODO ErrorSchemaResolver not implemented"
     }
 }
 
