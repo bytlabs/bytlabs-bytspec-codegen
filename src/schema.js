@@ -347,3 +347,25 @@ export class AggregateActionSchema {
      */
     parameters
 }
+
+/**
+* Description placeholder
+*/
+export class ObjectStageSchema
+{
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string | Object | undefined}
+     */
+    merge
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string[] | undefined}
+     */
+    omit
+}

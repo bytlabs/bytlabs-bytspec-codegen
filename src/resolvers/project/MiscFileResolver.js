@@ -46,6 +46,7 @@ class MiscFileResolver {
             await parseTemplateWithPath(sourceDirectory, destinationDirectory, "Dockerfile", templateData);
             await parseTemplateWithPath(sourceDirectory, destinationDirectory, "launch.json", templateData);
             await parseTemplateWithPath(sourceDirectory, destinationDirectory, "extensions.json", templateData);
+            await parseTemplateWithPath(sourceDirectory, destinationDirectory, "JsonObjectBuilder.cs", templateData);
         }
     }
 }
