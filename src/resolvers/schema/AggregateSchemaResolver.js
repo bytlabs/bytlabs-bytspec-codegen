@@ -66,7 +66,7 @@ class AggregateSchemaResolver {
             )) : [];
 
         const aggregateContext = Builder(AggregateTemplateContext)
-            .name(options.primaryVariableName || randomName())
+            .name(options.targetName || randomName())
             .op(await this.provider.aggregateOpSchemaResolver.execute({ context, ...options }))
             .actions(actions)
             .build()

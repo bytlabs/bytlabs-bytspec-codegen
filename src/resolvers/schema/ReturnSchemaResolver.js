@@ -43,10 +43,10 @@ class ReturnSchemaResolver {
             
         }
         else {
-            const primaryVariableName = randomName();
+            const targetName = randomName();
             contextTemplate = Builder(ReturnTemplateContext)
-                .preReturnOp(await this.provider.opSchemaResolver.execute({ context: context, ...options, primaryVariableName }))
-                .return(primaryVariableName)
+                .preReturnOp(await this.provider.opSchemaResolver.execute({ context: context, ...options, targetName }))
+                .return(targetName)
                 .build()
         }
 

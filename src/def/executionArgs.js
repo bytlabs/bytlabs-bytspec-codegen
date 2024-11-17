@@ -30,5 +30,5 @@ export class ExecutionArgs {
      *
      * @type {string | undefined}
      */
-    primaryVariableName
+    targetName
 }

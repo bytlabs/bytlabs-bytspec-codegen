@@ -1,8 +1,13 @@
 import { pascalCase } from "change-case";
 import { ExecutionArgs } from "../../def/executionArgs.js";
 import { Provider } from "../../def/provider.js";
-import { ObjectStageSchema } from "../../schema.js";
+import { ObjectSchema } from "../../schema.js";
 import _ from "lodash"
+import { Builder } from "builder-pattern";
+import compileTemplate from "../../utils/compileTemplate.js";
+import path from "path"
+import randomName from "../../utils/randomName.js";
+
 /**
 * Description placeholder
 */
@@ -24,23 +29,28 @@ class ObjectSchemaResolver {
 
     /**
     * Generates code based on a given schema object, using a specified template.
-    * @param {ExecutionArgs & {context: ObjectStageSchema[]}} param
+    * @param {ExecutionArgs & {context: ObjectSchema}} param
     * @returns {Promise<string>}
     * 
     */
     async execute({ context, ...options }) {
 
-        const body = context.map(stage=>{
-            const opKey = _.chain(stage)
-                .pick(['merge', 'omit'])
-                .keys()
-                .first()
-                .value();
+        const target = options.targetName ?? randomName();
 
-            const data = this.provider[`object${pascalCase(opKey)}SchemaResolver`]({context:stage[opKey], ...options})
-        })
+        const body = await Promise.all(context.from.map(async stage => {
+            const data = await this.provider.objectOpSchemaResolver.execute({ context: stage, ...options,  targetName: target })
+            return data;
+        }))
 
-        return ""
+        const as = await this.provider.typeSchemaResolver.execute({ context: { type: context.of, items: null }, ...options });
+
+        const templateContext = Builder(ObjectTemplateContext)
+            .body(body)
+            .target(target)
+            .as(as)
+            .build();
+
+        return await compileTemplate(path.join(this.provider.schemaTemplate, `object.hbs`), templateContext)
     }
 }
 
@@ -51,19 +61,27 @@ export default ObjectSchemaResolver
 */
 export class ObjectTemplateContext {
 
-    
+
     /**
      * Description placeholder
      *
      * @type {string}
      */
-    objectVariableName
+    target
 
-    
+
     /**
      * Description placeholder
      *
      * @type {string[]}
      */
     body
+
+
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    as
 }

@@ -4,6 +4,7 @@ import MiscFileResolver from "../resolvers/project/MiscFileResolver.js"
 import AggregateActionSchemaResolver from "../resolvers/schema/AggregateActionSchemaResolver.js"
 import AggregateOpSchemaResolver from "../resolvers/schema/AggregateOpSchemaResolver.js"
 import AggregateSchemaResolver from "../resolvers/schema/AggregateSchemaResolver.js"
+import AnonymousObjectSchemaResolver from "../resolvers/schema/AnonymousObjectSchemaResolver.js"
 import ConditionSchemaResolver from "../resolvers/schema/ConditionSchemaResolver.js"
 import FindSchemaResolver from "../resolvers/schema/FindSchemaResolver.js"
 import IfSchemaResolver from "../resolvers/schema/IfSchemaResolver.js"
@@ -12,9 +13,11 @@ import LetSchemaResolver from "../resolvers/schema/LetSchemaResolver.js"
 import MapFieldsSchemaResolver from "../resolvers/schema/MapFieldsSchemaResolver.js"
 import MatchSchemaResolver from "../resolvers/schema/MatchSchemaResolver.js"
 import MethodSchemaResolver from "../resolvers/schema/MethodSchemaResolver.js"
+import ObjectOpSchemaResolver from "../resolvers/schema/ObjectOpSchemaResolver.js"
 import OpSchemaResolver from "../resolvers/schema/OpSchemaResolver.js"
 import PropertySchemaResolver from "../resolvers/schema/PropertySchemaResolver.js"
 import PushSchemaResolver from "../resolvers/schema/PushSchemaResolver.js"
+import StringArraySchemaResolver from "../resolvers/schema/StringArraySchemaResolver.js"
 import TypeDefaultSchemaResolver from "../resolvers/schema/TypeDefaultSchemaResolver.js"
 import TypeSchemaResolver from "../resolvers/schema/TypeSchemaResolver.js"
 import UnlessSchemaResolver from "../resolvers/schema/UnlessSchemaResolver.js"
@@ -190,4 +193,28 @@ export class Provider {
      * @type {MiscFileResolver}
      */
     miscFileResolver
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {AnonymousObjectSchemaResolver}
+     */
+    anonymousObjectSchemaResolver
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {StringArraySchemaResolver}
+     */
+    stringArraySchemaResolver
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {ObjectOpSchemaResolver}
+     */
+    objectOpSchemaResolver
 }

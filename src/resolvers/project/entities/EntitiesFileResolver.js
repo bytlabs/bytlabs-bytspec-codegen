@@ -41,7 +41,7 @@ class EntitiesFileResolver {
         for (let boundedContext of unwrapObj(spec.boundedContexts)) {
             const entities = unwrapObj(boundedContext.domain.entities);
             const templatesData = await Promise.all(entities
-            .map(async entity => await this.getClassTemplateData({ context: entity, boundedContext, domainObject: null, command: null, isEntity: true, primaryVariableName: null })))
+            .map(async entity => await this.getClassTemplateData({ context: entity, boundedContext, domainObject: null, command: null, isEntity: true, targetName: null })))
 
             for (let templateData of templatesData) {
                 const destinationDirectory = path.join(outputDirectory, templateData.project.name);
@@ -62,9 +62,9 @@ class EntitiesFileResolver {
     
         const properties = await Promise.all(unwrapObj(context.properties || {})
         .map(async field => ({
-            type: await this.provider.typeSchemaResolver.execute({ context: field, boundedContext: options.boundedContext, domainObject: context, command: null, primaryVariableName: null}),
+            type: await this.provider.typeSchemaResolver.execute({ context: field, boundedContext: options.boundedContext, domainObject: context, command: null, targetName: null}),
             name: pascalCase(field.name),
-            default: await this.provider.typeDefaultSchemaResolver.execute({ context: field, boundedContext: options.boundedContext, domainObject: context, command: null, primaryVariableName: null}),
+            default: await this.provider.typeDefaultSchemaResolver.execute({ context: field, boundedContext: options.boundedContext, domainObject: context, command: null, targetName: null}),
         })))
     
         let methods = [];
@@ -75,8 +75,8 @@ class EntitiesFileResolver {
                 name: pascalCase(method.name),
                 type: "void",
                 parameters: await Promise.all(unwrapObj(method.parameters)
-                .map(async param => ({ name: param.name, type: await this.provider.typeSchemaResolver.execute({ context: param, boundedContext: options.boundedContext, domainObject: context, command: null, primaryVariableName: null}) }))),
-                body: await Promise.all(method.execute.map(async line => await this.provider.opSchemaResolver.execute({ context: line, boundedContext: options.boundedContext, domainObject: context, command: null, primaryVariableName: null })))
+                .map(async param => ({ name: param.name, type: await this.provider.typeSchemaResolver.execute({ context: param, boundedContext: options.boundedContext, domainObject: context, command: null, targetName: null}) }))),
+                body: await Promise.all(method.execute.map(async line => await this.provider.opSchemaResolver.execute({ context: line, boundedContext: options.boundedContext, domainObject: context, command: null, targetName: null })))
             })))
         }
     

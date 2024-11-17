@@ -111,7 +111,9 @@
                                             "onTarget": "@let.existingAddress",
                                             "method": {
                                                 "name": "update",
-                                                "parameters": ["@parameters.data"]
+                                                "parameters": [
+                                                    "@parameters.data"
+                                                ]
                                             }
                                         }
                                     }
@@ -213,26 +215,29 @@
                             }
                         },
                         "returns": "#/domain/entities/customer",
-                        "execute": [                            
+                        "execute": [
                             {
                                 "let": {
                                     "data": {
-                                        "object": [
-                                            {
-                                                "merge": "@input.data"
-                                            },
-                                            {
-                                                "omit": [
-                                                    "password",
-                                                    "repeatPassword"
-                                                ]
-                                            },
-                                            {
-                                                "merge": {
-                                                    "userId": "@identity.claims.sub"
+                                        "object": {
+                                            "of":"#/domain/entities/customer",
+                                            "from": [
+                                                {
+                                                    "merge": "@input.data"
+                                                },
+                                                {
+                                                    "omit": [
+                                                        "password",
+                                                        "repeatPassword"
+                                                    ]
+                                                },
+                                                {
+                                                    "merge": {
+                                                        "userId": "@identity.claims.sub"
+                                                    }
                                                 }
-                                            }
-                                        ]
+                                            ]
+                                        }
                                     }
                                 }
                             },
@@ -292,7 +297,9 @@
                                     "actions": [
                                         {
                                             "name": "update",
-                                            "parameters": ["@input.data"]
+                                            "parameters": [
+                                                "@input.data"
+                                            ]
                                         }
                                     ],
                                     "saveOptions": {
@@ -333,7 +340,9 @@
                                             "actions": [
                                                 {
                                                     "name": "addAddress",
-                                                    "parameters": ["@input.data"]
+                                                    "parameters": [
+                                                        "@input.data"
+                                                    ]
                                                 }
                                             ],
                                             "saveOptions": {
@@ -388,7 +397,10 @@
                                     "actions": [
                                         {
                                             "name": "updateAddress",
-                                            "parameters": ["@input.id", "@input.data"]
+                                            "parameters": [
+                                                "@input.id",
+                                                "@input.data"
+                                            ]
                                         }
                                     ],
                                     "saveOptions": {
@@ -412,7 +424,9 @@
                             {
                                 "aggregate": {
                                     "type": "#/domain/entities/customer",
-                                    "deleteOne": ["@identity.claims.sub"],
+                                    "deleteOne": [
+                                        "@identity.claims.sub"
+                                    ],
                                     "saveOptions": {
                                         "persistChanges": true,
                                         "auditTrail": {

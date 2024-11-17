@@ -1,3 +1,4 @@
+
 /**
 * Description placeholder
 */
@@ -346,6 +347,28 @@ export class AggregateActionSchema {
      * @type {string[]}
      */
     parameters
+}
+
+/**
+* Description placeholder
+*/
+export class ObjectSchema {
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {ObjectStageSchema[]}
+     */
+    from
+
+    
+    /**
+     * Description placeholder
+     *
+     * @type {string}
+     */
+    of
 }
 
 /**
